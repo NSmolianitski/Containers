@@ -1,4 +1,4 @@
-//#include "List.hpp"
+#include "list.hpp"
 #include "vector.hpp"
 #include "stack.hpp"
 
@@ -18,6 +18,17 @@ void printVector(const T &vec)
 {
 	for (int i = 0; i < vec.size(); ++i)
 		std::cout << "[" << i << "] " <<  vec[i] << "\n";
+}
+
+template <typename T>
+void printList(T &list)
+{
+	int i = 0;
+	for (typename T::iterator it = list.begin(); it != list.end(); ++it)
+	{
+		std::cout << "[" << i << "] " << *it << "\n";
+		++i;
+	}
 }
 
 void vectorTest()
@@ -943,6 +954,11 @@ void vectorTest()
 	}
 }
 
+void listTest()
+{
+
+}
+
 void stackTest()
 {
 
@@ -951,5 +967,10 @@ void stackTest()
 int main()
 {
 //	vectorTest();
-
+//	listTest();
+//	std::list<int> list;
+	ft::list<int> ft_l(5, 10);
+	printList(ft_l);
+	ft::list<int>::iterator it = ft_l.begin();
+//	ft_l
 }

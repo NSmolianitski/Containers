@@ -5,11 +5,7 @@
 #ifndef FT_CONTAINERS_VECTOR_HPP
 #define FT_CONTAINERS_VECTOR_HPP
 
-#include <iostream>
-#include <exception>
 #include <sstream>
-
-#include <unistd.h>
 
 namespace ft
 {
