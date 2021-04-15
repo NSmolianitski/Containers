@@ -1,5 +1,6 @@
 //#include "List.hpp"
-#include "Vector.hpp"
+#include "vector.hpp"
+#include "stack.hpp"
 
 #include <iostream>
 #include <list>
@@ -47,7 +48,7 @@ void vectorTest()
 		std::cout << "Size " << v.size() << "\n";
 //--------------------------------------------------------------------------------------//
 		std::cout << YELLOW "\nCustom:" CLR << "\n";
-		ft::Vector<int> ft_v;
+		ft::vector<int> ft_v;
 
 		ft_v.push_back(a);
 		ft_v.push_back(a);
@@ -112,7 +113,7 @@ void vectorTest()
 		std::cout << "Size " << v.size() << "\n";
 //--------------------------------------------------------------------------------------//
 		std::cout << YELLOW "\nCustom:" CLR << "\n";
-		ft::Vector<int> ft_v;
+		ft::vector<int> ft_v;
 
 		ft_v.push_back(a);
 		ft_v.push_back(a);
@@ -200,7 +201,7 @@ void vectorTest()
 			std::cout << "Vector is not empty" << std::endl;
 //--------------------------------------------------------------------------------------//
 		std::cout << YELLOW "\nCustom:" CLR << "\n";
-		ft::Vector<std::string> ft_v;
+		ft::vector<std::string> ft_v;
 
 		printVector(ft_v);
 		std::cout << "Capacity " << ft_v.capacity() << "\n";
@@ -262,7 +263,7 @@ void vectorTest()
 		std::cout << "Size " << v.size() << "\n";
 //--------------------------------------------------------------------------------------//
 		std::cout << YELLOW "\nCustom:" CLR << "\n";
-		ft::Vector<std::string> ft_v(5);
+		ft::vector<std::string> ft_v(5);
 		printVector(ft_v);
 
 		std::cout << "\nCapacity " << ft_v.capacity() << "\n";
@@ -316,10 +317,10 @@ void vectorTest()
 		std::vector<float> v2;
 		std::vector<std::string> v3;
 
-		ft::Vector<char> ft_v;
-		ft::Vector<int> ft_v1;
-		ft::Vector<float> ft_v2;
-		ft::Vector<std::string> ft_v3;
+		ft::vector<char> ft_v;
+		ft::vector<int> ft_v1;
+		ft::vector<float> ft_v2;
+		ft::vector<std::string> ft_v3;
 
 		std::cout << GREEN "Standard " CLR << "CHAR max size:  " << v.max_size() << std::endl;
 		std::cout << YELLOW "Custom " CLR << "  CHAR max size:  " << ft_v.max_size() << "\n" << std::endl;
@@ -360,7 +361,7 @@ void vectorTest()
 		std::cout << "Size " << v.size() << "\n";
 //--------------------------------------------------------------------------------------//
 		std::cout << YELLOW "\nCustom:" CLR << "\n";
-		ft::Vector<int> ft_v;
+		ft::vector<int> ft_v;
 
 		ft_v.push_back(a);
 		ft_v.push_back(a);
@@ -431,7 +432,7 @@ void vectorTest()
 		std::cout << "End - 1: " << *(v.end() - 1) << std::endl;
 //--------------------------------------------------------------------------------------//
 		std::cout << YELLOW "\nCustom:" CLR << "\n";
-		ft::Vector<int> ft_v;
+		ft::vector<int> ft_v;
 		std::cout << "Size " << ft_v.size() << "\n\n";
 
 		std::cout << "Push 5, 8 and 10" << std::endl;
@@ -459,7 +460,7 @@ void vectorTest()
 		printVector(ft_v);
 
 		std::cout << "\nCopy from begin + 1 to end:"<< "\n";
-		ft::Vector<int> ft_v2(ft_v.begin() + 1, ft_v.end());
+		ft::vector<int> ft_v2(ft_v.begin() + 1, ft_v.end());
 		printVector(ft_v2);
 	}
 //██████████████████████████████████████████████████████████████████████████████████████//
@@ -483,7 +484,7 @@ void vectorTest()
 		printVector(v);
 //--------------------------------------------------------------------------------------//
 		std::cout << YELLOW "\nCustom:" CLR << "\n";
-		ft::Vector<int> ft_v;
+		ft::vector<int> ft_v;
 		ft_v.push_back(1);
 		ft_v.push_back(4);
 		ft_v.push_back(20);
@@ -522,7 +523,7 @@ void vectorTest()
 		std::cout << YELLOW "\nCustom:" CLR << "\n";
 		printVector(ft_v);
 
-		ft::Vector<int>::reverse_iterator ft_rit = ft_v.rbegin();
+		ft::vector<int>::reverse_iterator ft_rit = ft_v.rbegin();
 
 		std::cout << "\nRBegin:   " << *ft_rit << std::endl;
 		std::cout << "++RBegin: "   << *(++ft_rit) << std::endl;
@@ -552,7 +553,7 @@ void vectorTest()
 		std::cout << YELLOW "\nCustom:" CLR << "\n";
 		printVector(ft_v);
 
-		ft::Vector<int>::reverse_iterator ft_reit = ft_v.rend();
+		ft::vector<int>::reverse_iterator ft_reit = ft_v.rend();
 
 		std::cout << "\n--REnd: " << *(--ft_reit) << std::endl;
 		std::cout << "--REnd: "   << *(--ft_reit) << std::endl;
@@ -592,8 +593,8 @@ void vectorTest()
 		std::cout << "Size     " << v2.size() << "\n";
 //--------------------------------------------------------------------------------------//
 		std::cout << YELLOW "\nCustom:" CLR << "\n";
-		ft::Vector<int> ft_v;
-		ft::Vector<int> ft_v2;
+		ft::vector<int> ft_v;
+		ft::vector<int> ft_v2;
 		ft_v.push_back(1);
 		ft_v.push_back(2);
 		ft_v.push_back(3);
@@ -667,7 +668,7 @@ void vectorTest()
 		printVector(v);
 //--------------------------------------------------------------------------------------//
 		std::cout << YELLOW "\nCustom:" CLR << "\n";
-		ft::Vector<int> ft;
+		ft::vector<int> ft;
 
 		ft.push_back(10);
 		ft.push_back(20);
@@ -677,7 +678,7 @@ void vectorTest()
 		printVector(ft);
 		std::cout << std::endl;
 
-		ft::Vector<int>::iterator ft_it = ft.begin() + 2;
+		ft::vector<int>::iterator ft_it = ft.begin() + 2;
 		ft.insert(ft_it, 2);
 		std::cout << "After:" << std::endl;
 		printVector(ft);
@@ -706,7 +707,7 @@ void vectorTest()
 		printVector(v);
 //--------------------------------------------------------------------------------------//
 		std::cout << YELLOW "\nCustom:" CLR << "\n";
-		ft::Vector<int> ft;
+		ft::vector<int> ft;
 
 		ft.push_back(10);
 		ft.push_back(20);
@@ -717,7 +718,7 @@ void vectorTest()
 		printVector(ft);
 		std::cout << std::endl;
 
-		ft::Vector<int>::iterator ft_it = ft.begin() + 2;
+		ft::vector<int>::iterator ft_it = ft.begin() + 2;
 		ft.insert(ft_it, 3, 8);
 		std::cout << "After:" << std::endl;
 		printVector(ft);
@@ -746,7 +747,7 @@ void vectorTest()
 		printVector(v);
 //--------------------------------------------------------------------------------------//
 		std::cout << YELLOW "\nCustom:" CLR << "\n";
-		ft::Vector<int> ft;
+		ft::vector<int> ft;
 
 		ft.push_back(10);
 		ft.push_back(20);
@@ -757,7 +758,7 @@ void vectorTest()
 		printVector(ft);
 		std::cout << std::endl;
 
-		ft::Vector<int>::iterator ft_it = ft.begin() + 1;
+		ft::vector<int>::iterator ft_it = ft.begin() + 1;
 		ft.insert(ft_it, ft.begin(), ft.begin() + 3);
 		std::cout << "After:" << std::endl;
 		printVector(ft);
@@ -791,7 +792,7 @@ void vectorTest()
 		printVector(v);
 //--------------------------------------------------------------------------------------//
 		std::cout << YELLOW "\nCustom:" CLR << "\n";
-		ft::Vector<int> ft;
+		ft::vector<int> ft;
 
 		ft.push_back(10);
 		ft.push_back(20);
@@ -801,7 +802,7 @@ void vectorTest()
 		printVector(ft);
 		std::cout << std::endl;
 
-		ft::Vector<int>::iterator ft_it = ft.begin() + 2;
+		ft::vector<int>::iterator ft_it = ft.begin() + 2;
 		std::cout << *ft.erase(ft_it);
 		std::cout << "After:" << std::endl;
 		printVector(ft);
@@ -831,7 +832,7 @@ void vectorTest()
 		std::cout << "Size     " << v.size() << "\n";
 //--------------------------------------------------------------------------------------//
 		std::cout << YELLOW "\nCustom:" CLR << "\n";
-		ft::Vector<int> ft;
+		ft::vector<int> ft;
 
 		ft.push_back(1);
 		ft.push_back(2);
@@ -879,12 +880,12 @@ void vectorTest()
 			std::cout << "\nNot equal" << std::endl;
 //--------------------------------------------------------------------------------------//
 		std::cout << YELLOW "\nCustom:" CLR << "\n";
-		ft::Vector<int> ft;
+		ft::vector<int> ft;
 
 		ft.push_back(1);
 		ft.push_back(2);
 
-		ft::Vector<int> ft1 = ft;
+		ft::vector<int> ft1 = ft;
 
 		std::cout << "Vector one:" << std::endl;
 		printVector(ft);
@@ -922,12 +923,12 @@ void vectorTest()
 			std::cout << "\nNot equal" << std::endl;
 //--------------------------------------------------------------------------------------//
 		std::cout << YELLOW "\nCustom:" CLR << "\n";
-		ft::Vector<int> ft;
+		ft::vector<int> ft;
 
 		ft.push_back(1);
 		ft.push_back(2);
 
-		ft::Vector<int> ft1;
+		ft::vector<int> ft1;
 		ft1.push_back(2);
 
 		std::cout << "Vector one:" << std::endl;
@@ -939,12 +940,16 @@ void vectorTest()
 			std::cout << "\nEqual" << std::endl;
 		else
 			std::cout << "\nNot equal" << std::endl;
-
 	}
+}
+
+void stackTest()
+{
+
 }
 
 int main()
 {
-	vectorTest();
+//	vectorTest();
 
 }

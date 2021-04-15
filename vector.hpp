@@ -38,7 +38,7 @@ namespace ft
 	};
 
 	template<typename T>
-	class Vector
+	class vector
 	{
 		class Iterator;
 		class ReverseIterator;
@@ -54,16 +54,16 @@ namespace ft
 		typedef	const ReverseIterator	const_reverse_iterator;
 
 		//Constructors, destructor
-		Vector();
-		explicit Vector (size_type n, const value_type& val = value_type());
+		vector();
+		explicit vector (size_type n, const value_type& val = value_type());
 		template <class InputIterator>
-			Vector (InputIterator first, typename enable_if<IsIterator<InputIterator>::value, InputIterator>::type last);
-		Vector (const Vector& x);
+			vector (InputIterator first, typename enable_if<IsIterator<InputIterator>::value, InputIterator>::type last);
+		vector (const vector& x);
 
-		~Vector();
+		~vector();
 
 		//Operator overload
-		Vector&			operator=	(const Vector& x);
+		vector&			operator=	(const vector& x);
 
 		//Capacity
 		bool			empty		() const;
@@ -91,7 +91,7 @@ namespace ft
 		void					push_back	(const value_type& val);
 		void					pop_back	();
 		void					clear		();
-		void					swap		(Vector& x);
+		void					swap		(vector& x);
 
 		template <class InputIterator>
 			typename enable_if<IsIterator<InputIterator>::value, void>::type insert
@@ -205,10 +205,10 @@ namespace ft
 
 	//Constructors			************************************************************
 	template<typename T>
-	Vector<T>::Vector() : m_array(nullptr), m_size(0), m_capacity(0) {}
+	vector<T>::vector() : m_array(nullptr), m_size(0), m_capacity(0) {}
 
 	template<typename T>
-	Vector<T>::Vector(Vector::size_type n, const value_type &val) : m_size(n), m_capacity(n)
+	vector<T>::vector(vector::size_type n, const value_type &val) : m_size(n), m_capacity(n)
 	{
 		m_array = new value_type [n];
 		for (int i = 0; i < n; ++i)
@@ -217,7 +217,7 @@ namespace ft
 
 	template<typename T>
 	template<class InputIterator>
-	Vector<T>::Vector (InputIterator first, typename enable_if<IsIterator<InputIterator>::value, InputIterator>::type last) : m_size(last - first), m_capacity(last - first)
+	vector<T>::vector (InputIterator first, typename enable_if<IsIterator<InputIterator>::value, InputIterator>::type last) : m_size(last - first), m_capacity(last - first)
 	{
 		m_array = new value_type [m_capacity];
 		for (int i = 0; first < last; ++i)
@@ -228,7 +228,7 @@ namespace ft
 	}
 
 	template<typename T>
-	Vector<T>::Vector(const Vector &x) : m_size(x.m_size), m_capacity(x.m_capacity)
+	vector<T>::vector(const vector &x) : m_size(x.m_size), m_capacity(x.m_capacity)
 	{
 		m_array = new value_type [x.m_capacity];
 
@@ -237,14 +237,14 @@ namespace ft
 	}
 
 	template<typename T>
-	Vector<T>::~Vector()
+	vector<T>::~vector()
 	{
 		delete [] m_array;
 	}
 
 	//Operator overload	************************************************************
 	template<typename T>
-	Vector<T> & Vector<T>::operator=(const Vector &x)
+	vector<T> & vector<T>::operator=(const vector &x)
 	{
 		if (this != &x)
 		{
@@ -261,7 +261,7 @@ namespace ft
 
 	//Capacity		************************************************************
 	template<typename T>
-	bool Vector<T>::empty() const
+	bool vector<T>::empty() const
 	{
 		if (m_size == 0)
 			return true;
@@ -269,13 +269,13 @@ namespace ft
 	}
 
 	template<typename T>
-	typename Vector<T>::size_type Vector<T>::size() const
+	typename vector<T>::size_type vector<T>::size() const
 	{
 		return m_size;
 	}
 
 	template<typename T>
-	typename Vector<T>::size_type Vector<T>::max_size() const
+	typename vector<T>::size_type vector<T>::max_size() const
 	{
 		if (sizeof(T) == 1)
 			return ULLONG_MAX / 2;
@@ -283,7 +283,7 @@ namespace ft
 	}
 
 	template<typename T>
-	void Vector<T>::resize(Vector::size_type n, value_type val)
+	void vector<T>::resize(vector::size_type n, value_type val)
 	{
 		if (n < 0)
 			throw std::length_error("vector");
@@ -318,26 +318,26 @@ namespace ft
 	}
 
 	template<typename T>
-	typename Vector<T>::size_type Vector<T>::capacity() const
+	typename vector<T>::size_type vector<T>::capacity() const
 	{
 		return m_capacity;
 	}
 
 	//Element access		************************************************************
 	template<typename T>
-	typename Vector<T>::reference		Vector<T>::operator[](Vector::size_type n)
+	typename vector<T>::reference		vector<T>::operator[](vector::size_type n)
 	{
 		return m_array[n];
 	}
 
 	template<typename T>
-	typename Vector<T>::const_reference	Vector<T>::operator[](Vector::size_type n) const
+	typename vector<T>::const_reference	vector<T>::operator[](vector::size_type n) const
 	{
 		return m_array[n];
 	}
 
 	template<typename T>
-	typename Vector<T>::reference		Vector<T>::at(Vector::size_type n)
+	typename vector<T>::reference		vector<T>::at(vector::size_type n)
 	{
 		std::ostringstream o;
 
@@ -348,7 +348,7 @@ namespace ft
 	}
 
 	template<typename T>
-	typename Vector<T>::const_reference	Vector<T>::at(Vector::size_type n) const
+	typename vector<T>::const_reference	vector<T>::at(vector::size_type n) const
 	{
 		std::ostringstream o;
 
@@ -359,32 +359,32 @@ namespace ft
 	}
 
 	template<typename T>
-	typename Vector<T>::reference		Vector<T>::front()
+	typename vector<T>::reference		vector<T>::front()
 	{
 		return m_array[0];
 	}
 
 	template<typename T>
-	typename Vector<T>::const_reference	Vector<T>::front() const
+	typename vector<T>::const_reference	vector<T>::front() const
 	{
 		return m_array[0];
 	}
 
 	template<typename T>
-	typename Vector<T>::reference		Vector<T>::back()
+	typename vector<T>::reference		vector<T>::back()
 	{
 		return m_array[m_size - 1];
 	}
 
 	template<typename T>
-	typename Vector<T>::const_reference	Vector<T>::back() const
+	typename vector<T>::const_reference	vector<T>::back() const
 	{
 		return m_array[m_size - 1];
 	}
 
 	//Modifiers		************************************************************
 	template<typename T>
-	void Vector<T>::push_back (const value_type &val)
+	void vector<T>::push_back (const value_type &val)
 	{
 		if (m_capacity == 0)
 		{
@@ -413,7 +413,7 @@ namespace ft
 
 	template<typename T>
 	template<typename InputIterator>
-		typename enable_if<IsIterator<InputIterator>::value, void>::type Vector<T>::assign(InputIterator first, InputIterator last)
+		typename enable_if<IsIterator<InputIterator>::value, void>::type vector<T>::assign(InputIterator first, InputIterator last)
 	{
 		if ((last - first) > m_capacity)
 		{
@@ -430,7 +430,7 @@ namespace ft
 	}
 
 	template<typename T>
-	void Vector<T>::assign(Vector::size_type n, const value_type &val)
+	void vector<T>::assign(vector::size_type n, const value_type &val)
 	{
 		if (n < 0)
 			throw std::length_error("vector");
@@ -446,7 +446,7 @@ namespace ft
 	}
 
 	template<typename T>
-	void Vector<T>::pop_back()
+	void vector<T>::pop_back()
 	{
 		m_array[m_size - 1].~T();
 		--m_size;
@@ -454,7 +454,7 @@ namespace ft
 
 	//Utils		************************************************************
 	template<typename T>
-	typename Vector<T>::size_type Vector<T>::getNearestPowerOfTwo(size_type x)
+	typename vector<T>::size_type vector<T>::getNearestPowerOfTwo(size_type x)
 	{
 		--x;
 		for (int p = 1; p < 32; p <<= 1)
@@ -463,7 +463,7 @@ namespace ft
 	}
 
 	template<typename T>
-	void Vector<T>::reserve(Vector::size_type n)
+	void vector<T>::reserve(vector::size_type n)
 	{
 		if (n > m_capacity)
 		{
@@ -478,55 +478,55 @@ namespace ft
 
 	//Iterators		************************************************************
 	template<typename T>
-	typename Vector<T>::iterator Vector<T>::begin()
+	typename vector<T>::iterator vector<T>::begin()
 	{
 		return Iterator(&m_array[0]);
 	}
 
 	template<typename T>
-	typename Vector<T>::const_iterator Vector<T>::begin() const
+	typename vector<T>::const_iterator vector<T>::begin() const
 	{
 		return Iterator(&m_array[0]);
 	}
 
 	template<typename T>
-	typename Vector<T>::iterator Vector<T>::end()
+	typename vector<T>::iterator vector<T>::end()
 	{
 		return Iterator(&m_array[m_size]);
 	}
 
 	template<typename T>
-	typename Vector<T>::const_iterator Vector<T>::end() const
+	typename vector<T>::const_iterator vector<T>::end() const
 	{
 		return Iterator(&m_array[m_size]);
 	}
 
 	template<typename T>
-	typename Vector<T>::reverse_iterator Vector<T>::rbegin()
+	typename vector<T>::reverse_iterator vector<T>::rbegin()
 	{
 		return ReverseIterator(&m_array[m_size - 1]);
 	}
 
 	template<typename T>
-	typename Vector<T>::const_reverse_iterator Vector<T>::rbegin() const
+	typename vector<T>::const_reverse_iterator vector<T>::rbegin() const
 	{
 		return ReverseIterator(&m_array[m_size - 1]);
 	}
 
 	template<typename T>
-	typename Vector<T>::reverse_iterator Vector<T>::rend()
+	typename vector<T>::reverse_iterator vector<T>::rend()
 	{
 		return ReverseIterator(&m_array[-1]);
 	}
 
 	template<typename T>
-	typename Vector<T>::const_reverse_iterator Vector<T>::rend() const
+	typename vector<T>::const_reverse_iterator vector<T>::rend() const
 	{
 		return ReverseIterator(&m_array[-1]);
 	}
 
 	template<typename T>
-	void Vector<T>::clear()
+	void vector<T>::clear()
 	{
 		for (int i = 0; i < m_size; ++i)
 			m_array[i].~T();
@@ -534,7 +534,7 @@ namespace ft
 	}
 
 	template<typename T>
-	void Vector<T>::swap(Vector &x)
+	void vector<T>::swap(vector &x)
 	{
 		value_type	*tmp_array   = x.m_array;
 		size_type	tmp_size	 = x.m_size;
@@ -550,7 +550,7 @@ namespace ft
 	}
 
 	template<typename T>
-	typename Vector<T>::iterator Vector<T>::insert(Vector::iterator position, const value_type &val)
+	typename vector<T>::iterator vector<T>::insert(vector::iterator position, const value_type &val)
 	{
 		if (m_size == m_capacity)
 		{
@@ -577,7 +577,7 @@ namespace ft
 	}
 
 	template<typename T>
-	void Vector<T>::insert(Vector::iterator position, Vector::size_type n, const value_type &val)
+	void vector<T>::insert(vector::iterator position, vector::size_type n, const value_type &val)
 	{
 		if (m_size + n >= m_capacity)
 		{
@@ -612,8 +612,8 @@ namespace ft
 
 	template<typename T>
 	template<class InputIterator>
-		typename enable_if<IsIterator<InputIterator>::value, void>::type Vector<T>::insert
-			(Vector::iterator position, InputIterator first, InputIterator last)
+		typename enable_if<IsIterator<InputIterator>::value, void>::type vector<T>::insert
+			(vector::iterator position, InputIterator first, InputIterator last)
 	{
 		if (first > last)
 			return;
@@ -656,9 +656,9 @@ namespace ft
 	}
 
 	template<typename T>
-	typename Vector<T>::iterator Vector<T>::erase(Vector::iterator position)
+	typename vector<T>::iterator vector<T>::erase(vector::iterator position)
 	{
-		Vector::iterator tmpPosition = position;
+		vector::iterator tmpPosition = position;
 		(*position).~T();
 		for (; position < end() - 1; ++position)
 			*position = *(position + 1);
@@ -667,11 +667,11 @@ namespace ft
 	}
 
 	template<typename T>
-	typename Vector<T>::iterator Vector<T>::erase(Vector::iterator first, Vector::iterator last)
+	typename vector<T>::iterator vector<T>::erase(vector::iterator first, vector::iterator last)
 	{
 		if (last < first)
 			return first;
-		Vector::iterator tmpPosition = first;
+		vector::iterator tmpPosition = first;
 		for (int i = 0; i < (last - first); ++i)
 			(*(first + i)).~T();
 		int i = 0;
@@ -686,7 +686,7 @@ namespace ft
 
 	//Comparison
 	template <class T>
-	bool operator== (const Vector<T>& lhs, const Vector<T>& rhs)
+	bool operator== (const vector<T>& lhs, const vector<T>& rhs)
 	{
 		if (lhs.size() != rhs.size())
 			return false;
@@ -699,7 +699,7 @@ namespace ft
 	}
 
 	template <class T>
-	bool operator!= (const Vector<T>& lhs, const Vector<T>& rhs)
+	bool operator!= (const vector<T>& lhs, const vector<T>& rhs)
 	{
 		if (lhs.size() != rhs.size())
 			return true;
@@ -712,7 +712,7 @@ namespace ft
 	}
 
 	template <class T>
-	bool operator<  (const Vector<T>& lhs, const Vector<T>& rhs)
+	bool operator<  (const vector<T>& lhs, const vector<T>& rhs)
 	{
 		if (lhs.size() < rhs.size())
 			return true;
@@ -725,7 +725,7 @@ namespace ft
 	}
 
 	template <class T>
-	bool operator<= (const Vector<T>& lhs, const Vector<T>& rhs)
+	bool operator<= (const vector<T>& lhs, const vector<T>& rhs)
 	{
 		if (lhs.size() > rhs.size())
 			return false;
@@ -738,7 +738,7 @@ namespace ft
 	}
 
 	template <class T>
-	bool operator>  (const Vector<T>& lhs, const Vector<T>& rhs)
+	bool operator>  (const vector<T>& lhs, const vector<T>& rhs)
 	{
 		if (lhs.size() > rhs.size())
 			return true;
@@ -751,7 +751,7 @@ namespace ft
 	}
 
 	template <class T>
-	bool operator>= (const Vector<T>& lhs, const Vector<T>& rhs)
+	bool operator>= (const vector<T>& lhs, const vector<T>& rhs)
 	{
 		if (lhs.size() < rhs.size())
 			return false;
