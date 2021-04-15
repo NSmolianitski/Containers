@@ -99,6 +99,8 @@ namespace ft
 
 		iterator				insert		(iterator position, const value_type& val);
 		void					insert		(iterator position, size_type n, const value_type& val);
+		iterator				erase		(iterator position);
+		iterator				erase		(iterator first, iterator last);
 
 
 		//Iterators
@@ -244,7 +246,7 @@ namespace ft
 	template<typename T>
 	Vector<T> & Vector<T>::operator=(const Vector &x)
 	{
-		if (this != x)
+		if (this != &x)
 		{
 			delete [] m_array;
 			m_array = new value_type [x.m_size];
@@ -651,6 +653,114 @@ namespace ft
 			}
 		}
 		m_size += n;
+	}
+
+	template<typename T>
+	typename Vector<T>::iterator Vector<T>::erase(Vector::iterator position)
+	{
+		Vector::iterator tmpPosition = position;
+		(*position).~T();
+		for (; position < end() - 1; ++position)
+			*position = *(position + 1);
+		--m_size;
+		return tmpPosition;
+	}
+
+	template<typename T>
+	typename Vector<T>::iterator Vector<T>::erase(Vector::iterator first, Vector::iterator last)
+	{
+		if (last < first)
+			return first;
+		Vector::iterator tmpPosition = first;
+		for (int i = 0; i < (last - first); ++i)
+			(*(first + i)).~T();
+		int i = 0;
+		for (; first < last + 1; ++first)
+		{
+			*first = *(last + i);
+			++i;
+		}
+		m_size -= last - tmpPosition;
+		return tmpPosition;
+	}
+
+	//Comparison
+	template <class T>
+	bool operator== (const Vector<T>& lhs, const Vector<T>& rhs)
+	{
+		if (lhs.size() != rhs.size())
+			return false;
+		for (int i = 0; i < lhs.size(); ++i)
+		{
+			if (lhs[i] != rhs[i])
+				return false;
+		}
+		return true;
+	}
+
+	template <class T>
+	bool operator!= (const Vector<T>& lhs, const Vector<T>& rhs)
+	{
+		if (lhs.size() != rhs.size())
+			return true;
+		for (int i = 0; i < lhs.size(); ++i)
+		{
+			if (lhs[i] != rhs[i])
+				return true;
+		}
+		return false;
+	}
+
+	template <class T>
+	bool operator<  (const Vector<T>& lhs, const Vector<T>& rhs)
+	{
+		if (lhs.size() < rhs.size())
+			return true;
+		for (int i = 0; i < lhs.size(); ++i)
+		{
+			if (lhs[i] < rhs[i])
+				return true;
+		}
+		return false;
+	}
+
+	template <class T>
+	bool operator<= (const Vector<T>& lhs, const Vector<T>& rhs)
+	{
+		if (lhs.size() > rhs.size())
+			return false;
+		for (int i = 0; i < lhs.size(); ++i)
+		{
+			if (lhs[i] > rhs[i])
+				return false;
+		}
+		return true;
+	}
+
+	template <class T>
+	bool operator>  (const Vector<T>& lhs, const Vector<T>& rhs)
+	{
+		if (lhs.size() > rhs.size())
+			return true;
+		for (int i = 0; i < lhs.size(); ++i)
+		{
+			if (lhs[i] > rhs[i])
+				return true;
+		}
+		return false;
+	}
+
+	template <class T>
+	bool operator>= (const Vector<T>& lhs, const Vector<T>& rhs)
+	{
+		if (lhs.size() < rhs.size())
+			return false;
+		for (int i = 0; i < lhs.size(); ++i)
+		{
+			if (lhs[i] < rhs[i])
+				return false;
+		}
+		return true;
 	}
 }
 

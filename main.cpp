@@ -762,6 +762,185 @@ void vectorTest()
 		std::cout << "After:" << std::endl;
 		printVector(ft);
 	}
+//██████████████████████████████████████████████████████████████████████████████████████//
+//██████████████████████████████████████████████████████████████████████████████████████//
+//███████████████████████████████████████[ERASE]████████████████████████████████████████//
+//██████████████████████████████████████████████████████████████████████████████████████//
+//██████████████████████████████████████████████████████████████████████████████████████//
+	std::cout << RED "\n[ERASE]" CLR << "\n";
+	{
+//░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░//
+//░░░░░░░░░░░░░░░░░░░░░░░░░░░░░[PUSH 4 ELEMENTS AND ERASE]░░░░░░░░░░░░░░░░░░░░░░░░░░░░░//
+//░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░//
+		std::cout << RED "\n* PUSH 4 ELEMENTS AND ERASE *" CLR << "\n";
+//░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░//
+		std::cout << GREEN "Standard:" CLR << "\n";
+		std::vector<int> v;
+
+		v.push_back(10);
+		v.push_back(20);
+		v.push_back(30);
+		v.push_back(40);
+		std::cout << "Before:" << std::endl;
+		printVector(v);
+		std::cout << std::endl;
+
+		std::vector<int>::iterator it = v.begin() + 2;
+		std::cout << *v.erase(it);
+		std::cout << "After:" << std::endl;
+		printVector(v);
+//--------------------------------------------------------------------------------------//
+		std::cout << YELLOW "\nCustom:" CLR << "\n";
+		ft::Vector<int> ft;
+
+		ft.push_back(10);
+		ft.push_back(20);
+		ft.push_back(30);
+		ft.push_back(40);
+		std::cout << "Before:" << std::endl;
+		printVector(ft);
+		std::cout << std::endl;
+
+		ft::Vector<int>::iterator ft_it = ft.begin() + 2;
+		std::cout << *ft.erase(ft_it);
+		std::cout << "After:" << std::endl;
+		printVector(ft);
+	}
+//░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░//
+//░░░░░░░░░░░░░░░░░░░░░░░░░░░[PUSH 4 ELEMENTS AND ERASE TWO]░░░░░░░░░░░░░░░░░░░░░░░░░░░░//
+//░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░//
+	{
+		std::cout << RED "\n* PUSH 4 ELEMENTS AND ERASE TWO *" CLR << "\n";
+//░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░//
+		std::cout << GREEN "Standard:" CLR << "\n";
+		std::vector<int> v;
+
+		v.push_back(1);
+		v.push_back(2);
+		v.push_back(3);
+		v.push_back(4);
+		v.push_back(5);
+		std::cout << "Before:" << std::endl;
+		printVector(v);
+		std::cout << std::endl;
+
+		std::cout << "After:" << std::endl;
+		v.erase(v.begin(), v.begin() + 2);
+		printVector(v);
+		std::cout << "Capacity " << v.capacity() << "\n";
+		std::cout << "Size     " << v.size() << "\n";
+//--------------------------------------------------------------------------------------//
+		std::cout << YELLOW "\nCustom:" CLR << "\n";
+		ft::Vector<int> ft;
+
+		ft.push_back(1);
+		ft.push_back(2);
+		ft.push_back(3);
+		ft.push_back(4);
+		ft.push_back(5);
+		std::cout << "Before:" << std::endl;
+		printVector(ft);
+		std::cout << std::endl;
+
+		std::cout << "After:" << std::endl;
+		ft.erase(ft.begin(), ft.begin() + 2);
+		printVector(ft);
+		std::cout << "Capacity " << ft.capacity() << "\n";
+		std::cout << "Size     " << ft.size() << "\n";
+	}
+//██████████████████████████████████████████████████████████████████████████████████████//
+//██████████████████████████████████████████████████████████████████████████████████████//
+//█████████████████████████████████[VECTOR COMPARISON]██████████████████████████████████//
+//██████████████████████████████████████████████████████████████████████████████████████//
+//██████████████████████████████████████████████████████████████████████████████████████//
+	std::cout << RED "\n[VECTOR COMPARISON]" CLR << "\n";
+	{
+//░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░//
+//░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░[COMPARE TWO VECTORS]░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░//
+//░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░//
+		std::cout << RED "\n* COMPARE TWO VECTORS *" CLR << "\n";
+//░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░//
+		std::cout << GREEN "Standard:" CLR << "\n";
+		std::vector<int> v;
+
+		v.push_back(1);
+		v.push_back(2);
+
+		std::vector<int> v1 = v;
+
+		std::cout << "Vector one:" << std::endl;
+		printVector(v);
+		std::cout << "Vector two:" << std::endl;
+		printVector(v1);
+
+		if (v == v1)
+			std::cout << "\nEqual" << std::endl;
+		else
+			std::cout << "\nNot equal" << std::endl;
+//--------------------------------------------------------------------------------------//
+		std::cout << YELLOW "\nCustom:" CLR << "\n";
+		ft::Vector<int> ft;
+
+		ft.push_back(1);
+		ft.push_back(2);
+
+		ft::Vector<int> ft1 = ft;
+
+		std::cout << "Vector one:" << std::endl;
+		printVector(ft);
+		std::cout << "Vector two:" << std::endl;
+		printVector(ft1);
+
+		if (ft == ft1)
+			std::cout << "\nEqual" << std::endl;
+		else
+			std::cout << "\nNot equal" << std::endl;
+	}
+//░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░//
+//░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░[ONE MORE COMPARE]░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░//
+//░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░//
+		std::cout << RED "\n* ONE MORE COMPARE *" CLR << "\n";
+//░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░//
+	{
+		std::cout << GREEN "Standard:" CLR << "\n";
+		std::vector<int> v;
+
+		v.push_back(1);
+		v.push_back(2);
+
+		std::vector<int> v1;
+		v1.push_back(2);
+
+		std::cout << "Vector one:" << std::endl;
+		printVector(v);
+		std::cout << "Vector two:" << std::endl;
+		printVector(v1);
+
+		if (v == v1)
+			std::cout << "\nEqual" << std::endl;
+		else
+			std::cout << "\nNot equal" << std::endl;
+//--------------------------------------------------------------------------------------//
+		std::cout << YELLOW "\nCustom:" CLR << "\n";
+		ft::Vector<int> ft;
+
+		ft.push_back(1);
+		ft.push_back(2);
+
+		ft::Vector<int> ft1;
+		ft1.push_back(2);
+
+		std::cout << "Vector one:" << std::endl;
+		printVector(ft);
+		std::cout << "Vector two:" << std::endl;
+		printVector(ft1);
+
+		if (ft == ft1)
+			std::cout << "\nEqual" << std::endl;
+		else
+			std::cout << "\nNot equal" << std::endl;
+
+	}
 }
 
 int main()
