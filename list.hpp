@@ -1,6 +1,8 @@
 #ifndef FT_CONTAINERS_LIST_HPP
 #define FT_CONTAINERS_LIST_HPP
 
+#include "vector.hpp"
+
 #include <sstream>
 
 namespace ft
@@ -56,8 +58,8 @@ namespace ft
 		typedef	const ReverseIterator	const_reverse_iterator;
 
 		//Constructors and destructor
-//		template<class InputIterator>
-//			list		(InputIterator first, InputIterator last);
+		template<class InputIterator>
+			list		(InputIterator first, typename enable_if<IsIterator<InputIterator>::value, InputIterator>::type last);
 
 		list			();
 		list			(const list &x);
@@ -76,7 +78,7 @@ namespace ft
 		class Iterator
 		{
 		public:
-			typedef	std::random_access_iterator_tag	iterator_category;
+			typedef	std::bidirectional_iterator_tag	iterator_category;
 			typedef	std::ptrdiff_t					difference_type;
 			typedef	T								value_type;
 			typedef	T*								pointer;
@@ -86,7 +88,7 @@ namespace ft
 			explicit Iterator(Node *ptr) : m_ptr(ptr) {}
 
 			reference		operator*  () const 				{ return m_ptr->m_value; }
-			pointer			operator-> () const 				{ return &m_ptr->m_value; }
+			pointer			operator-> () const 				{ return m_ptr->m_value; }
 
 			Iterator&		operator++ ()						{ m_ptr = m_ptr->m_next; return *this; }
 			Iterator		operator++ (int)					{ Iterator tmp = *this; ++(*this); return tmp; }
@@ -104,7 +106,7 @@ namespace ft
 		class ReverseIterator
 		{
 		public:
-			typedef	std::random_access_iterator_tag	iterator_category;
+			typedef	std::bidirectional_iterator_tag	iterator_category;
 			typedef	std::ptrdiff_t					difference_type;
 			typedef	T								value_type;
 			typedef	T*								pointer;
@@ -113,17 +115,17 @@ namespace ft
 			ReverseIterator() : m_ptr(0) {}
 			explicit ReverseIterator(pointer ptr) : m_ptr(ptr) {}
 
-			reference				operator*  () const 						{ return *m_ptr; }
-			pointer					operator-> () const 						{ return m_ptr; }
+			reference				operator*  () const 						{ return m_ptr->m_value; }
+			pointer					operator-> () const 						{ return m_ptr->m_value; }
 
-			ReverseIterator&		operator++ ()								{ --m_ptr; return *this; }
+			ReverseIterator&		operator++ ()								{ m_ptr = m_ptr->m_prev; return *this; }
 			ReverseIterator			operator++ (int)							{ ReverseIterator tmp = *this; --(*this); return tmp; }
 
-			ReverseIterator&		operator-- ()								{ ++m_ptr; return *this; }
+			ReverseIterator&		operator-- ()								{ m_ptr = m_ptr->m_next; return *this; }
 			ReverseIterator			operator-- (int)							{ ReverseIterator tmp = *this; ++(*this); return tmp; }
 
-			bool			operator== (const ReverseIterator &other)			{ return this->m_ptr == other.m_ptr; }
-			bool			operator!= (const ReverseIterator &other)			{ return this->m_ptr != other.m_ptr; }
+			bool					operator== (const ReverseIterator &other)	{ return this->m_ptr == other.m_ptr; }
+			bool					operator!= (const ReverseIterator &other)	{ return this->m_ptr != other.m_ptr; }
 
 		private:
 			pointer	m_ptr;
@@ -131,11 +133,12 @@ namespace ft
 
 	};
 
+	//Constructors and destructor
 	template<typename T>
 	list<T>::list()
-		: m_size(0),
-		  m_head(0),
-		  m_tail(0) {}
+		: m_size(0)
+		, m_head(0)
+		, m_tail(0) {}
 
 	template<typename T>
 	list<T>::list(size_type n, const value_type &val) : m_size(n)
@@ -152,35 +155,84 @@ namespace ft
 		m_tail = ptr;
 	}
 
-//	template<typename T>
-//	template<class InputIterator>
-//	list<T>::list(InputIterator first, InputIterator last)
-//	{
-//
-//	}
+	template<typename T>
+	template<class InputIterator>
+	list<T>::list(InputIterator first, typename enable_if<IsIterator<InputIterator>::value, InputIterator>::type last)
+	{
+		m_head = new Node(*first);
+		++first;
+		m_size = 1;
+		Node *ptr = m_head;
+		for (; first != last; ++first)
+		{
+			ptr->m_next = new Node(*first);
+			ptr->m_next->m_prev = ptr;
+			ptr = ptr->m_next;
+			++m_size;
+		}
+		ptr->m_next = 0;
+		m_tail = ptr;
+	}
 
 	template<typename T>
 	list<T>::list(const list &x)
 	{
+		m_head = new Node(*x.begin());
+		Node *ptr = m_head;
+		m_size = x.m_size;
 
+		iterator it = x.begin();
+		++it;
+		for (; it != x.end(); ++it)
+		{
+			ptr->m_next = new Node(*it);
+			ptr->m_next->m_prev = ptr;
+			ptr = ptr->m_next;
+		}
+
+		ptr->m_next = 0;
+		m_tail = ptr;
 	}
 
 	template<typename T>
 	list<T>::~list()
 	{
-
+		Node *ptr = m_head->m_next;
+		for (; ptr; ptr = ptr->m_next)
+			delete ptr->m_prev;
+		delete m_tail;
 	}
 
 	template<typename T>
 	list<T> &list<T>::operator= (const list &x)
 	{
-		if (this != x)
+		if (this != &x)
 		{
-
+			if (m_size > 0)
+			{
+				m_head = m_head->m_next;
+				for (; m_head; m_head = m_head->m_next)
+					delete m_head->m_prev;
+				delete m_tail;
+			}
+			m_head = new Node(*x.begin());
+			m_size = x.m_size;
+			Node *ptr = m_head;
+			iterator it = x.begin();
+			++it;
+			for (; it != x.end(); ++it)
+			{
+				ptr->m_next = new Node(*it);
+				ptr->m_next->m_prev = ptr;
+				ptr = ptr->m_next;
+			}
+			ptr->m_next = 0;
+			m_tail = ptr;
 		}
 		return *this;
 	}
 
+	//Member functions
 	template<typename T>
 	typename list<T>::iterator list<T>::begin()
 	{

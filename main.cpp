@@ -956,7 +956,34 @@ void vectorTest()
 
 void listTest()
 {
+	std::cout << BLUE "**********************\\\\\\\\LIST////**********************" CLR << "\n";
+	{
+		std::cout << RED "* COPY LIST TO FT_LIST *" CLR << "\n";
 
+		std::list<int> list;
+
+		list.push_back(0);
+		list.push_back(20);
+		list.push_back(999);
+
+		ft::list<int> ft_list(list.begin(), list.end());
+		ft::list<int> ft_list2(4, 2);
+		ft_list2 = ft_list;
+		printList(ft_list2);
+
+		std::cout << GREEN "Standard:" CLR << "\n";
+		printList(list);
+		std::cout << YELLOW "\nCustom:" CLR << "\n";
+		printList(ft_list);
+
+//--------------------------------------------------------------------------------------//
+		std::cout << RED "*  *" CLR << "\n";
+
+		std::cout << GREEN "Standard:" CLR << "\n";
+		printList(list);
+		std::cout << YELLOW "\nCustom:" CLR << "\n";
+		printList(ft_list);
+	}
 }
 
 void stackTest()
@@ -967,10 +994,5 @@ void stackTest()
 int main()
 {
 //	vectorTest();
-//	listTest();
-//	std::list<int> list;
-	ft::list<int> ft_l(5, 10);
-	printList(ft_l);
-	ft::list<int>::iterator it = ft_l.begin();
-//	ft_l
+	listTest();
 }

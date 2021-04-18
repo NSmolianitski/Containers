@@ -216,7 +216,7 @@ namespace ft
 	vector<T>::vector (InputIterator first, typename enable_if<IsIterator<InputIterator>::value, InputIterator>::type last) : m_size(last - first), m_capacity(last - first)
 	{
 		m_array = new value_type [m_capacity];
-		for (int i = 0; first < last; ++i)
+		for (int i = 0; first != last; ++i)
 		{
 			m_array[i] = *first;
 			++first;
@@ -418,7 +418,7 @@ namespace ft
 			m_size = m_capacity;
 			m_array = new value_type[m_capacity];
 		}
-		for (int i = 0; first < last; ++i)
+		for (int i = 0; first != last; ++i)
 		{
 			m_array[i] = *first;
 			++first;
