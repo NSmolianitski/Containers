@@ -4,6 +4,7 @@
 #include "vector.hpp"
 
 #include <sstream>
+#include <iostream>
 
 namespace ft
 {
@@ -21,7 +22,7 @@ namespace ft
 			Node	*m_prev;
 
 			//Constructors and destructor
-			Node				() : m_value(value_type()), m_next(0), m_prev(0) {}
+			Node				() : m_value(value_type()) {}
 			explicit Node		(T value) : m_value(value) {}
 			Node				(const Node &other) : m_value(other.m_value), m_next(m_value), m_prev(m_value)	{}
 			~Node				() {}
@@ -69,10 +70,34 @@ namespace ft
 		list<T>& operator= (const list &x);
 
 		//Iterators
-		iterator		begin	();
-		const_iterator	begin	() const;
-		iterator		end		();
-		const_iterator	end		() const;
+		iterator				begin	();
+		const_iterator			begin	() const;
+		iterator				end		();
+		const_iterator			end		() const;
+		reverse_iterator		rbegin	();
+		const_reverse_iterator	rbegin	() const;
+		reverse_iterator		rend	();
+		const_reverse_iterator	rend	() const;
+
+		//Capacity
+		bool		empty	() const;
+		size_type	size	() const;
+		size_type	max_size() const;
+
+		//Element access
+		reference		front();
+		const_reference	front() const;
+		reference		back();
+		const_reference	back() const;
+
+		//Modifiers
+		template <class InputIterator>
+			void assign (InputIterator first, typename enable_if<IsIterator<InputIterator>::value, InputIterator>::type last);
+		void assign		(size_type n, const value_type& val);
+		void push_front	(const value_type& val);
+		void pop_front();
+		void push_back (const value_type& val);
+		void pop_back();
 
 	private:
 		class Iterator
@@ -91,10 +116,10 @@ namespace ft
 			pointer			operator-> () const 				{ return m_ptr->m_value; }
 
 			Iterator&		operator++ ()						{ m_ptr = m_ptr->m_next; return *this; }
-			Iterator		operator++ (int)					{ Iterator tmp = *this; ++(*this); return tmp; }
+			Iterator		operator++ (int)					{ Iterator tmp = *this; tmp.m_ptr = tmp.m_ptr->m_next; return tmp; }
 
 			Iterator&		operator-- ()						{ m_ptr = m_ptr->m_prev; return *this; }
-			Iterator		operator-- (int)					{ Iterator tmp = *this; --(*this); return tmp; }
+			Iterator		operator-- (int)					{ Iterator tmp = *this; tmp.m_ptr = tmp.m_ptr->m_prev; return tmp; }
 
 			bool			operator== (const Iterator &other)	{ return this->m_ptr == other.m_ptr; }
 			bool			operator!= (const Iterator &other)	{ return this->m_ptr != other.m_ptr; }
@@ -113,22 +138,22 @@ namespace ft
 			typedef	T&								reference;
 
 			ReverseIterator() : m_ptr(0) {}
-			explicit ReverseIterator(pointer ptr) : m_ptr(ptr) {}
+			explicit ReverseIterator(Node *ptr) : m_ptr(ptr) {}
 
 			reference				operator*  () const 						{ return m_ptr->m_value; }
 			pointer					operator-> () const 						{ return m_ptr->m_value; }
 
 			ReverseIterator&		operator++ ()								{ m_ptr = m_ptr->m_prev; return *this; }
-			ReverseIterator			operator++ (int)							{ ReverseIterator tmp = *this; --(*this); return tmp; }
+			ReverseIterator			operator++ (int)							{ ReverseIterator tmp = *this; tmp.m_ptr = tmp.m_ptr->m_prev; return tmp; }
 
 			ReverseIterator&		operator-- ()								{ m_ptr = m_ptr->m_next; return *this; }
-			ReverseIterator			operator-- (int)							{ ReverseIterator tmp = *this; ++(*this); return tmp; }
+			ReverseIterator			operator-- (int)							{ ReverseIterator tmp = *this; tmp.m_ptr = tmp.m_ptr->m_next; return tmp; }
 
 			bool					operator== (const ReverseIterator &other)	{ return this->m_ptr == other.m_ptr; }
 			bool					operator!= (const ReverseIterator &other)	{ return this->m_ptr != other.m_ptr; }
 
 		private:
-			pointer	m_ptr;
+			Node	*m_ptr;
 		};
 
 	};
@@ -197,10 +222,13 @@ namespace ft
 	template<typename T>
 	list<T>::~list()
 	{
-		Node *ptr = m_head->m_next;
-		for (; ptr; ptr = ptr->m_next)
-			delete ptr->m_prev;
-		delete m_tail;
+		if (m_size > 0)
+		{
+			Node *ptr = m_head->m_next;
+			for (; ptr; ptr = ptr->m_next)
+				delete ptr->m_prev;
+			delete m_tail;
+		}
 	}
 
 	template<typename T>
@@ -232,7 +260,7 @@ namespace ft
 		return *this;
 	}
 
-	//Member functions
+	//Iterators
 	template<typename T>
 	typename list<T>::iterator list<T>::begin()
 	{
@@ -255,6 +283,174 @@ namespace ft
 	typename list<T>::const_iterator list<T>::end() const
 	{
 		return Iterator(m_tail->m_next);
+	}
+
+	template<typename T>
+	typename list<T>::reverse_iterator list<T>::rbegin()
+	{
+		return ReverseIterator(m_tail);
+	}
+
+	template<typename T>
+	typename list<T>::const_reverse_iterator list<T>::rbegin() const
+	{
+		return ReverseIterator(m_tail);
+	}
+
+	template<typename T>
+	typename list<T>::reverse_iterator list<T>::rend()
+	{
+		return ReverseIterator(m_head->m_prev);
+	}
+
+	template<typename T>
+	typename list<T>::const_reverse_iterator list<T>::rend() const
+	{
+		return ReverseIterator(m_head->m_prev);
+	}
+
+	//Capacity
+	template<typename T>
+	bool list<T>::empty() const
+	{
+		if (m_size == 0)
+			return true;
+		return false;
+	}
+
+	template<typename T>
+	typename list<T>::size_type list<T>::size() const
+	{
+		return m_size;
+	}
+
+	template<typename T>
+	typename list<T>::size_type list<T>::max_size() const
+	{
+		return SIZE_T_MAX / sizeof(Node);
+	}
+
+	//Element access
+	template<typename T>
+	typename list<T>::reference list<T>::front()
+	{
+		return m_head->m_value;
+	}
+
+	template<typename T>
+	typename list<T>::const_reference list<T>::front() const
+	{
+		return m_head->m_value;
+	}
+
+	template<typename T>
+	typename list<T>::reference list<T>::back()
+	{
+		return m_tail->m_value;
+	}
+
+	template<typename T>
+	typename list<T>::const_reference list<T>::back() const
+	{
+		return m_tail->m_value;
+	}
+
+	//Modifiers
+	template<typename T>
+		template<class InputIterator>
+	void list<T>::assign(InputIterator first, typename enable_if<IsIterator<InputIterator>::value, InputIterator>::type last)
+	{
+		if (m_size > 0)
+		{
+			Node *ptr = m_head->m_next;
+			for (; ptr; ptr = ptr->m_next)
+				delete ptr->m_prev;
+			delete m_tail;
+			m_size = 0;
+		}
+
+		m_head = new Node(*first);
+		Node *ptr = m_head;
+		++first;
+
+		for (; first != last; ++first)
+		{
+			ptr->m_next = new Node(*first);
+			ptr->m_next->m_prev = ptr;
+			ptr = ptr->m_next;
+			++m_size;
+		}
+
+		ptr->m_next = 0;
+		m_tail = ptr;
+		++m_size;
+	}
+
+	template<typename T>
+	void list<T>::assign(list::size_type n, const value_type &val)
+	{
+		if (m_size > 0)
+		{
+			Node *ptr = m_head->m_next;
+			for (; ptr; ptr = ptr->m_next)
+				delete ptr->m_prev;
+			delete m_tail;
+		}
+
+		m_head = new Node(val);
+		Node *ptr = m_head;
+		m_size = 1;
+
+		for (int i = 1; i < n; ++i)
+		{
+			ptr->m_next = new Node(val);
+			ptr->m_next->m_prev = ptr;
+			ptr = ptr->m_next;
+			++m_size;
+		}
+
+		ptr->m_next = 0;
+		m_tail = ptr;
+		++m_size;
+	}
+
+	template<typename T>
+	void list<T>::push_front(const value_type &val)
+	{
+		Node *ptr = new Node(val);
+
+		ptr->m_next = m_head;
+		m_head->m_prev = ptr;
+		m_head = ptr;
+		++m_size;
+	}
+
+	template<typename T>
+	void list<T>::pop_front()
+	{
+		m_head = m_head->m_next;
+		delete m_head->m_prev;
+		--m_size;
+	}
+
+	template<typename T>
+	void list<T>::push_back(const value_type &val)
+	{
+		m_tail->next = new Node(val);
+
+		m_tail->m_next->prev = m_tail;
+		m_tail = m_tail->m_next;
+		m_tail->m_next = nullptr;
+		++m_size;
+	}
+
+	template<typename T>
+	void list<T>::pop_back()
+	{
+		m_tail = m_tail->m_prev;
+		delete m_tail->m_next;
+		m_tail->m_next = nullptr;
+		--m_size;
 	}
 }
 

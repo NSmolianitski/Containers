@@ -958,31 +958,87 @@ void listTest()
 {
 	std::cout << BLUE "**********************\\\\\\\\LIST////**********************" CLR << "\n";
 	{
-		std::cout << RED "* COPY LIST TO FT_LIST *" CLR << "\n";
+		std::cout << RED "* CREATE, EMPTY, SIZE *" CLR << "\n";
 
 		std::list<int> list;
 
-		list.push_back(0);
+		list.push_back(1);
 		list.push_back(20);
 		list.push_back(999);
 
 		ft::list<int> ft_list(list.begin(), list.end());
-		ft::list<int> ft_list2(4, 2);
-		ft_list2 = ft_list;
-		printList(ft_list2);
 
 		std::cout << GREEN "Standard:" CLR << "\n";
 		printList(list);
+		if (list.empty())
+			std::cout << "List is empty" << std::endl;
+		else
+			std::cout << "List is not empty" << std::endl;
+		std::cout << "Size: " << list.size() << std::endl;
+		std::cout << "Max size: " << list.max_size() << std::endl;
+
 		std::cout << YELLOW "\nCustom:" CLR << "\n";
 		printList(ft_list);
+		if (ft_list.empty())
+			std::cout << "List is empty" << std::endl;
+		else
+			std::cout << "List is not empty" << std::endl;
+		std::cout << "Size: " << ft_list.size() << std::endl;
+		std::cout << "Max size: " << ft_list.max_size() << std::endl;
 
 //--------------------------------------------------------------------------------------//
-		std::cout << RED "*  *" CLR << "\n";
+		std::cout << RED "\n* FRONT, BACK, ASSIGN *" CLR << "\n";
 
 		std::cout << GREEN "Standard:" CLR << "\n";
 		printList(list);
+		std::cout << "Front: " << list.front() << std::endl;
+		std::cout << "Back:  " << list.back() << std::endl;
+		std::cout << "Assign:" << std::endl;
+		list.assign(3, 2);
+		printList(list);
+
+
+
 		std::cout << YELLOW "\nCustom:" CLR << "\n";
 		printList(ft_list);
+		std::cout << "Front: " << ft_list.front() << std::endl;
+		std::cout << "Back:  " << ft_list.back() << std::endl;
+		std::cout << "Assign:" << std::endl;
+		ft_list.assign(list.begin(), list.end());
+		printList(ft_list);
+//--------------------------------------------------------------------------------------//
+		std::cout << RED "\n* PUSH, POP *" CLR << "\n";
+		std::cout << GREEN "Standard:" CLR << "\n";
+		std::cout << "Push" << "\n";
+		list.push_front(16);
+		std::cout << "Push" << "\n";
+		list.push_front(73);
+		printList(list);
+
+		std::cout << "\n";
+		std::cout << "Pop" << "\n";
+		list.pop_front();
+		printList(list);
+
+
+
+		std::cout << YELLOW "\nCustom:" CLR << "\n";
+		std::cout << "Push" << "\n";
+		ft_list.push_front(16);
+		std::cout << "Push" << "\n";
+		ft_list.push_front(73);
+		printList(ft_list);
+
+		std::cout << "\n";
+		std::cout << "Pop" << "\n";
+		ft_list.pop_front();
+		printList(ft_list);
+//--------------------------------------------------------------------------------------//
+		std::cout << RED "\n*  *" CLR << "\n";
+		std::cout << GREEN "Standard:" CLR << "\n";
+
+		std::cout << YELLOW "\nCustom:" CLR << "\n";
+
 	}
 }
 
@@ -995,4 +1051,5 @@ int main()
 {
 //	vectorTest();
 	listTest();
+
 }
