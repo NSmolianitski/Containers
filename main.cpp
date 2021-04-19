@@ -13,6 +13,21 @@
 
 #define CLR		"\033[0m"
 
+bool single_digit(const int &value)
+{
+	return (value < 10);
+}
+
+bool mycomparison (int first, int second)
+{
+	return (first > second);
+}
+
+bool is_second_lower(int first, int second)
+{
+	return (first > second);
+}
+
 template <typename T>
 void printVector(const T &vec)
 {
@@ -977,6 +992,8 @@ void listTest()
 		std::cout << "Size: " << list.size() << std::endl;
 		std::cout << "Max size: " << list.max_size() << std::endl;
 
+
+
 		std::cout << YELLOW "\nCustom:" CLR << "\n";
 		printList(ft_list);
 		if (ft_list.empty())
@@ -1007,38 +1024,549 @@ void listTest()
 		ft_list.assign(list.begin(), list.end());
 		printList(ft_list);
 //--------------------------------------------------------------------------------------//
-		std::cout << RED "\n* PUSH, POP *" CLR << "\n";
+		std::cout << RED "\n* PUSH, POP FRONT *" CLR << "\n";
 		std::cout << GREEN "Standard:" CLR << "\n";
-		std::cout << "Push" << "\n";
+		std::cout << "Push front" << "\n";
 		list.push_front(16);
-		std::cout << "Push" << "\n";
+		std::cout << "Push front" << "\n";
 		list.push_front(73);
 		printList(list);
 
 		std::cout << "\n";
-		std::cout << "Pop" << "\n";
+		std::cout << "Pop front" << "\n";
 		list.pop_front();
 		printList(list);
 
 
 
 		std::cout << YELLOW "\nCustom:" CLR << "\n";
-		std::cout << "Push" << "\n";
+		std::cout << "Push front" << "\n";
 		ft_list.push_front(16);
-		std::cout << "Push" << "\n";
+		std::cout << "Push front" << "\n";
 		ft_list.push_front(73);
 		printList(ft_list);
 
 		std::cout << "\n";
-		std::cout << "Pop" << "\n";
+		std::cout << "Pop front" << "\n";
 		ft_list.pop_front();
 		printList(ft_list);
 //--------------------------------------------------------------------------------------//
-		std::cout << RED "\n*  *" CLR << "\n";
+		std::cout << RED "\n* PUSH, POP BACK *" CLR << "\n";
 		std::cout << GREEN "Standard:" CLR << "\n";
+		std::cout << "Push back" << "\n";
+		list.push_back(5);
+		printList(list);
+
+		std::cout << "\nPop back" << "\n";
+		list.pop_back();
+		printList(list);
+
+
 
 		std::cout << YELLOW "\nCustom:" CLR << "\n";
+		std::cout << "Push back" << "\n";
+		ft_list.push_back(5);
+		printList(ft_list);
 
+		std::cout << "\nPop back" << "\n";
+		ft_list.pop_back();
+		printList(ft_list);
+//--------------------------------------------------------------------------------------//
+		std::cout << RED "\n* INSERT *" CLR << "\n";
+		std::cout << GREEN "Standard:" CLR << "\n";
+		std::list<int>::iterator it = list.begin().operator++();
+		list.insert(it, 44);
+		printList(list);
+		std::cout << "\n";
+
+		std::list<int>::iterator it2 = list.begin().operator++();
+		list.insert(it2, 2, 58);
+		printList(list);
+
+
+
+		std::cout << YELLOW "\nCustom:" CLR << "\n";
+		ft::list<int>::iterator ft_it = ft_list.begin().operator++();
+		ft_list.insert(ft_it, 44);
+		printList(ft_list);
+		std::cout << "\n";
+
+		ft::list<int>::iterator ft_it2 = ft_list.begin().operator++();
+		ft_list.insert(ft_it2, 2, 58);
+		printList(ft_list);
+//--------------------------------------------------------------------------------------//
+		std::cout << RED "\n* INSERT ITERATORS *" CLR << "\n";
+		std::cout << GREEN "Standard:" CLR << "\n";
+		std::list<int> list2;
+		list2.push_back(9999);
+		list2.push_back(4718);
+		list2.push_back(3571);
+		list2.push_back(1985);
+
+		list.insert(list.begin().operator++(), list2.begin(), list2.begin().operator++().operator++());
+		printList(list);
+		std::cout << "Size: " << list.size() << std::endl;
+
+
+
+		std::cout << YELLOW "\nCustom:" CLR << "\n";
+		ft::list<int> ft_list2;
+		ft_list2.push_back(9999);
+		ft_list2.push_back(4718);
+		ft_list2.push_back(3571);
+		ft_list2.push_back(1985);
+
+		ft_list.insert(ft_list.begin().operator++(), ft_list2.begin(), ft_list2.begin().operator++().operator++());
+		printList(ft_list);
+		std::cout << "Size: " << ft_list.size() << std::endl;
+//--------------------------------------------------------------------------------------//
+		std::cout << RED "\n* ERASE *" CLR << "\n";
+		std::cout << GREEN "Standard:" CLR << "\n";
+		list.pop_back();
+		list.pop_back();
+		list.pop_back();
+		printList(list);
+		std::cout << "\nErase Iterator: " << *list.erase(list.begin().operator++()) << std::endl;
+		printList(list);
+		std::cout << "\nErase Iterator: " << *list.erase(list.begin().operator++(), list.begin().operator++().operator++()) << std::endl;
+		printList(list);
+
+
+
+		std::cout << YELLOW "\nCustom:" CLR << "\n";
+		ft_list.pop_back();
+		ft_list.pop_back();
+		ft_list.pop_back();
+
+		printList(ft_list);
+		std::cout << "\nErase Iterator: " << *ft_list.erase(ft_list.begin().operator++()) << std::endl;
+		printList(ft_list);
+		std::cout << "\nErase Iterator: " << *ft_list.erase(ft_list.begin().operator++(), ft_list.begin().operator++().operator++()) << std::endl;
+		printList(ft_list);
+	}
+	{
+//--------------------------------------------------------------------------------------//
+		std::cout << RED "\n* SWAP *" CLR << "\n";
+		std::cout << GREEN "Standard:" CLR << "\n";
+		std::list<int> list;
+		list.push_back(5);
+		std::list<int> list2;
+		list2.push_back(10);
+		list2.push_back(20);
+		std::cout << "List one:\n";
+		printList(list);
+		std::cout << "List two:\n";
+		printList(list2);
+
+		std::cout << "\n";
+		list.swap(list2);
+
+		std::cout << "List one:\n";
+		printList(list);
+		std::cout << "List two:\n";
+		printList(list2);
+
+
+
+		std::cout << YELLOW "\nCustom:" CLR << "\n";
+		ft::list<int> ft_list;
+		ft_list.push_back(5);
+		ft::list<int> ft_list2;
+		ft_list2.push_back(10);
+		ft_list2.push_back(20);
+		std::cout << "List one:\n";
+		printList(ft_list);
+		std::cout << "List two:\n";
+		printList(ft_list2);
+
+		std::cout << "\n";
+		ft_list.swap(ft_list2);
+
+		std::cout << "List one:\n";
+		printList(ft_list);
+		std::cout << "List two:\n";
+		printList(ft_list2);
+
+//--------------------------------------------------------------------------------------//
+		std::cout << RED "\n* RESIZE *" CLR << "\n";
+		std::cout << GREEN "Standard:" CLR << "\n";
+		printList(list);
+		std::cout << "\nResize to 5:\n";
+		list.resize(5, 8);
+		printList(list);
+		std::cout << "\nResize to 3:\n";
+		list.resize(3);
+		printList(list);
+
+
+
+		std::cout << YELLOW "\nCustom:" CLR << "\n";
+		printList(ft_list);
+		std::cout << "\nResize to 5:\n";
+		ft_list.resize(5, 8);
+		printList(ft_list);
+		std::cout << "\nResize to 3:\n";
+		ft_list.resize(3);
+		printList(ft_list);
+//--------------------------------------------------------------------------------------//
+		std::cout << RED "\n* CLEAR *" CLR << "\n";
+		std::cout << GREEN "Standard:" CLR << "\n";
+		printList(list);
+		std::cout << "\nClear:\n";
+		list.clear();
+		printList(list);
+
+
+
+		std::cout << YELLOW "\nCustom:" CLR << "\n";
+		printList(ft_list);
+		std::cout << "\nClear:\n";
+		ft_list.clear();
+		printList(ft_list);
+//--------------------------------------------------------------------------------------//
+		std::cout << RED "\n* SPLICE *" CLR << "\n";
+		std::cout << GREEN "Standard:" CLR << "\n";
+		std::cout << "List one:\n";
+		list.push_back(10);
+		list.push_back(4);
+		list.push_back(2);
+		printList(list);
+		std::cout << "\nList two:\n";
+		list2.push_back(875);
+		printList(list2);
+		list.splice(list.end(), list2);
+		std::cout << "\nList one after splice:\n";
+		printList(list);
+
+
+
+		std::cout << YELLOW "\nCustom:" CLR << "\n";
+		std::cout << "List one:\n";
+		ft_list.push_back(10);
+		ft_list.push_back(4);
+		ft_list.push_back(2);
+		printList(ft_list);
+		std::cout << "\nList two:\n";
+		ft_list2.push_back(875);
+		printList(ft_list2);
+		ft_list.splice(ft_list.end(), ft_list2);
+		std::cout << "\nList one after splice:\n";
+		printList(ft_list);
+//--------------------------------------------------------------------------------------//
+		std::cout << RED "\n* SPLICE MORE *" CLR << "\n";
+		list.clear();
+		ft_list.clear();
+
+		std::cout << GREEN "Standard:" CLR << "\n";
+		std::cout << "List one:\n";
+		list.push_back(1);
+		list.push_back(2);
+		list.push_back(3);
+		printList(list);
+		std::cout << "\nList two:\n";
+		list2.push_back(100);
+		list2.push_back(200);
+		list2.push_back(300);
+		printList(list2);
+		list.splice(list.end().operator--(), list2, list2.begin().operator++());
+		std::cout << "\nList one after splice:\n";
+		printList(list);
+
+
+
+		std::cout << YELLOW "\nCustom:" CLR << "\n";
+		std::cout << "List one:\n";
+		ft_list.push_back(1);
+		ft_list.push_back(2);
+		ft_list.push_back(3);
+		printList(ft_list);
+		std::cout << "\nList two:\n";
+		ft_list2.push_back(100);
+		ft_list2.push_back(200);
+		ft_list2.push_back(300);
+		printList(ft_list2);
+		ft_list.splice(ft_list.end().operator--(), ft_list2, ft_list2.begin().operator++());
+		std::cout << "\nList one after splice:\n";
+		printList(ft_list);
+//--------------------------------------------------------------------------------------//
+		std::cout << RED "\n* REMOVE *" CLR << "\n";
+
+		std::cout << GREEN "Standard:" CLR << "\n";
+		std::cout << "List:\n";
+		list.push_back(200);
+		list.push_front(200);
+		printList(list);
+
+		list.remove(200);
+		std::cout << "\nList after remove:\n";
+		printList(list);
+
+
+
+		std::cout << YELLOW "\nCustom:" CLR << "\n";
+		std::cout << "List:\n";
+		ft_list.push_front(200);
+		ft_list.push_back(200);
+		printList(ft_list);
+
+		ft_list.remove(200);
+		std::cout << "\nList after remove:\n";
+		printList(ft_list);
+//--------------------------------------------------------------------------------------//
+		std::cout << RED "\n* REMOVE_IF *" CLR << "\n";
+
+		std::cout << GREEN "Standard:" CLR << "\n";
+		std::cout << "List:\n";
+		list.push_back(200);
+		list.push_front(200);
+		printList(list);
+
+		list.remove_if(single_digit);
+		std::cout << "\nList after remove:\n";
+		printList(list);
+
+
+
+		std::cout << YELLOW "\nCustom:" CLR << "\n";
+		std::cout << "List:\n";
+		ft_list.push_front(200);
+		ft_list.push_back(200);
+		printList(ft_list);
+
+		ft_list.remove_if(single_digit);
+		std::cout << "\nList after remove:\n";
+		printList(ft_list);
+//--------------------------------------------------------------------------------------//
+		std::cout << RED "\n* UNIQUE *" CLR << "\n";
+
+		std::cout << GREEN "Standard:" CLR << "\n";
+		std::cout << "List:\n";
+		list.push_back(80);
+		list.push_back(5);
+		list.push_back(5);
+		list.push_front(5);
+		list.push_front(80);
+		printList(list);
+
+		list.unique();
+		std::cout << "\nList after unique:\n";
+		printList(list);
+
+
+
+		std::cout << YELLOW "\nCustom:" CLR << "\n";
+		std::cout << "List:\n";
+		ft_list.push_back(80);
+		ft_list.push_back(5);
+		ft_list.push_back(5);
+		ft_list.push_front(5);
+		ft_list.push_front(80);
+		printList(ft_list);
+
+		ft_list.unique();
+		std::cout << "\nList after unique:\n";
+		printList(ft_list);
+//--------------------------------------------------------------------------------------//
+		std::cout << RED "\n* UNIQUE WITH PARAM *" CLR << "\n";
+		list.clear();
+		ft_list.clear();
+
+
+		std::cout << GREEN "Standard:" CLR << "\n";
+		std::cout << "List:\n";
+		list.push_back(10);
+		list.push_back(10);
+		list.push_back(20);
+		list.push_back(88);
+		list.push_back(20);
+		list.push_back(15);
+		list.push_back(60);
+		printList(list);
+
+		list.unique(is_second_lower);
+		std::cout << "\nList after unique:\n";
+		printList(list);
+
+
+
+		std::cout << YELLOW "\nCustom:" CLR << "\n";
+		std::cout << "List:\n";
+		ft_list.push_back(10);
+		ft_list.push_back(10);
+		ft_list.push_back(20);
+		ft_list.push_back(88);
+		ft_list.push_back(20);
+		ft_list.push_back(15);
+		ft_list.push_back(60);
+		printList(ft_list);
+
+		ft_list.unique(is_second_lower);
+		std::cout << "\nList after unique:\n";
+		printList(ft_list);
+//--------------------------------------------------------------------------------------//
+		std::cout << RED "\n* MERGE *" CLR << "\n";
+		list.clear();
+		list2.clear();
+		ft_list.clear();
+		ft_list2.clear();
+
+
+		std::cout << GREEN "Standard:" CLR << "\n";
+		std::cout << "List one:\n";
+		list.push_back(1);
+		list.push_back(2);
+		list.push_back(3);
+		list.push_back(5);
+		list.push_back(8);
+		list.push_back(12);
+		printList(list);
+
+		std::cout << "\nList two:\n";
+		list2.push_back(4);
+		list2.push_back(8);
+		list2.push_back(10);
+		printList(list2);
+
+		list.merge(list2);
+		std::cout << "\nList one after merge:\n";
+		printList(list);
+
+
+
+		std::cout << YELLOW "\nCustom:" CLR << "\n";
+		std::cout << "List one:\n";
+		ft_list.push_back(1);
+		ft_list.push_back(2);
+		ft_list.push_back(3);
+		ft_list.push_back(5);
+		ft_list.push_back(8);
+		ft_list.push_back(12);
+		printList(ft_list);
+
+		std::cout << "\nList two:\n";
+		ft_list2.push_back(4);
+		ft_list2.push_back(8);
+		ft_list2.push_back(10);
+		printList(ft_list2);
+
+		ft_list.merge(ft_list2);
+		std::cout << "\nList one after merge:\n";
+		printList(ft_list);
+//--------------------------------------------------------------------------------------//
+		std::cout << RED "\n* MERGE WITH CUSTOM COMPARISON *" CLR << "\n";
+		list.clear();
+		list2.clear();
+		ft_list.clear();
+		ft_list2.clear();
+
+
+		std::cout << GREEN "Standard:" CLR << "\n";
+		std::cout << "List one:\n";
+		list.push_back(12);
+		list.push_back(1);
+		list.push_back(2);
+		list.push_back(3);
+		list.push_back(5);
+		list.push_back(8);
+		printList(list);
+
+		std::cout << "\nList two:\n";
+		list2.push_back(4);
+		list2.push_back(8);
+		list2.push_back(10);
+		printList(list2);
+
+		list.merge(list2, mycomparison);
+		std::cout << "\nList one after merge:\n";
+		printList(list);
+
+
+
+		std::cout << YELLOW "\nCustom:" CLR << "\n";
+		std::cout << "List one:\n";
+		ft_list.push_back(12);
+		ft_list.push_back(1);
+		ft_list.push_back(2);
+		ft_list.push_back(3);
+		ft_list.push_back(5);
+		ft_list.push_back(8);
+		printList(ft_list);
+
+		std::cout << "\nList two:\n";
+		ft_list2.push_back(4);
+		ft_list2.push_back(8);
+		ft_list2.push_back(10);
+		printList(ft_list2);
+
+		ft_list.merge(ft_list2, mycomparison);
+		std::cout << "\nList one after merge:\n";
+		printList(ft_list);
+//--------------------------------------------------------------------------------------//
+		std::cout << RED "\n* REVERSE *" CLR << "\n";
+		list.clear();
+		list2.clear();
+		ft_list.clear();
+		ft_list2.clear();
+
+
+		std::cout << GREEN "Standard:" CLR << "\n";
+		std::cout << "List one:\n";
+		list.push_back(1);
+		list.push_back(10);
+		list.push_back(500);
+		list.push_back(8000);
+		printList(list);
+
+		list.reverse();
+		std::cout << "\nList after reverse:\n";
+		printList(list);
+
+
+
+		std::cout << YELLOW "\nCustom:" CLR << "\n";
+		std::cout << "List one:\n";
+		ft_list.push_back(1);
+		ft_list.push_back(10);
+		ft_list.push_back(500);
+		ft_list.push_back(8000);
+		printList(ft_list);
+
+		ft_list.reverse();
+		std::cout << "\nList after reverse:\n";
+		printList(ft_list);
+//--------------------------------------------------------------------------------------//
+		std::cout << RED "\n* SORT *" CLR << "\n";
+		list.clear();
+		list2.clear();
+		ft_list.clear();
+		ft_list2.clear();
+
+
+		std::cout << GREEN "Standard:" CLR << "\n";
+		std::cout << "List one:\n";
+		list.push_back(1);
+		list.push_back(8000);
+		list.push_back(500);
+		list.push_back(10);
+		printList(list);
+
+		list.sort();
+		std::cout << "\nList after reverse:\n";
+		printList(list);
+
+
+
+		std::cout << YELLOW "\nCustom:" CLR << "\n";
+		std::cout << "List one:\n";
+		ft_list.push_back(1);
+		ft_list.push_back(8000);
+		ft_list.push_back(500);
+		ft_list.push_back(10);
+		printList(ft_list);
+
+		ft_list.sort();
+		std::cout << "\nList after reverse:\n";
+		printList(ft_list);
 	}
 }
 
@@ -1051,5 +1579,5 @@ int main()
 {
 //	vectorTest();
 	listTest();
-
+	getchar();
 }
