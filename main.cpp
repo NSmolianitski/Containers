@@ -18,11 +18,6 @@ bool single_digit(const int &value)
 	return (value < 10);
 }
 
-bool mycomparison (int first, int second)
-{
-	return (first > second);
-}
-
 bool is_second_lower(int first, int second)
 {
 	return (first > second);
@@ -1476,7 +1471,7 @@ void listTest()
 		list2.push_back(10);
 		printList(list2);
 
-		list.merge(list2, mycomparison);
+		list.merge(list2, is_second_lower);
 		std::cout << "\nList one after merge:\n";
 		printList(list);
 
@@ -1498,7 +1493,7 @@ void listTest()
 		ft_list2.push_back(10);
 		printList(ft_list2);
 
-		ft_list.merge(ft_list2, mycomparison);
+		ft_list.merge(ft_list2, is_second_lower);
 		std::cout << "\nList one after merge:\n";
 		printList(ft_list);
 //--------------------------------------------------------------------------------------//
@@ -1541,7 +1536,6 @@ void listTest()
 		ft_list.clear();
 		ft_list2.clear();
 
-
 		std::cout << GREEN "Standard:" CLR << "\n";
 		std::cout << "List one:\n";
 		list.push_back(1);
@@ -1567,6 +1561,36 @@ void listTest()
 		ft_list.sort();
 		std::cout << "\nList after reverse:\n";
 		printList(ft_list);
+//--------------------------------------------------------------------------------------//
+		std::cout << RED "\n* SORT MORE *" CLR << "\n";
+		list.clear();
+		ft_list.clear();
+
+		std::cout << GREEN "Standard:" CLR << "\n";
+		std::cout << "List one:\n";
+		list.push_back(1);
+		list.push_back(8000);
+		list.push_back(500);
+		list.push_back(10);
+		printList(list);
+
+		list.sort(is_second_lower);
+		std::cout << "\nList after reverse:\n";
+		printList(list);
+
+
+
+		std::cout << YELLOW "\nCustom:" CLR << "\n";
+		std::cout << "List one:\n";
+		ft_list.push_back(1);
+		ft_list.push_back(8000);
+		ft_list.push_back(500);
+		ft_list.push_back(10);
+		printList(ft_list);
+
+		ft_list.sort(is_second_lower);
+		std::cout << "\nList after reverse:\n";
+		printList(ft_list);
 	}
 }
 
@@ -1579,5 +1603,5 @@ int main()
 {
 //	vectorTest();
 	listTest();
-	getchar();
+//	getchar();
 }

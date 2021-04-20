@@ -834,17 +834,55 @@ namespace ft
 			++tmpIt;
 			if (*it > *tmpIt)
 			{
-				Node *tmp = it.getNode();
-				it.getNode()->m_next = tmpIt.getNode()->m_next;
-				tmpIt.getNode()->m_next = tmp;
+				Node *left = it.getNode();
+				Node *right = tmpIt.getNode();
 
-				tmp = it.getNode()->m_prev;
-				tmp->m_next = tmpIt.getNode();
-				it.getNode()->m_prev = tmpIt.getNode();
-				tmpIt.getNode()->m_prev = tmp;
+				left->m_next = right->m_next;
+				right->m_next->m_prev = left;
+				right->m_next = left;
+
+				right->m_prev = left->m_prev;
+				if (left != m_head)
+					left->m_prev->m_next = right;
+				left->m_prev = right;
+
+				if (left == m_head)
+					m_head = right;
+				if (right == m_tail)
+					m_tail = left;
 				it = begin();
 			}
-			/////!!!!! Доделать END, TAIL и HEAD !!!
+		}
+	}
+
+	template<typename T>
+	template<class Compare>
+	void list<T>::sort(Compare comp)
+	{
+		for (iterator it = begin(); it != end().operator--(); ++it)
+		{
+			iterator tmpIt = it;
+			++tmpIt;
+			if (comp(*tmpIt, *it))
+			{
+				Node *left = it.getNode();
+				Node *right = tmpIt.getNode();
+
+				left->m_next = right->m_next;
+				right->m_next->m_prev = left;
+				right->m_next = left;
+
+				right->m_prev = left->m_prev;
+				if (left != m_head)
+					left->m_prev->m_next = right;
+				left->m_prev = right;
+
+				if (left == m_head)
+					m_head = right;
+				if (right == m_tail)
+					m_tail = left;
+				it = begin();
+			}
 		}
 	}
 
