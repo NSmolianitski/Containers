@@ -135,14 +135,6 @@ namespace ft
 		template <class Compare>
 			void	sort		(Compare comp);
 
-		//Relational operators
-		bool operator== (const list<T>& rhs);
-		bool operator!= (const list<T>& rhs);
-		bool operator<  (const list<T>& rhs);
-		bool operator<= (const list<T>& rhs);
-		bool operator>  (const list<T>& rhs);
-		bool operator>= (const list<T>& rhs);
-
 	private:
 
 		class Iterator
@@ -204,6 +196,20 @@ namespace ft
 		};
 
 	};
+
+	//Relational operators
+	template <class T>
+		bool operator== (const list<T> &lhs, const list<T> &rhs);
+	template <class T>
+		bool operator!= (const list<T> &lhs, const list<T> &rhs);
+	template <class T>
+		bool operator<  (const list<T> &lhs, const list<T> &rhs);
+	template <class T>
+		bool operator<= (const list<T> &lhs, const list<T> &rhs);
+	template <class T>
+		bool operator>  (const list<T> &lhs, const list<T> &rhs);
+	template <class T>
+		bool operator>= (const list<T> &lhs, const list<T> &rhs);
 
 	//Constructors and destructor
 	template<typename T>
@@ -895,113 +901,119 @@ namespace ft
 	}
 
 	template<typename T>
-	bool list<T>::operator==(const list<T> &rhs)
+	bool operator==(const list<T> &lhs, const list<T> &rhs)
 	{
-		if (m_size != rhs.m_size)
+		if (lhs.size() != rhs.size())
 			return false;
 
-		iterator it = begin();
-		iterator rhsIt = rhs.begin();
-		iterator rhsItEnd = const_cast< list<T> & >(rhs).end();
+		typename ft::list<T>::iterator lhsIt = lhs.begin();
+		typename ft::list<T>::iterator rhsIt = rhs.begin();
+		typename ft::list<T>::iterator lhsItEnd = const_cast< list<T> & >(lhs).end();
+		typename ft::list<T>::iterator rhsItEnd = const_cast< list<T> & >(rhs).end();
 
-		for (; it != end() && rhsIt != rhsItEnd; ++it, ++rhsIt)
+		for (; lhsIt != lhsItEnd && rhsIt != rhsItEnd; ++lhsIt, ++rhsIt)
 		{
-			if (*it != *rhsIt)
+			if (*lhsIt != *rhsIt)
 				return false;
 		}
 		return true;
 	}
 
 	template<typename T>
-	bool list<T>::operator!=(const list<T> &rhs)
+	bool operator!=(const list<T> &lhs, const list<T> &rhs)
 	{
-		if (m_size != rhs.m_size)
+		if (lhs.size() != rhs.size())
 			return true;
 
-		iterator it = begin();
-		iterator rhsIt = rhs.begin();
-		iterator rhsItEnd = const_cast< list<T> & >(rhs).end();
+		typename ft::list<T>::iterator lhsIt = lhs.begin();
+		typename ft::list<T>::iterator rhsIt = rhs.begin();
+		typename ft::list<T>::iterator lhsItEnd = const_cast< list<T> & >(lhs).end();
+		typename ft::list<T>::iterator rhsItEnd = const_cast< list<T> & >(rhs).end();
 
-		for (; it != end() && rhsIt != rhsItEnd; ++it, ++rhsIt)
+		for (; lhsIt != lhsItEnd && rhsIt != rhsItEnd; ++lhsIt, ++rhsIt)
 		{
-			if (*it != *rhsIt)
+			if (*lhsIt != *rhsIt)
 				return true;
 		}
 		return false;
 	}
 
 	template<typename T>
-	bool list<T>::operator<(const list<T> &rhs)
+	bool operator<(const list<T> &lhs, const list<T> &rhs)
 	{
-		iterator it = begin();
-		iterator rhsIt = rhs.begin();
-		iterator rhsItEnd = const_cast< list<T> & >(rhs).end();
+		typename ft::list<T>::iterator lhsIt = lhs.begin();
+		typename ft::list<T>::iterator rhsIt = rhs.begin();
+		typename ft::list<T>::iterator lhsItEnd = const_cast< list<T> & >(lhs).end();
+		typename ft::list<T>::iterator rhsItEnd = const_cast< list<T> & >(rhs).end();
 
-		for (; it != end() && rhsIt != rhsItEnd; ++it, ++rhsIt)
+		for (; lhsIt != lhsItEnd && rhsIt != rhsItEnd; ++lhsIt, ++rhsIt)
 		{
-			if (*it < *rhsIt)
+			if (*lhsIt < *rhsIt)
 				return true;
-			else if (*it > *rhsIt)
+			else if (*lhsIt > *rhsIt)
 				return false;
 		}
-		if (m_size < rhs.m_size)
+		if (lhs.size() < rhs.size())
 			return true;
 		return false;
 	}
 
 	template<typename T>
-	bool list<T>::operator<=(const list<T> &rhs)
+	bool operator<=(const list<T> &lhs, const list<T> &rhs)
 	{
-		iterator it = begin();
-		iterator rhsIt = rhs.begin();
-		iterator rhsItEnd = const_cast< list<T> & >(rhs).end();
+		typename ft::list<T>::iterator lhsIt = lhs.begin();
+		typename ft::list<T>::iterator rhsIt = rhs.begin();
+		typename ft::list<T>::iterator lhsItEnd = const_cast< list<T> & >(lhs).end();
+		typename ft::list<T>::iterator rhsItEnd = const_cast< list<T> & >(rhs).end();
 
-		for (; it != end() && rhsIt != rhsItEnd; ++it, ++rhsIt)
+		for (; lhsIt != lhsItEnd && rhsIt != rhsItEnd; ++lhsIt, ++rhsIt)
 		{
-			if (*it < *rhsIt)
+			if (*lhsIt < *rhsIt)
 				return true;
-			else if (*it > *rhsIt)
+			else if (*lhsIt > *rhsIt)
 				return false;
 		}
-		if (m_size <= rhs.m_size)
+		if (lhs.size() <= rhs.size())
 			return true;
 		return false;
 	}
 
 	template<typename T>
-	bool list<T>::operator>(const list<T> &rhs)
+	bool operator>(const list<T> &lhs, const list<T> &rhs)
 	{
-		iterator it = begin();
-		iterator rhsIt = rhs.begin();
-		iterator rhsItEnd = const_cast< list<T> & >(rhs).end();
+		typename ft::list<T>::iterator lhsIt = lhs.begin();
+		typename ft::list<T>::iterator rhsIt = rhs.begin();
+		typename ft::list<T>::iterator lhsItEnd = const_cast< list<T> & >(lhs).end();
+		typename ft::list<T>::iterator rhsItEnd = const_cast< list<T> & >(rhs).end();
 
-		for (; it != end() && rhsIt != rhsItEnd; ++it, ++rhsIt)
+		for (; lhsIt != lhsItEnd && rhsIt != rhsItEnd; ++lhsIt, ++rhsIt)
 		{
-			if (*it > *rhsIt)
+			if (*lhsIt > *rhsIt)
 				return true;
-			else if (*it < *rhsIt)
+			else if (*lhsIt < *rhsIt)
 				return false;
 		}
-		if (m_size > rhs.m_size)
+		if (lhs.size() > rhs.size())
 			return true;
 		return false;
 	}
 
 	template<typename T>
-	bool list<T>::operator>=(const list<T> &rhs)
+	bool operator>=(const list<T> &lhs, const list<T> &rhs)
 	{
-		iterator it = begin();
-		iterator rhsIt = rhs.begin();
-		iterator rhsItEnd = const_cast< list<T> & >(rhs).end();
+		typename ft::list<T>::iterator lhsIt = lhs.begin();
+		typename ft::list<T>::iterator rhsIt = rhs.begin();
+		typename ft::list<T>::iterator lhsItEnd = const_cast< list<T> & >(lhs).end();
+		typename ft::list<T>::iterator rhsItEnd = const_cast< list<T> & >(rhs).end();
 
-		for (; it != end() && rhsIt != rhsItEnd; ++it, ++rhsIt)
+		for (; lhsIt != lhsItEnd && rhsIt != rhsItEnd; ++lhsIt, ++rhsIt)
 		{
-			if (*it > *rhsIt)
+			if (*lhsIt > *rhsIt)
 				return true;
-			else if (*it < *rhsIt)
+			else if (*lhsIt < *rhsIt)
 				return false;
 		}
-		if (m_size >= rhs.m_size)
+		if (lhs.size() >= rhs.size())
 			return true;
 		return false;
 	}
