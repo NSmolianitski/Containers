@@ -876,91 +876,105 @@ void vectorTest()
 //██████████████████████████████████████████████████████████████████████████████████████//
 //██████████████████████████████████████████████████████████████████████████████████████//
 	std::cout << RED "\n[VECTOR COMPARISON]" CLR << "\n";
-	{
 //░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░//
 //░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░[COMPARE TWO VECTORS]░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░//
 //░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░//
-		std::cout << RED "\n* COMPARE TWO VECTORS *" CLR << "\n";
-//░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░//
-		std::cout << GREEN "Standard:" CLR << "\n";
-		std::vector<int> v;
-
-		v.push_back(1);
-		v.push_back(2);
-
-		std::vector<int> v1 = v;
-
-		std::cout << "Vector one:" << std::endl;
-		printVector(v);
-		std::cout << "Vector two:" << std::endl;
-		printVector(v1);
-
-		if (v == v1)
-			std::cout << "\nEqual" << std::endl;
-		else
-			std::cout << "\nNot equal" << std::endl;
-//--------------------------------------------------------------------------------------//
-		std::cout << YELLOW "\nCustom:" CLR << "\n";
-		ft::vector<int> ft;
-
-		ft.push_back(1);
-		ft.push_back(2);
-
-		ft::vector<int> ft1 = ft;
-
-		std::cout << "Vector one:" << std::endl;
-		printVector(ft);
-		std::cout << "Vector two:" << std::endl;
-		printVector(ft1);
-
-		if (ft == ft1)
-			std::cout << "\nEqual" << std::endl;
-		else
-			std::cout << "\nNot equal" << std::endl;
-	}
-//░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░//
-//░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░[ONE MORE COMPARE]░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░//
-//░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░//
-		std::cout << RED "\n* ONE MORE COMPARE *" CLR << "\n";
+	std::cout << RED "\n* COMPARE TWO VECTORS *" CLR << "\n";
 //░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░//
 	{
-		std::cout << GREEN "Standard:" CLR << "\n";
+		std::cout << RED "\n* SORT MORE *" CLR << "\n";
 		std::vector<int> v;
+		std::vector<int> v2;
+		ft::vector<int> ft_v;
+		ft::vector<int> ft_v2;
 
-		v.push_back(1);
-		v.push_back(2);
-
-		std::vector<int> v1;
-		v1.push_back(2);
-
-		std::cout << "Vector one:" << std::endl;
+		std::cout << GREEN "Standard:" CLR << "\n";
+		std::cout << "List one:\n";
+		v.push_back(400);
+		v.push_back(500);
+		v.push_back(400);
 		printVector(v);
-		std::cout << "Vector two:" << std::endl;
-		printVector(v1);
+		std::cout << "\nList two:\n";
+		v2.push_back(200);
+		v2.push_back(500);
+		v2.push_back(200);
+		printVector(v2);
 
-		if (v == v1)
-			std::cout << "\nEqual" << std::endl;
+		std::cout << "Vector one == Vector two:" <<std::endl;
+		if (v == v2)
+			std::cout << GREEN "True" CLR <<std::endl;
 		else
-			std::cout << "\nNot equal" << std::endl;
-//--------------------------------------------------------------------------------------//
+			std::cout << RED "False" CLR <<std::endl;
+		std::cout << "Vector one != Vector two:" <<std::endl;
+		if (v != v2)
+			std::cout << GREEN "True" CLR <<std::endl;
+		else
+			std::cout << RED "False" CLR <<std::endl;
+		std::cout << "Vector one < Vector two:" <<std::endl;
+		if (v < v2)
+			std::cout << GREEN "True" CLR <<std::endl;
+		else
+			std::cout << RED "False" CLR <<std::endl;
+		std::cout << "Vector one <= Vector two:" <<std::endl;
+		if (v <= v2)
+			std::cout << GREEN "True" CLR <<std::endl;
+		else
+			std::cout << RED "False" CLR <<std::endl;
+		std::cout << "Vector one > Vector two:" <<std::endl;
+		if (v > v2)
+			std::cout << GREEN "True" CLR <<std::endl;
+		else
+			std::cout << RED "False" CLR <<std::endl;
+		std::cout << "Vector one >= Vector two:" <<std::endl;
+		if (v >= v2)
+			std::cout << GREEN "True" CLR <<std::endl;
+		else
+			std::cout << RED "False" CLR <<std::endl;
+
+
+
 		std::cout << YELLOW "\nCustom:" CLR << "\n";
-		ft::vector<int> ft;
+		std::cout << "List one:\n";
+		ft_v.push_back(400);
+		ft_v.push_back(500);
+		ft_v.push_back(400);
+		printVector(ft_v);
+		std::cout << "\nList two:\n";
+		ft_v2.push_back(200);
+		ft_v2.push_back(500);
+		ft_v2.push_back(200);
+		printVector(ft_v2);
 
-		ft.push_back(1);
-		ft.push_back(2);
-
-		ft::vector<int> ft1;
-		ft1.push_back(2);
-
-		std::cout << "Vector one:" << std::endl;
-		printVector(ft);
-		std::cout << "Vector two:" << std::endl;
-		printVector(ft1);
-
-		if (ft == ft1)
-			std::cout << "\nEqual" << std::endl;
+		std::cout << "Vector one == Vector two:" <<std::endl;
+		if (ft_v == ft_v2)
+			std::cout << GREEN "True" CLR <<std::endl;
 		else
-			std::cout << "\nNot equal" << std::endl;
+			std::cout << RED "False" CLR <<std::endl;
+		std::cout << "Vector one != Vector two:" <<std::endl;
+		if (ft_v != ft_v2)
+			std::cout << GREEN "True" CLR <<std::endl;
+		else
+			std::cout << RED "False" CLR <<std::endl;
+		std::cout << "Vector one < Vector two:" <<std::endl;
+		if (ft_v < ft_v2)
+			std::cout << GREEN "True" CLR <<std::endl;
+		else
+			std::cout << RED "False" CLR <<std::endl;
+		std::cout << "Vector one <= Vector two:" <<std::endl;
+		if (ft_v <= ft_v2)
+			std::cout << GREEN "True" CLR <<std::endl;
+		else
+			std::cout << RED "False" CLR <<std::endl;
+		std::cout << "Vector one > Vector two:" <<std::endl;
+		if (ft_v > ft_v2)
+			std::cout << GREEN "True" CLR <<std::endl;
+		else
+			std::cout << RED "False" CLR <<std::endl;
+		std::cout << "Vector one >= Vector two:" <<std::endl;
+		if (ft_v >= ft_v2)
+			std::cout << GREEN "True" CLR <<std::endl;
+		else
+			std::cout << RED "False" CLR <<std::endl;
 	}
 }
 
@@ -1592,7 +1606,7 @@ void listTest()
 		std::cout << "\nList after reverse:\n";
 		printList(ft_list);
 //--------------------------------------------------------------------------------------//
-		std::cout << RED "\n* SORT MORE *" CLR << "\n";
+		std::cout << RED "\n* COMPARE *" CLR << "\n";
 		list.clear();
 		list2.clear();
 		ft_list.clear();
@@ -1668,17 +1682,17 @@ void listTest()
 			std::cout << GREEN "True" CLR <<std::endl;
 		else
 			std::cout << RED "False" CLR <<std::endl;
-		std::cout << "List one <= list two" <<std::endl;
+		std::cout << "List one <= list two:" <<std::endl;
 		if (ft_list <= ft_list2)
 			std::cout << GREEN "True" CLR <<std::endl;
 		else
 			std::cout << RED "False" CLR <<std::endl;
-		std::cout << "List one > list two" <<std::endl;
+		std::cout << "List one > list two:" <<std::endl;
 		if (ft_list > ft_list2)
 			std::cout << GREEN "True" CLR <<std::endl;
 		else
 			std::cout << RED "False" CLR <<std::endl;
-		std::cout << "List one >= list two" <<std::endl;
+		std::cout << "List one >= list two:" <<std::endl;
 		if (ft_list >= ft_list2)
 			std::cout << GREEN "True" CLR <<std::endl;
 		else
@@ -1693,7 +1707,7 @@ void stackTest()
 
 int main()
 {
-//	vectorTest();
-	listTest();
+	vectorTest();
+//	listTest();
 //	getchar();
 }

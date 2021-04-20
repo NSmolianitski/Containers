@@ -686,9 +686,15 @@ namespace ft
 	{
 		if (lhs.size() != rhs.size())
 			return false;
-		for (int i = 0; i < lhs.size(); ++i)
+
+		typename ft::vector<T>::iterator lhsIt = lhs.begin();
+		typename ft::vector<T>::iterator rhsIt = rhs.begin();
+		typename ft::vector<T>::iterator lhsItEnd = const_cast< vector<T> & >(lhs).end();
+		typename ft::vector<T>::iterator rhsItEnd = const_cast< vector<T> & >(rhs).end();
+
+		for (; lhsIt != lhsItEnd && rhsIt != rhsItEnd; ++lhsIt, ++rhsIt)
 		{
-			if (lhs[i] != rhs[i])
+			if (*lhsIt != *rhsIt)
 				return false;
 		}
 		return true;
@@ -699,9 +705,15 @@ namespace ft
 	{
 		if (lhs.size() != rhs.size())
 			return true;
-		for (int i = 0; i < lhs.size(); ++i)
+
+		typename ft::vector<T>::iterator lhsIt = lhs.begin();
+		typename ft::vector<T>::iterator rhsIt = rhs.begin();
+		typename ft::vector<T>::iterator lhsItEnd = const_cast< vector<T> & >(lhs).end();
+		typename ft::vector<T>::iterator rhsItEnd = const_cast< vector<T> & >(rhs).end();
+
+		for (; lhsIt != lhsItEnd && rhsIt != rhsItEnd; ++lhsIt, ++rhsIt)
 		{
-			if (lhs[i] != rhs[i])
+			if (*lhsIt != *rhsIt)
 				return true;
 		}
 		return false;
@@ -710,54 +722,88 @@ namespace ft
 	template <class T>
 	bool operator<  (const vector<T>& lhs, const vector<T>& rhs)
 	{
+		typename ft::vector<T>::iterator lhsIt = lhs.begin();
+		typename ft::vector<T>::iterator rhsIt = rhs.begin();
+		typename ft::vector<T>::iterator lhsItEnd = const_cast< vector<T> & >(lhs).end();
+		typename ft::vector<T>::iterator rhsItEnd = const_cast< vector<T> & >(rhs).end();
+
+		for (; lhsIt != lhsItEnd && rhsIt != rhsItEnd; ++lhsIt, ++rhsIt)
+		{
+			if (*lhsIt < *rhsIt)
+				return true;
+			else if (*lhsIt > *rhsIt)
+				return false;
+		}
 		if (lhs.size() < rhs.size())
 			return true;
-		for (int i = 0; i < lhs.size(); ++i)
-		{
-			if (lhs[i] < rhs[i])
-				return true;
-		}
 		return false;
 	}
 
 	template <class T>
 	bool operator<= (const vector<T>& lhs, const vector<T>& rhs)
 	{
-		if (lhs.size() > rhs.size())
-			return false;
-		for (int i = 0; i < lhs.size(); ++i)
+		typename ft::vector<T>::iterator lhsIt = lhs.begin();
+		typename ft::vector<T>::iterator rhsIt = rhs.begin();
+		typename ft::vector<T>::iterator lhsItEnd = const_cast< vector<T> & >(lhs).end();
+		typename ft::vector<T>::iterator rhsItEnd = const_cast< vector<T> & >(rhs).end();
+
+		for (; lhsIt != lhsItEnd && rhsIt != rhsItEnd; ++lhsIt, ++rhsIt)
 		{
-			if (lhs[i] > rhs[i])
+			if (*lhsIt < *rhsIt)
+				return true;
+			else if (*lhsIt > *rhsIt)
 				return false;
 		}
-		return true;
+		if (lhs.size() <= rhs.size())
+			return true;
+		return false;
 	}
 
 	template <class T>
 	bool operator>  (const vector<T>& lhs, const vector<T>& rhs)
 	{
+		typename ft::vector<T>::iterator lhsIt = lhs.begin();
+		typename ft::vector<T>::iterator rhsIt = rhs.begin();
+		typename ft::vector<T>::iterator lhsItEnd = const_cast< vector<T> & >(lhs).end();
+		typename ft::vector<T>::iterator rhsItEnd = const_cast< vector<T> & >(rhs).end();
+
+		for (; lhsIt != lhsItEnd && rhsIt != rhsItEnd; ++lhsIt, ++rhsIt)
+		{
+			if (*lhsIt > *rhsIt)
+				return true;
+			else if (*lhsIt < *rhsIt)
+				return false;
+		}
 		if (lhs.size() > rhs.size())
 			return true;
-		for (int i = 0; i < lhs.size(); ++i)
-		{
-			if (lhs[i] > rhs[i])
-				return true;
-		}
 		return false;
 	}
 
 	template <class T>
 	bool operator>= (const vector<T>& lhs, const vector<T>& rhs)
 	{
-		if (lhs.size() < rhs.size())
-			return false;
-		for (int i = 0; i < lhs.size(); ++i)
+		typename ft::vector<T>::iterator lhsIt = lhs.begin();
+		typename ft::vector<T>::iterator rhsIt = rhs.begin();
+		typename ft::vector<T>::iterator lhsItEnd = const_cast< vector<T> & >(lhs).end();
+		typename ft::vector<T>::iterator rhsItEnd = const_cast< vector<T> & >(rhs).end();
+
+		for (; lhsIt != lhsItEnd && rhsIt != rhsItEnd; ++lhsIt, ++rhsIt)
 		{
-			if (lhs[i] < rhs[i])
+			if (*lhsIt > *rhsIt)
+				return true;
+			else if (*lhsIt < *rhsIt)
 				return false;
 		}
-		return true;
+		if (lhs.size() >= rhs.size())
+			return true;
+		return false;
 	}
+}
+
+template <class T>
+void swap (ft::vector<T> &x, ft::vector<T> &y)
+{
+	x.swap(y);
 }
 
 #endif

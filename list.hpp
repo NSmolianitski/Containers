@@ -1019,4 +1019,10 @@ namespace ft
 	}
 }
 
+template <class T>
+void swap (ft::list<T> &x, ft::list<T> &y)
+{
+	x.swap(y);
+}
+
 #endif
