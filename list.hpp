@@ -135,6 +135,14 @@ namespace ft
 		template <class Compare>
 			void	sort		(Compare comp);
 
+		//Relational operators
+		bool operator== (const list<T>& rhs);
+		bool operator!= (const list<T>& rhs);
+		bool operator<  (const list<T>& rhs);
+		bool operator<= (const list<T>& rhs);
+		bool operator>  (const list<T>& rhs);
+		bool operator>= (const list<T>& rhs);
+
 	private:
 
 		class Iterator
@@ -886,6 +894,117 @@ namespace ft
 		}
 	}
 
+	template<typename T>
+	bool list<T>::operator==(const list<T> &rhs)
+	{
+		if (m_size != rhs.m_size)
+			return false;
+
+		iterator it = begin();
+		iterator rhsIt = rhs.begin();
+		iterator rhsItEnd = const_cast< list<T> & >(rhs).end();
+
+		for (; it != end() && rhsIt != rhsItEnd; ++it, ++rhsIt)
+		{
+			if (*it != *rhsIt)
+				return false;
+		}
+		return true;
+	}
+
+	template<typename T>
+	bool list<T>::operator!=(const list<T> &rhs)
+	{
+		if (m_size != rhs.m_size)
+			return true;
+
+		iterator it = begin();
+		iterator rhsIt = rhs.begin();
+		iterator rhsItEnd = const_cast< list<T> & >(rhs).end();
+
+		for (; it != end() && rhsIt != rhsItEnd; ++it, ++rhsIt)
+		{
+			if (*it != *rhsIt)
+				return true;
+		}
+		return false;
+	}
+
+	template<typename T>
+	bool list<T>::operator<(const list<T> &rhs)
+	{
+		iterator it = begin();
+		iterator rhsIt = rhs.begin();
+		iterator rhsItEnd = const_cast< list<T> & >(rhs).end();
+
+		for (; it != end() && rhsIt != rhsItEnd; ++it, ++rhsIt)
+		{
+			if (*it < *rhsIt)
+				return true;
+			else if (*it > *rhsIt)
+				return false;
+		}
+		if (m_size < rhs.m_size)
+			return true;
+		return false;
+	}
+
+	template<typename T>
+	bool list<T>::operator<=(const list<T> &rhs)
+	{
+		iterator it = begin();
+		iterator rhsIt = rhs.begin();
+		iterator rhsItEnd = const_cast< list<T> & >(rhs).end();
+
+		for (; it != end() && rhsIt != rhsItEnd; ++it, ++rhsIt)
+		{
+			if (*it < *rhsIt)
+				return true;
+			else if (*it > *rhsIt)
+				return false;
+		}
+		if (m_size <= rhs.m_size)
+			return true;
+		return false;
+	}
+
+	template<typename T>
+	bool list<T>::operator>(const list<T> &rhs)
+	{
+		iterator it = begin();
+		iterator rhsIt = rhs.begin();
+		iterator rhsItEnd = const_cast< list<T> & >(rhs).end();
+
+		for (; it != end() && rhsIt != rhsItEnd; ++it, ++rhsIt)
+		{
+			if (*it > *rhsIt)
+				return true;
+			else if (*it < *rhsIt)
+				return false;
+		}
+		if (m_size > rhs.m_size)
+			return true;
+		return false;
+	}
+
+	template<typename T>
+	bool list<T>::operator>=(const list<T> &rhs)
+	{
+		iterator it = begin();
+		iterator rhsIt = rhs.begin();
+		iterator rhsItEnd = const_cast< list<T> & >(rhs).end();
+
+		for (; it != end() && rhsIt != rhsItEnd; ++it, ++rhsIt)
+		{
+			if (*it > *rhsIt)
+				return true;
+			else if (*it < *rhsIt)
+				return false;
+		}
+		if (m_size >= rhs.m_size)
+			return true;
+		return false;
+	}
 }
 
 #endif

@@ -1591,6 +1591,98 @@ void listTest()
 		ft_list.sort(is_second_lower);
 		std::cout << "\nList after reverse:\n";
 		printList(ft_list);
+//--------------------------------------------------------------------------------------//
+		std::cout << RED "\n* SORT MORE *" CLR << "\n";
+		list.clear();
+		list2.clear();
+		ft_list.clear();
+		ft_list2.clear();
+
+		std::cout << GREEN "Standard:" CLR << "\n";
+		std::cout << "List one:\n";
+		list.push_back(500);
+		list.push_back(400);
+		list.push_back(400);
+		printList(list);
+		std::cout << "\nList two:\n";
+		list2.push_back(500);
+		list2.push_back(200);
+		printList(list2);
+
+		std::cout << "List one == list two:" <<std::endl;
+		if (list == list2)
+			std::cout << GREEN "True" CLR <<std::endl;
+		else
+			std::cout << RED "False" CLR <<std::endl;
+		std::cout << "List one != list two:" <<std::endl;
+		if (list != list2)
+			std::cout << GREEN "True" CLR <<std::endl;
+		else
+			std::cout << RED "False" CLR <<std::endl;
+		std::cout << "List one < list two:" <<std::endl;
+		if (list < list2)
+			std::cout << GREEN "True" CLR <<std::endl;
+		else
+			std::cout << RED "False" CLR <<std::endl;
+		std::cout << "List one <= list two:" <<std::endl;
+		if (list <= list2)
+			std::cout << GREEN "True" CLR <<std::endl;
+		else
+			std::cout << RED "False" CLR <<std::endl;
+		std::cout << "List one > list two:" <<std::endl;
+		if (list > list2)
+			std::cout << GREEN "True" CLR <<std::endl;
+		else
+			std::cout << RED "False" CLR <<std::endl;
+		std::cout << "List one >= list two:" <<std::endl;
+		if (list >= list2)
+			std::cout << GREEN "True" CLR <<std::endl;
+		else
+			std::cout << RED "False" CLR <<std::endl;
+
+
+
+		std::cout << YELLOW "\nCustom:" CLR << "\n";
+		std::cout << "List one:\n";
+		ft_list.push_back(500);
+		ft_list.push_back(400);
+		ft_list.push_back(400);
+		printList(ft_list);
+		std::cout << "\nList two:\n";
+		ft_list2.push_back(500);
+		ft_list2.push_back(200);
+		printList(ft_list2);
+
+		std::cout << "List one == list two:" <<std::endl;
+		if (ft_list == ft_list2)
+			std::cout << GREEN "True" CLR <<std::endl;
+		else
+			std::cout << RED "False" CLR <<std::endl;
+		std::cout << "List one != list two:" <<std::endl;
+		if (ft_list != ft_list2)
+			std::cout << GREEN "True" CLR <<std::endl;
+		else
+			std::cout << RED "False" CLR <<std::endl;
+		std::cout << "List one < list two:" <<std::endl;
+		if (ft_list < ft_list2)
+			std::cout << GREEN "True" CLR <<std::endl;
+		else
+			std::cout << RED "False" CLR <<std::endl;
+		std::cout << "List one <= list two" <<std::endl;
+		if (ft_list <= ft_list2)
+			std::cout << GREEN "True" CLR <<std::endl;
+		else
+			std::cout << RED "False" CLR <<std::endl;
+		std::cout << "List one > list two" <<std::endl;
+		if (ft_list > ft_list2)
+			std::cout << GREEN "True" CLR <<std::endl;
+		else
+			std::cout << RED "False" CLR <<std::endl;
+		std::cout << "List one >= list two" <<std::endl;
+		if (ft_list >= ft_list2)
+			std::cout << GREEN "True" CLR <<std::endl;
+		else
+			std::cout << RED "False" CLR <<std::endl;
 	}
 }
 
