@@ -148,6 +148,7 @@ namespace ft
 
 			Iterator() {}
 			explicit Iterator(Node *ptr) : m_ptr(ptr) {}
+			explicit Iterator(const Node *ptr) : m_ptr(const_cast<Node *> (ptr)) {}
 
 			reference		operator*  () const 				{ return m_ptr->m_value; }
 			pointer			operator-> () const 				{ return m_ptr->m_value; }
@@ -178,6 +179,7 @@ namespace ft
 
 			ReverseIterator() {}
 			explicit ReverseIterator(Node *ptr) : m_ptr(ptr) {}
+			explicit ReverseIterator(const Node *ptr) : m_ptr(const_cast<Node *> (ptr)) {}
 
 			reference				operator*  () const 						{ return m_ptr->m_value; }
 			pointer					operator-> () const 						{ return m_ptr->m_value; }

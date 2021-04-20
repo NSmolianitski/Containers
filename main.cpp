@@ -5,6 +5,7 @@
 #include <iostream>
 #include <list>
 #include <vector>
+#include <stack>
 
 #define RED		"\033[31m"
 #define GREEN	"\033[32m"
@@ -1702,12 +1703,176 @@ void listTest()
 
 void stackTest()
 {
+	std::cout << BLUE "**********************\\\\\\\\STACK////**********************" CLR << "\n";
+	{
+		std::cout << RED "* CREATE, PUSH, EMPTY, SIZE *" CLR << "\n";
 
+		std::cout << GREEN "Standard:" CLR << "\n";
+		std::stack<int> stack;
+
+		if (stack.empty())
+			std::cout << "List is empty" << std::endl;
+		else
+			std::cout << "List is not empty" << std::endl;
+		std::cout << "Size: " << stack.size() << std::endl;
+
+		std::cout << "Push 1" << std::endl;
+		stack.push(1);
+		std::cout << "Push 20" << std::endl;
+		stack.push(20);
+		std::cout << "Push 999" << std::endl;
+		stack.push(999);
+
+		if (stack.empty())
+			std::cout << "List is empty" << std::endl;
+		else
+			std::cout << "List is not empty" << std::endl;
+		std::cout << "Size: " << stack.size() << std::endl;
+
+
+
+		std::cout << YELLOW "\nCustom:" CLR << "\n";
+		ft::stack<int> ft_stack;
+
+		if (ft_stack.empty())
+			std::cout << "List is empty" << std::endl;
+		else
+			std::cout << "List is not empty" << std::endl;
+		std::cout << "Size: " << ft_stack.size() << std::endl;
+
+		std::cout << "Push 1" << std::endl;
+		ft_stack.push(1);
+		std::cout << "Push 20" << std::endl;
+		ft_stack.push(20);
+		std::cout << "Push 999" << std::endl;
+		ft_stack.push(999);
+
+		if (ft_stack.empty())
+			std::cout << "List is empty" << std::endl;
+		else
+			std::cout << "List is not empty" << std::endl;
+		std::cout << "Size: " << ft_stack.size() << std::endl;
+//--------------------------------------------------------------------------------------//
+		std::cout << RED "\n* TOP, POP *" CLR << "\n";
+
+		std::cout << GREEN "Standard:" CLR << "\n";
+		std::cout << "Top: " << stack.top() << std::endl;
+		std::cout << BLUE "Pop" CLR << std::endl;
+		stack.pop();
+		std::cout << "Top: " << stack.top() << std::endl;
+
+
+
+		std::cout << YELLOW "\nCustom:" CLR << "\n";
+		std::cout << "Top: " << ft_stack.top() << std::endl;
+		std::cout << BLUE "Pop" CLR << std::endl;
+		ft_stack.pop();
+		std::cout << "Top: " << ft_stack.top() << std::endl;
+//--------------------------------------------------------------------------------------//
+		std::cout << RED "\n* COMPARE *" CLR << "\n";
+
+		std::cout << GREEN "Standard:" CLR << "\n";
+		std::cout << "List one:\n";
+		std::cout << "Push 500" << std::endl;
+		stack.push(500);
+		std::cout << "Push 400" << std::endl;
+		stack.push(400);
+		std::cout << "Push 400" << std::endl;
+		stack.push(400);
+
+		std::cout << "\nList two:\n";
+		std::stack<int> stack2;
+		std::cout << "Push 500" << std::endl;
+		stack2.push(500);
+		std::cout << "Push 200" << std::endl;
+		stack2.push(200);
+
+		std::cout << "\nList one == list two:" <<std::endl;
+		if (stack == stack2)
+			std::cout << GREEN "True" CLR <<std::endl;
+		else
+			std::cout << RED "False" CLR <<std::endl;
+		std::cout << "List one != list two:" <<std::endl;
+		if (stack != stack2)
+			std::cout << GREEN "True" CLR <<std::endl;
+		else
+			std::cout << RED "False" CLR <<std::endl;
+		std::cout << "List one < list two:" <<std::endl;
+		if (stack < stack2)
+			std::cout << GREEN "True" CLR <<std::endl;
+		else
+			std::cout << RED "False" CLR <<std::endl;
+		std::cout << "List one <= list two:" <<std::endl;
+		if (stack <= stack2)
+			std::cout << GREEN "True" CLR <<std::endl;
+		else
+			std::cout << RED "False" CLR <<std::endl;
+		std::cout << "List one > list two:" <<std::endl;
+		if (stack > stack2)
+			std::cout << GREEN "True" CLR <<std::endl;
+		else
+			std::cout << RED "False" CLR <<std::endl;
+		std::cout << "List one >= list two:" <<std::endl;
+		if (stack >= stack2)
+			std::cout << GREEN "True" CLR <<std::endl;
+		else
+			std::cout << RED "False" CLR <<std::endl;
+
+
+
+		std::cout << YELLOW "\nCustom:" CLR << "\n";
+		std::cout << "List one:\n";
+		std::cout << "Push 500" << std::endl;
+		ft_stack.push(500);
+		std::cout << "Push 400" << std::endl;
+		ft_stack.push(400);
+		std::cout << "Push 400" << std::endl;
+		ft_stack.push(400);
+
+		std::cout << "\nList two:\n";
+		ft::stack<int> ft_stack2;
+		std::cout << "Push 500" << std::endl;
+		ft_stack2.push(500);
+		std::cout << "Push 200" << std::endl;
+		ft_stack2.push(200);
+
+		std::cout << "\nList one == list two:" <<std::endl;
+		if (ft_stack == ft_stack2)
+			std::cout << GREEN "True" CLR <<std::endl;
+		else
+			std::cout << RED "False" CLR <<std::endl;
+		std::cout << "List one != list two:" <<std::endl;
+		if (ft_stack != ft_stack2)
+			std::cout << GREEN "True" CLR <<std::endl;
+		else
+			std::cout << RED "False" CLR <<std::endl;
+		std::cout << "List one < list two:" <<std::endl;
+		if (ft_stack < ft_stack2)
+			std::cout << GREEN "True" CLR <<std::endl;
+		else
+			std::cout << RED "False" CLR <<std::endl;
+		std::cout << "List one <= list two:" <<std::endl;
+		if (ft_stack <= ft_stack2)
+			std::cout << GREEN "True" CLR <<std::endl;
+		else
+			std::cout << RED "False" CLR <<std::endl;
+		std::cout << "List one > list two:" <<std::endl;
+		if (ft_stack > ft_stack2)
+			std::cout << GREEN "True" CLR <<std::endl;
+		else
+			std::cout << RED "False" CLR <<std::endl;
+		std::cout << "List one >= list two:" <<std::endl;
+		if (ft_stack >= ft_stack2)
+			std::cout << GREEN "True" CLR <<std::endl;
+		else
+			std::cout << RED "False" CLR <<std::endl;
+	}
 }
 
 int main()
 {
-	vectorTest();
+//	vectorTest();
 //	listTest();
+	stackTest();
 //	getchar();
 }
