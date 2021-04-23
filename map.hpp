@@ -248,12 +248,16 @@ namespace ft
 		else
 			ptr->right = nullptr;
 		if (ptr->parent == nullptr)
+		{
 			m_root = tmp;
+			m_root->parent = nullptr;
+		}
 		else if (ptr->parent->left == ptr)
 			ptr->parent->left = tmp;
 		else
 			ptr->parent->right = tmp;
 		tmp->left = ptr;
+		tmp->parent = ptr->parent;
 		ptr->parent = tmp;
 	}
 
@@ -266,76 +270,17 @@ namespace ft
 		else
 			ptr->left = nullptr;
 		if (ptr->parent == nullptr)
+		{
 			m_root = tmp;
+			m_root->parent = nullptr;
+		}
 		else if (ptr->parent->right == ptr)
 			ptr->parent->right = tmp;
 		else
 			ptr->parent->left = tmp;
 		tmp->right = ptr;
+		tmp->parent = ptr->parent;
 		ptr->parent = tmp;
-	}
-
-	template<class Key, class T, class Compare>
-	void map<Key, T, Compare>::fixInsertion(Node * ptr)
-	{
-		if (ptr == m_root)
-		{
-			ptr->color = BLACK;
-			return;
-		}
-		Node * father = ptr->parent;
-		while (father->color == RED)
-		{
-			if (father == father->parent->left)
-			{
-				if (father->parent->right)
-				{
-					if (father->parent->right->color == RED)
-					{
-						father->color = BLACK;
-						father->parent->right->color = BLACK;
-						father->parent->color = RED;
-						ptr = father->parent;
-					}
-				}
-				else
-				{
-					if (ptr == father->right)
-					{
-						ptr = father;
-						leftRotate(ptr); //////
-					}
-					ptr->parent->color = BLACK;
-					ptr->parent->parent->color = RED;
-					rightRotate(ptr->parent->parent); //////
-				}
-			}
-			else
-			{
-				if (father->parent->left)
-				{
-					if (father->parent->left->color == RED)
-					{
-						father->color = BLACK;
-						father->parent->left->color = BLACK;
-						father->parent->color = RED;
-						ptr = father->parent;
-					}
-				}
-				else
-				{
-					if (ptr == father->left)
-					{
-						ptr = father;
-						rightRotate(ptr); //////
-					}
-					ptr->parent->color = BLACK;
-					ptr->parent->parent->color = RED;
-					leftRotate(ptr->parent->parent); //////
-				}
-			}
-		}
-		m_root->color = BLACK;
 	}
 
 	template<class Key, class T, class Compare>
@@ -372,6 +317,66 @@ namespace ft
 	}
 
 	template<class Key, class T, class Compare>
+	void map<Key, T, Compare>::fixInsertion(Node * ptr)
+	{
+		if (ptr == m_root)
+		{
+			ptr->color = BLACK;
+			return;
+		}
+		while (ptr->parent && ptr->parent->color == RED)
+		{
+			Node * father = ptr->parent;
+			if (father == father->parent->left)
+			{
+				if (father->parent->right && father->parent->right->color == RED)
+				{
+					father->color = BLACK;
+					father->parent->right->color = BLACK;
+					father->parent->color = RED;
+					ptr = father->parent;
+				}
+				else
+				{
+					if (ptr == father->right)
+					{
+						ptr = father;
+						leftRotate(ptr);
+					}
+					ptr->parent->color = BLACK;
+					ptr->parent->parent->color = RED;
+					rightRotate(ptr->parent->parent);
+				}
+			}
+			else
+			{
+				if (father->parent->left)
+				{
+					if (father->parent->left->color == RED)
+					{
+						father->color = BLACK;
+						father->parent->left->color = BLACK;
+						father->parent->color = RED;
+						ptr = father->parent;
+					}
+				}
+				else
+				{
+					if (ptr == father->left)
+					{
+						ptr = father;
+						rightRotate(ptr);
+					}
+					ptr->parent->color = BLACK;
+					ptr->parent->parent->color = RED;
+					leftRotate(ptr->parent->parent);
+				}
+			}
+		}
+		m_root->color = BLACK;
+	}
+
+	template<class Key, class T, class Compare>
 		std::pair<typename ft::map<Key, T, Compare>::iterator, bool> map<Key, T, Compare>
 		        ::insert(const map::value_type &val)
 	{
@@ -382,8 +387,8 @@ namespace ft
 			Iterator it = find(val.first);
 			if (it == end())
 			{
-				Node *ptr = addNode(val);
-				fixInsertion(ptr);
+				Node *ptr = addNode(val);	// Assign leaf parent as new Node parent
+				fixInsertion(ptr);			// Fix tree if needed
 				return std::pair<iterator, bool>(Iterator(ptr), true);
 			}
 			else

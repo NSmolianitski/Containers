@@ -5,6 +5,7 @@
 #ifndef FT_CONTAINERS_QUEUE_HPP
 #define FT_CONTAINERS_QUEUE_HPP
 
+#include "list.hpp"
 
 namespace ft
 {
