@@ -2,12 +2,14 @@
 #include "vector.hpp"
 #include "stack.hpp"
 #include "queue.hpp"
+#include "map.hpp"
 
 #include <iostream>
 #include <list>
 #include <vector>
 #include <stack>
 #include <queue>
+#include <map>
 
 #define RED		"\033[31m"
 #define GREEN	"\033[32m"
@@ -2053,11 +2055,50 @@ void queueTest()
 	}
 }
 
+void mapTest()
+{
+	std::cout << BLUE "**********************\\\\\\\\MAP////**********************" CLR << "\n";
+	{
+		std::cout << RED "*  *" CLR << "\n";
+
+		std::cout << GREEN "Standard:" CLR << "\n";
+		std::map<int, int> map;
+		map.insert(std::pair<int, int>(10, 20));
+		for (std::map<int, int>::iterator it = map.begin(); it != map.end(); ++it)
+			std::cout << it->second << std::endl;
+
+
+
+		std::cout << YELLOW "\nCustom:" CLR << "\n";
+		ft::map<int, int> ft_map;
+		ft_map.insert(std::pair<int, int>(10, 20));
+		ft_map.insert(std::pair<int, int>(20, 20));
+//		ft_map.insert(std::pair<int, int>(5, 20));
+//		ft_map.insert(std::pair<int, int>(50, 20));
+//		ft_map.insert(std::pair<int, int>(14, 20));
+//		ft_map.insert(std::pair<int, int>(4, 20));
+//		ft_map.insert(std::pair<int, int>(0, 20));
+//		ft_map.insert(std::pair<int, int>(12, 20));
+//		ft_map.insert(std::pair<int, int>(120, 20));
+//		ft_map.insert(std::pair<int, int>(6, 20));
+		ft_map.insert(std::pair<int, int>(187, 20));
+//		ft_map.drawTree(ft_map.getRoot(), 0, 0);
+		ft_map.insert(std::pair<int, int>(-271, 20));
+		ft_map.insert(std::pair<int, int>(1, 20));
+		ft_map.drawTree(ft_map.getRoot(), 0, 0);
+		ft_map.insert(std::pair<int, int>(-147483648, 20));
+//--------------------------------------------------------------------------------------//
+		ft_map.drawTree(ft_map.getRoot(), 0, 0);
+		std::cout << "Boom";
+	}
+}
+
 int main()
 {
 //	vectorTest();
 //	listTest();
-	stackTest();
-	queueTest();
+//	stackTest();
+//	queueTest();
+	mapTest();
 //	getchar();
 }

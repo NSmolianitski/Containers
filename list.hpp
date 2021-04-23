@@ -43,6 +43,7 @@ namespace ft
 		Node	*m_head;
 		Node	*m_tail;
 		Node	m_end;
+
 		size_t	m_size;
 
 		class Iterator;

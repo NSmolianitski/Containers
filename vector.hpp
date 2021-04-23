@@ -49,7 +49,7 @@ namespace ft
 		typedef	ReverseIterator			reverse_iterator;
 		typedef	const ReverseIterator	const_reverse_iterator;
 
-		//Constructors, destructor
+		/// CONSTRUCTORS, DESTRUCTOR
 		vector();
 		explicit vector (size_type n, const value_type& val = value_type());
 		template <class InputIterator>
@@ -58,10 +58,10 @@ namespace ft
 
 		~vector();
 
-		//Operator overload
+		/// OPERATOR OVERLOAD
 		vector&			operator=	(const vector& x);
 
-		//Capacity
+		/// CAPACITY
 		bool			empty		() const;
 		size_type		size		() const;
 		size_type		max_size	() const;
@@ -69,7 +69,7 @@ namespace ft
 		size_type		capacity	() const;
 		void			reserve		(size_type n);
 
-		//Element access
+		/// ELEMENT ACCESS
 		reference		operator[]	(size_type n);
 		const_reference	operator[]	(size_type n) const;
 		reference		at			(size_type n);
@@ -79,7 +79,7 @@ namespace ft
 		reference		back		();
 		const_reference	back		() const;
 
-		//Modifiers
+		/// MODIFIERS
 		template <typename InputIterator>
 			typename enable_if<IsIterator<InputIterator>::value, void>::type assign(InputIterator first, InputIterator last);
 
@@ -99,7 +99,7 @@ namespace ft
 		iterator				erase		(iterator first, iterator last);
 
 
-		//Iterators
+		/// ITERATORS
 		iterator				begin		();
 		const_iterator			begin		() const;
 		iterator				end			();
@@ -195,11 +195,11 @@ namespace ft
 		size_type				m_size;
 		size_type				m_capacity;
 
-		//Utils
+		/// UTILS
 		size_type		getNearestPowerOfTwo(size_type x);
 	};
 
-	//Constructors			************************************************************
+	/// CONSTRUCTORS			************************************************************
 	template<typename T>
 	vector<T>::vector() : m_array(nullptr), m_size(0), m_capacity(0) {}
 
@@ -238,7 +238,7 @@ namespace ft
 		delete [] m_array;
 	}
 
-	//Operator overload	************************************************************
+	/// OPERATOR OVERLOAD	************************************************************
 	template<typename T>
 	vector<T> & vector<T>::operator=(const vector &x)
 	{
@@ -255,7 +255,7 @@ namespace ft
 		return *this;
 	}
 
-	//Capacity		************************************************************
+	/// CAPACITY		************************************************************
 	template<typename T>
 	bool vector<T>::empty() const
 	{
@@ -319,7 +319,7 @@ namespace ft
 		return m_capacity;
 	}
 
-	//Element access		************************************************************
+	/// ELEMENT ACCESS		************************************************************
 	template<typename T>
 	typename vector<T>::reference		vector<T>::operator[](vector::size_type n)
 	{
@@ -378,7 +378,7 @@ namespace ft
 		return m_array[m_size - 1];
 	}
 
-	//Modifiers		************************************************************
+	/// MODIFIERS		************************************************************
 	template<typename T>
 	void vector<T>::push_back (const value_type &val)
 	{
@@ -448,7 +448,7 @@ namespace ft
 		--m_size;
 	}
 
-	//Utils		************************************************************
+	/// UTILS		************************************************************
 	template<typename T>
 	typename vector<T>::size_type vector<T>::getNearestPowerOfTwo(size_type x)
 	{
@@ -472,7 +472,7 @@ namespace ft
 		}
 	}
 
-	//Iterators		************************************************************
+	/// ITERATORS		************************************************************
 	template<typename T>
 	typename vector<T>::iterator vector<T>::begin()
 	{
@@ -680,7 +680,7 @@ namespace ft
 		return tmpPosition;
 	}
 
-	//Comparison
+	/// COMPARISON
 	template <class T>
 	bool operator== (const vector<T>& lhs, const vector<T>& rhs)
 	{
