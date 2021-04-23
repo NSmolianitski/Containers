@@ -4,10 +4,11 @@
 
 #ifndef FT_CONTAINERS_MAP_HPP
 #define FT_CONTAINERS_MAP_HPP
+
 #include <iomanip> ///////////////////////////////////////////////////////////////!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 namespace ft
 {
-	/// RED-BLACK TREE COLORS
+	/// RED-BLACK TREE ENUMS
 	enum TreeColor
 	{
 		BLACK,
@@ -23,7 +24,7 @@ namespace ft
 	public:
 		class Iterator;
 		class ReverseIterator;
-		class value_comp;
+		class value_comp;/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 		typedef Key										key_type;
 		typedef T										mapped_type;
@@ -74,6 +75,7 @@ namespace ft
 		void		fixInsertion	(Node * ptr);
 		void 		leftRotate		(Node * ptr);
 		void 		rightRotate		(Node * ptr);
+		void		changeParent	(Node ** parentPtr, Node * child);
 
 	public:
 		void 		drawTree		(Node *root, int space, int debug); ///DELEEEEEEEEETE!@!!!!@!@!!#$!#!#!$!@! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -164,7 +166,8 @@ namespace ft
 		size_type	max_size() const;
 
 		/// OBSERVERS
-		value_compare value_comp() const;
+		value_compare	value_com	() const;
+		key_compare		key_comp	() const;
 
 		/// MODIFIERS
 		std::pair<iterator, bool>	insert (const value_type& val);
@@ -172,6 +175,11 @@ namespace ft
 
 		template <class InputIterator>
 			void insert (InputIterator first, InputIterator last);
+
+
+		void						erase (iterator position);
+		size_type					erase (const key_type& k);
+		void						erase (iterator first, iterator last);
 
 		/// OPERATIONS
 		iterator find (const key_type& k);
@@ -399,6 +407,97 @@ namespace ft
 		return std::pair<iterator, bool>(Iterator(m_root), true);
 	}
 
+//	template<class Key, class T, class Compare>
+//	void map<Key, T, Compare>::erase(map::iterator position)
+//	{
+//		Iterator it = find(val.first);
+//		if (it == end())
+//		{
+//			Node *ptr = addNode(val);	// Assign leaf parent as new Node parent
+//			fixInsertion(ptr);			// Fix tree if needed
+//			return std::pair<iterator, bool>(Iterator(ptr), true);
+//		}
+//		--m_size;
+//		fixInsertion(m_root);
+//	}
+
+	template<class Key, class T, class Compare>
+	void map<Key, T, Compare>::changeParent(Node ** parentPtr, Node * child)
+	{
+		child->parent = *parentPtr;
+		*parentPtr = child;
+	}
+
+	template<class Key, class T, class Compare>
+	typename map<Key, T, Compare>::size_type map<Key, T, Compare>::erase(const key_type &k)
+	{
+		Iterator it = find(k);
+
+		if (it == end())
+			return 0;
+
+		Node * nodeToBeDeleted = it.getNode();
+		bool savedColor = nodeToBeDeleted->color;
+
+		Node ** parentPointer = nullptr;
+		if (nodeToBeDeleted != m_root)
+		{
+			if (nodeToBeDeleted->parent->left == nodeToBeDeleted)
+				parentPointer = &nodeToBeDeleted->parent->left;
+			else
+				parentPointer = &nodeToBeDeleted->parent->right;
+		}
+
+		if (!nodeToBeDeleted->left && !nodeToBeDeleted->right)		// If no children
+		{
+			if (nodeToBeDeleted == m_root)
+				m_root = nullptr;
+			else
+				*parentPointer = nullptr;
+		}
+		else if (nodeToBeDeleted->left && nodeToBeDeleted->right)	// If two children
+		{
+			Node * ptr = nodeToBeDeleted->right;
+			while (ptr->left)
+				ptr = ptr->left;
+			ptr->parent = nullptr;
+			if (nodeToBeDeleted == m_root)
+				m_root = ptr;
+			else
+				*parentPointer = ptr;
+			ptr->left = nodeToBeDeleted->left;
+			nodeToBeDeleted->left->parent = ptr;
+		}
+		else														// If one child
+		{
+			if (nodeToBeDeleted->left)
+			{
+				if (nodeToBeDeleted == m_root)
+					m_root = nodeToBeDeleted->left;
+				else
+				{
+					*parentPointer = nodeToBeDeleted->left;
+					nodeToBeDeleted->left->parent = nodeToBeDeleted->parent;
+				}
+			}
+			else
+			{
+				if (nodeToBeDeleted == m_root)
+					m_root = nodeToBeDeleted->right;
+				else
+				{
+					*parentPointer = nodeToBeDeleted->right;
+					nodeToBeDeleted->left->parent = nodeToBeDeleted->parent;
+				}
+			}
+		}
+		if (m_root)
+			m_root->parent = nullptr;
+		delete nodeToBeDeleted;
+		--m_size;
+		return 1;
+	}
+
 	/// OPERATIONS
 	template<class Key, class T, class Compare>
 	typename map<Key, T, Compare>::iterator map<Key, T, Compare>::find(const key_type &k)
@@ -414,6 +513,20 @@ namespace ft
 				ptr = ptr->left;
 		}
 		return Iterator(m_end);
+	}
+
+	/// OBSERVERS
+	template<class Key, class T, class Compare>
+		typename map<Key, T, Compare>::key_compare map<Key, T, Compare>::key_comp() const
+	{
+		return key_compare();
+	}
+
+
+	template<class Key, class T, class Compare>
+		typename map<Key, T, Compare>::value_compare map<Key, T, Compare>::value_com() const
+	{
+		return value_compare();
 	}
 
 //////////////////////////////////////////!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -477,6 +590,8 @@ namespace ft
 		// Process left child
 		drawTree(root->left, space, debug);
 	}
+
+
 //////////////////////////////////////////!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 }

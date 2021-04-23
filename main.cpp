@@ -2064,36 +2064,37 @@ void mapTest()
 		std::cout << GREEN "Standard:" CLR << "\n";
 		std::map<int, int> map;
 		map.insert(std::pair<int, int>(10, 20));
-		for (std::map<int, int>::iterator it = map.begin(); it != map.end(); ++it)
+		std::map<int, int>::iterator it = map.begin();
+		for (; it != map.end(); ++it)
 			std::cout << it->second << std::endl;
-
+		--it;
+		std::cout << it->second << std::endl;
+		map.erase(10);
+		std::cout << it->second << std::endl;
+//		map.erase(80);
 
 
 		std::cout << YELLOW "\nCustom:" CLR << "\n";
 		ft::map<int, int> ft_map;
 		ft_map.insert(std::pair<int, int>(10, 20));
 		ft_map.insert(std::pair<int, int>(20, 20));
-		ft_map.insert(std::pair<int, int>(5, 20));
-		ft_map.insert(std::pair<int, int>(50, 20));
-		ft_map.insert(std::pair<int, int>(14, 20));
 		ft_map.insert(std::pair<int, int>(4, 20));
-		ft_map.insert(std::pair<int, int>(0, 20));
-		ft_map.insert(std::pair<int, int>(12, 20));
-		ft_map.insert(std::pair<int, int>(120, 20));
-		ft_map.insert(std::pair<int, int>(6, 20));
-		ft_map.insert(std::pair<int, int>(187, 20));
-//		ft_map.drawTree(ft_map.getRoot(), 0, 0);
-		ft_map.insert(std::pair<int, int>(-271, 20));
+		ft_map.insert(std::pair<int, int>(50, 20));
 		ft_map.insert(std::pair<int, int>(1, 20));
-		ft_map.insert(std::pair<int, int>(-147483648, 20));
-		ft_map.insert(std::pair<int, int>(-2147483648, 20));
-		ft_map.insert(std::pair<int, int>(-2147483646, 20));
-//		ft_map.drawTree(ft_map.getRoot(), 0, 0);
-		ft_map.insert(std::pair<int, int>(-2147483246, 20));
-		ft_map.insert(std::pair<int, int>(-214283246, 20));
+
+		ft_map.erase(4);
+		ft_map.erase(10);
+		ft_map.erase(20);
+		ft_map.erase(50);
+		ft_map.erase(1);
 //--------------------------------------------------------------------------------------//
 		ft_map.drawTree(ft_map.getRoot(), 0, 0);
-		std::cout << "Boom";
+		std::cout << "\n\n\n\n\n";
+		std::map<int, int>::key_compare comp = map.key_comp();
+		std::cout << comp(1, 10);
+		std::cout << "\n\n\n\n\n";
+		ft::map<int, int>::key_compare comp1 = ft_map.key_comp();
+		std::cout << comp1(1, 10);
 	}
 }
 
