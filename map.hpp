@@ -83,15 +83,9 @@ namespace ft
 		void 		rightRotate			(Node* ptr);
 		Node*		eraseTwoChildren	(Node* nodeToBeDeleted, TreeColor& originalColor);
 		void		fixErasure			(Node* ptr);
-		void		addChildToParent	(Node* parent, bool side, Node* child);
-		Node*		getGrandfather		(Node* ptr);
-		Node*		getUncle			(Node* ptr);
-		Node*		getBrother			(Node* ptr);
 		Node*		transplant			(Node* parent, Node* child);
 		Node*		newNode				(const map::value_type &val);
 		Node*		min					(Node* ptr);
-		void		fixNil				();
-		bool		isLeftChild			(Node* ptr);
 
 ///DELEEEEEEEEETE!@!!!!@!@!!#$!#!#!$!@! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	public:																	///////////////////////////////////////////////////////////////!
@@ -481,7 +475,6 @@ namespace ft
 					leftRotate(ptr->parent->parent);
 				}
 			}
-			fixNil();
 		}
 		m_root->color = BLACK;
 	}
@@ -532,29 +525,11 @@ namespace ft
 	}
 
 	template<class Key, class T, class Compare>
-	void map<Key, T, Compare>::fixNil()
-	{
-		m_nil->parent = m_nil;
-		m_nil->left = m_nil;
-		m_nil->right = m_nil;
-
-		m_nil->color = BLACK;
-	}
-
-	template<class Key, class T, class Compare>
 	typename map<Key, T, Compare>::Node* map<Key, T, Compare>::min(Node* ptr)
 	{
 		while (ptr->left != m_nil)
 			ptr = ptr->left;
 		return ptr;
-	}
-
-	template<class Key, class T, class Compare>
-	bool map<Key, T, Compare>::isLeftChild(Node* ptr)
-	{
-		if (ptr->parent->left == ptr)
-			return true;
-		return false;
 	}
 
 	template<class Key, class T, class Compare>
@@ -664,9 +639,6 @@ namespace ft
 		if (savedColor == BLACK)
 			fixErasure(x);
 
-//		fixNil();
-//		if (m_root)
-//			m_root->parent = m_nil;
 		delete nodeToBeDeleted;
 		--m_size;
 		return 1;
@@ -705,47 +677,6 @@ namespace ft
 	}
 
 	/// UTILS
-	template<class Key, class T, class Compare>
-	void map<Key, T, Compare>::addChildToParent(Node* parent, bool side, Node* child)
-	{
-		if (side == RIGHT)
-			parent->right = child;
-		else
-			parent->left = child;
-		child->parent = parent;
-	}
-
-	template<class Key, class T, class Compare>
-	typename map<Key, T, Compare>::Node* map<Key, T, Compare>::getGrandfather(Node* ptr)
-	{
-		if (ptr != m_nil && ptr->parent)
-			return ptr->parent->parent;
-		return m_nil;
-	}
-
-	template<class Key, class T, class Compare>
-	typename map<Key, T, Compare>::Node* map<Key, T, Compare>::getBrother(Node* ptr)
-	{
-		if (ptr->parent->left == ptr)
-			return ptr->parent->right;
-		else
-			return ptr->parent->left;
-	}
-
-	template<class Key, class T, class Compare>
-	typename map<Key, T, Compare>::Node* map<Key, T, Compare>::getUncle(Node* ptr)
-	{
-		Node*	grandfather = getGrandfather();
-
-		if (grandfather != m_nil)
-		{
-			if (grandfather->left == ptr->parent)
-				return grandfather->right;
-			else
-				return grandfather->left;
-		}
-		return m_nil;
-	}
 
 //////////////////////////////////////////!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
