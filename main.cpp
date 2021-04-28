@@ -2082,28 +2082,30 @@ void mapTest()
 		ft::map<int, int> ft_map;
 		std::cout << "Max size: " << ft_map.max_size() << std::endl;
 
-		ft_map.insert(std::pair<int, int>(10, 20));
-		ft_map.insert(std::pair<int, int>(20, 20));
-		ft_map.insert(std::pair<int, int>(4, 20));
-		ft_map.insert(std::pair<int, int>(50, 20));
 		ft_map.insert(std::pair<int, int>(1, 20));
-		ft_map.insert(std::pair<int, int>(180, 20));
-		ft_map.insert(std::pair<int, int>(77, 20));
-		ft_map.insert(std::pair<int, int>(16, 20));
-		ft_map.insert(std::pair<int, int>(23, 20));
-		ft_map.insert(std::pair<int, int>(25, 20));
-		ft_map.insert(std::pair<int, int>(21, 20));
-		ft_map.insert(std::pair<int, int>(27, 20));
+		ft_map.insert(std::pair<int, int>(2, 20));
+		ft_map.insert(std::pair<int, int>(3, 20));
+		ft_map.insert(std::pair<int, int>(4, 20));
+		ft_map.insert(std::pair<int, int>(5, 20));
+		ft_map.insert(std::pair<int, int>(6, 20));
+		ft_map.insert(std::pair<int, int>(7, 20));
+		ft_map.insert(std::pair<int, int>(8, 20));
+		ft_map.insert(std::pair<int, int>(9, 20));
+		ft_map.insert(std::pair<int, int>(10, 20));
 
-//		ft_map.erase(4);
-//		ft_map.erase(10);
-//		ft_map.erase(20);
-//		ft_map.erase(50);
-//		ft_map.erase(1);
+		ft_map.erase(4);
+		ft_map.erase(5);
+		ft_map.erase(1);
+		ft_map.erase(8);
+		ft_map.erase(2);
+		ft_map.erase(9);
+		ft_map.erase(7);
+		ft_map.erase(3);
+		ft_map.erase(3);
 //--------------------------------------------------------------------------------------//
+		std::cout << "\n\n\n\n";
 		ft_map.drawTree(ft_map.getRoot(), 0, 0);
-
-
+		getchar();
 		ft::map<int, int>::iterator ft_it = ft_map.begin();
 		std::cout << "Begin iterator key: " << ft_it->first << std::endl;
 		++ft_it;

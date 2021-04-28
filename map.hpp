@@ -15,6 +15,12 @@ namespace ft
 		RED
 	};
 
+	enum TreeSide
+	{
+		LEFT,
+		RIGHT
+	};
+
 	/// MAP CLASS
 	template<   class Key,                                   // map::key_type
 				class T,                                     // map::mapped_type
@@ -43,6 +49,7 @@ namespace ft
 		typedef std::size_t								size_type;
 
 		/// NODE STRUCT
+	private:
 		struct Node
 		{
 			value_type		pair;
@@ -51,7 +58,7 @@ namespace ft
 			Node *			left;
 			Node *			right;
 
-			bool 			color; //BLACK = 0, RED = 1
+			TreeColor		color; //BLACK = 0, RED = 1
 
 			Node(const std::pair<Key, T> pair_)
 					: pair(pair_)
@@ -60,21 +67,31 @@ namespace ft
 					, right(nullptr)
 					, color(RED) {}
 
-		private:
 			Node() {}
+
 		};
 
-	private:
 		/// MEMBERS
-		size_type		m_size;
-		Node *			m_root;
-		Node *			m_end;
+		size_type			m_size;
+		Node *				m_root;
+		Node *				m_nil;
 
 		/// UTILS MEMBER FUNCTIONS
-		Node *		addNode			(const map::value_type &val);
-		void		fixInsertion	(Node * ptr);
-		void 		leftRotate		(Node * ptr);
-		void 		rightRotate		(Node * ptr);
+		Node *		addNode				(const map::value_type &val);
+		void		fixInsertion		(Node* ptr);
+		void 		leftRotate			(Node* ptr);
+		void 		rightRotate			(Node* ptr);
+		Node*		eraseTwoChildren	(Node* nodeToBeDeleted, TreeColor& originalColor);
+		void		fixErasure			(Node* ptr);
+		void		addChildToParent	(Node* parent, bool side, Node* child);
+		Node*		getGrandfather		(Node* ptr);
+		Node*		getUncle			(Node* ptr);
+		Node*		getBrother			(Node* ptr);
+		Node*		transplant			(Node* parent, Node* child);
+		Node*		newNode				(const map::value_type &val);
+		Node*		min					(Node* ptr);
+		void		fixNil				();
+		bool		isLeftChild			(Node* ptr);
 
 ///DELEEEEEEEEETE!@!!!!@!@!!#$!#!#!$!@! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	public:																	///////////////////////////////////////////////////////////////!
@@ -84,7 +101,7 @@ namespace ft
 ///DELEEEEEEEEETE!@!!!!@!@!!#$!#!#!$!@! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 	public:
-		/// ITERATORS
+		/// ITERATORS --START--
 		class Iterator
 		{
 		public:
@@ -116,6 +133,7 @@ namespace ft
 			Node *					m_ptr;
 
 		};
+
 		class ReverseIterator
 		{
 		public:
@@ -140,6 +158,7 @@ namespace ft
 		private:
 			Node *	m_ptr;
 		};
+		/// ITERATORS --END--
 
 		/// CONSTRUCTORS
 		explicit map(const key_compare &comp = key_compare());
@@ -192,7 +211,17 @@ namespace ft
 
 	/// CONSTRUCTORS
 	template<class Key, class T, class Compare>
-		map<Key, T, Compare>::map(const key_compare &comp) : m_size(0) {}
+		map<Key, T, Compare>::map(const key_compare &comp)
+			: m_size(0)
+	{
+		m_nil = new Node();
+		m_nil->parent = m_nil;
+		m_nil->left = m_nil;
+		m_nil->right = m_nil;
+		m_nil->color = BLACK;
+
+		m_root = m_nil;
+	}
 
 	template<class Key, class T, class Compare>
 		template<class InputIterator>
@@ -201,31 +230,25 @@ namespace ft
 		// Fill here
 	}
 
-//	template<class Key, class T, class Compare>
-//		map<Key, T, Compare>::map(const map &x) : m_size(x.m_size), m_root(&new Node (x.m_root))
-//	{
-//		// Fill here
-//	}
-
 	/// ITERATORS
 	template<class Key, class T, class Compare>
 	typename map<Key, T, Compare>::Iterator& map<Key, T, Compare>::Iterator::operator++()
 	{
 		Node		*ptr = m_ptr;
 
-		if (ptr->right)
+		if (ptr->right != m_map->m_nil)
 		{
 			ptr = ptr->right;
-			while (ptr->left)
+			while (ptr->left != m_map->m_nil)
 				ptr = ptr->left;
 			m_ptr = ptr;
 		}
 		else
 		{
-			while (ptr->parent && ptr->parent->right == ptr)
+			while (ptr != m_map->m_nil && ptr->parent->right == ptr)
 				ptr = ptr->parent;
-			if (!ptr->parent)
-				m_ptr = m_map->m_end;
+			if (ptr->parent == m_map->m_nil)
+				m_ptr = m_map->m_nil;
 			else
 				m_ptr = ptr->parent;
 		}
@@ -237,7 +260,7 @@ namespace ft
 	{
 		Node *ptr = m_root;
 
-		while (ptr->left)
+		while (ptr->left != m_nil)
 			ptr = ptr->left;
 
 		return Iterator(this, ptr);
@@ -246,19 +269,24 @@ namespace ft
 	template<class Key, class T, class Compare>
 	typename map<Key, T, Compare>::const_iterator map<Key, T, Compare>::begin() const
 	{
-		return Iterator(this, m_root);
+		Node *ptr = m_root;
+
+		while (ptr->left != m_nil)
+			ptr = ptr->left;
+
+		return Iterator(this, ptr);
 	}
 
 	template<class Key, class T, class Compare>
 	typename map<Key, T, Compare>::iterator map<Key, T, Compare>::end()
 	{
-		return Iterator(this, m_end);
+		return Iterator(this, m_nil);
 	}
 
 	template<class Key, class T, class Compare>
 	typename map<Key, T, Compare>::const_iterator map<Key, T, Compare>::end() const
 	{
-		return Iterator(this, m_end);
+		return Iterator(this, m_nil);
 	}
 
 	/// CAPACITY
@@ -291,7 +319,7 @@ namespace ft
 		key_type key = k;
 		iterator it = find(key);
 
-		if (it.getNode() != m_end)
+		if (it.getNode() != m_nil)
 			return it.getNode()->pair.second;
 		else
 		{
@@ -305,63 +333,66 @@ namespace ft
 	template<class Key, class T, class Compare>
 	void map<Key, T, Compare>::leftRotate(Node *ptr)
 	{
-		Node *tmp = ptr->right;
-		if (tmp->left)
-			ptr->right = tmp->left;
-		else
-			ptr->right = nullptr;
-		if (ptr->parent == nullptr)
-		{
+		Node* tmp = ptr->right;
+		
+		ptr->right = tmp->left;
+		if (tmp->left != m_nil)
+			tmp->left->parent = ptr;
+		tmp->parent = ptr->parent;
+		if (ptr->parent == m_nil)
 			m_root = tmp;
-			m_root->parent = nullptr;
-		}
-		else if (ptr->parent->left == ptr)
+		else if (ptr == ptr->parent->left)
 			ptr->parent->left = tmp;
 		else
 			ptr->parent->right = tmp;
 		tmp->left = ptr;
-		tmp->parent = ptr->parent;
 		ptr->parent = tmp;
 	}
 
 	template<class Key, class T, class Compare>
 	void map<Key, T, Compare>::rightRotate(Node *ptr)
 	{
-		Node *tmp = ptr->left;
-		if (tmp->right)
-		{
-			tmp->right->parent = ptr->left->parent;
-			ptr->left = tmp->right;
-		}
-		else
-			ptr->left = nullptr;
-		if (ptr->parent == nullptr)
-		{
+		Node* tmp = ptr->left;
+		ptr->left = tmp->right;
+		if (tmp->right != m_nil)
+			tmp->right->parent = ptr;
+		tmp->parent = ptr->parent;
+		if (ptr->parent == m_nil)
 			m_root = tmp;
-			m_root->parent = nullptr;
-		}
-		else if (ptr->parent->right == ptr)
+		else if (ptr == ptr->parent->right)
 			ptr->parent->right = tmp;
 		else
 			ptr->parent->left = tmp;
 		tmp->right = ptr;
-		tmp->parent = ptr->parent;
 		ptr->parent = tmp;
 	}
 
 	template<class Key, class T, class Compare>
-	typename map<Key, T, Compare>::Node * map<Key, T, Compare>::addNode(const map::value_type &val)
+	typename map<Key, T, Compare>::Node* map<Key, T, Compare>::newNode(const map::value_type &val)
+	{
+		Node*	newNode = new Node(val);
+
+		newNode->parent = m_nil;
+		newNode->left = m_nil;
+		newNode->right = m_nil;
+		newNode->color = RED;
+
+		return newNode;
+	}
+
+	template<class Key, class T, class Compare>
+	typename map<Key, T, Compare>::Node* map<Key, T, Compare>::addNode(const map::value_type &val)
 	{
 		Node		*ptr = m_root;
 		key_compare	comp;
 
-		while (ptr)
+		while (ptr != m_nil)
 		{
 			if (comp(ptr->pair.first, val.first))
 			{
-				if (!ptr->right)
+				if (ptr->right == m_nil)
 				{
-					ptr->right = new Node(val);
+					ptr->right = newNode(val);
 					ptr->right->parent = ptr;
 					++m_size;
 					return ptr->right;
@@ -370,9 +401,9 @@ namespace ft
 			}
 			else
 			{
-				if (!ptr->left)
+				if (ptr->left == m_nil)
 				{
-					ptr->left = new Node(val);
+					ptr->left = newNode(val);
 					ptr->left->parent = ptr;
 					++m_size;
 					return ptr->left;
@@ -391,12 +422,12 @@ namespace ft
 			ptr->color = BLACK;
 			return;
 		}
-		while (ptr->parent && ptr->parent->color == RED)
+		while (ptr != m_nil && ptr->parent->color == RED)
 		{
 			Node * father = ptr->parent;
 			if (father == father->parent->left)
 			{
-				if (father->parent->right && father->parent->right->color == RED)
+				if (father->parent->right->color == RED)
 				{
 					father->color = BLACK;
 					father->parent->right->color = BLACK;
@@ -417,9 +448,9 @@ namespace ft
 			}
 			else
 			{
-				if (father->parent->left)
+				if (father->parent->left != m_nil)
 				{
-					if (father->parent->left && father->parent->left->color == RED)
+					if (father->parent->left->color == RED)
 					{
 						father->color = BLACK;
 						father->parent->left->color = BLACK;
@@ -450,6 +481,7 @@ namespace ft
 					leftRotate(ptr->parent->parent);
 				}
 			}
+			fixNil();
 		}
 		m_root->color = BLACK;
 	}
@@ -459,7 +491,7 @@ namespace ft
 		        ::insert(const map::value_type &val)
 	{
 		if (!m_size)
-			m_root = new Node(val);
+			m_root = newNode(val);
 		else
 		{
 			Iterator it = find(val.first);
@@ -478,6 +510,139 @@ namespace ft
 	}
 
 	template<class Key, class T, class Compare>
+	typename map<Key, T, Compare>::Node* map<Key, T, Compare>::eraseTwoChildren(Node* nodeToBeDeleted, TreeColor& originalColor)
+	{
+		Node* minNode = min(nodeToBeDeleted->right);
+		Node* x = minNode->right;
+
+		originalColor = minNode->color;
+		if (minNode->parent == nodeToBeDeleted)
+			x->parent = minNode;
+		else
+		{
+			transplant(minNode, minNode->right);
+			minNode->right = nodeToBeDeleted->right;
+			minNode->right->parent = minNode;
+		}
+		transplant(nodeToBeDeleted, minNode);
+		minNode->left = nodeToBeDeleted->left;
+		minNode->left->parent = minNode;
+		minNode->color = nodeToBeDeleted->color;
+		return x;
+	}
+
+	template<class Key, class T, class Compare>
+	void map<Key, T, Compare>::fixNil()
+	{
+		m_nil->parent = m_nil;
+		m_nil->left = m_nil;
+		m_nil->right = m_nil;
+
+		m_nil->color = BLACK;
+	}
+
+	template<class Key, class T, class Compare>
+	typename map<Key, T, Compare>::Node* map<Key, T, Compare>::min(Node* ptr)
+	{
+		while (ptr->left != m_nil)
+			ptr = ptr->left;
+		return ptr;
+	}
+
+	template<class Key, class T, class Compare>
+	bool map<Key, T, Compare>::isLeftChild(Node* ptr)
+	{
+		if (ptr->parent->left == ptr)
+			return true;
+		return false;
+	}
+
+	template<class Key, class T, class Compare>
+	void map<Key, T, Compare>::fixErasure(Node* ptr)
+	{
+		while (ptr != m_root && ptr->color == BLACK)
+		{
+			if (ptr == ptr->parent->left)
+			{
+				Node *w = ptr->parent->right;
+				if (w->color == RED)
+				{
+					w->color = BLACK;
+					ptr->parent->color = RED;
+					leftRotate(ptr->parent);
+					w = ptr->parent->right;
+				}
+				if (w->left->color == BLACK && w->right->color == BLACK)
+				{
+					w->color = RED;
+					ptr = ptr->parent;
+				}
+				else
+				{
+					if (w->right->color == BLACK)
+					{
+						w->left->color = BLACK;
+						w->color = RED;
+						rightRotate(w);
+						w = ptr->parent->right;
+					}
+					w->color = ptr->parent->color;
+					ptr->parent->color = BLACK;
+					w->right->color = BLACK;
+					leftRotate(ptr->parent);
+					ptr = m_root;
+				}
+			}
+			else
+			{
+				Node* w = ptr->parent->left;
+				if (w->color == RED)
+				{
+					w->color = BLACK;
+					ptr->parent->color = RED;
+					rightRotate(ptr->parent);
+					w = ptr->parent->left;
+				}
+				if (w->right->color == BLACK && w->left->color == BLACK)
+				{
+					w->color = RED;
+					ptr = ptr->parent;
+				}
+				else
+				{
+					if (w->left->color == BLACK)
+					{
+						w->right->color = BLACK;
+						w->color = RED;
+						leftRotate(w);
+						w = ptr->parent->left;
+					}
+					w->color = ptr->parent->color;
+					ptr->parent->color = BLACK;
+					w->left->color = BLACK;
+					rightRotate(ptr->parent);
+					ptr = m_root;
+				}
+			}
+		}
+		ptr->color = BLACK;
+	}
+
+		template<class Key, class T, class Compare>
+	typename map<Key, T, Compare>::Node* map<Key, T, Compare>::transplant(Node* parent, Node* child)
+	{
+		if (parent->parent == m_nil)
+			m_root = child;
+		else if (parent == parent->parent->left)
+			parent->parent->left = child;
+		else
+			parent->parent->right = child;
+		child->parent = parent->parent;
+
+		return child;
+	}
+
+	template<class Key, class T, class Compare>
 	typename map<Key, T, Compare>::size_type map<Key, T, Compare>::erase(const key_type &k)
 	{
 		Iterator it = find(k);
@@ -486,62 +651,22 @@ namespace ft
 			return 0;
 
 		Node * nodeToBeDeleted = it.getNode();
-		bool savedColor = nodeToBeDeleted->color;
+		TreeColor savedColor = nodeToBeDeleted->color;
 
-		Node ** parentPointer = nullptr;
-		if (nodeToBeDeleted != m_root)
-		{
-			if (nodeToBeDeleted->parent->left == nodeToBeDeleted)
-				parentPointer = &nodeToBeDeleted->parent->left;
-			else
-				parentPointer = &nodeToBeDeleted->parent->right;
-		}
+		Node* x;
+		if (nodeToBeDeleted->left == m_nil)							// If left child is NIL
+			x = transplant(nodeToBeDeleted, nodeToBeDeleted->right);
+		else if (nodeToBeDeleted->right == m_nil)					// If right child is NIL
+			x = transplant(nodeToBeDeleted, nodeToBeDeleted->left);
+		else														// If two children
+			x = eraseTwoChildren(nodeToBeDeleted, savedColor);
 
-		if (!nodeToBeDeleted->left && !nodeToBeDeleted->right)		// If no children
-		{
-			if (nodeToBeDeleted == m_root)
-				m_root = nullptr;
-			else
-				*parentPointer = nullptr;
-		}
-		else if (nodeToBeDeleted->left && nodeToBeDeleted->right)	// If two children
-		{
-			Node * ptr = nodeToBeDeleted->right;
-			while (ptr->left)
-				ptr = ptr->left;
-			ptr->parent = nullptr;
-			if (nodeToBeDeleted == m_root)
-				m_root = ptr;
-			else
-				*parentPointer = ptr;
-			ptr->left = nodeToBeDeleted->left;
-			nodeToBeDeleted->left->parent = ptr;
-		}
-		else														// If one child
-		{
-			if (nodeToBeDeleted->left)
-			{
-				if (nodeToBeDeleted == m_root)
-					m_root = nodeToBeDeleted->left;
-				else
-				{
-					*parentPointer = nodeToBeDeleted->left;
-					nodeToBeDeleted->left->parent = nodeToBeDeleted->parent;
-				}
-			}
-			else
-			{
-				if (nodeToBeDeleted == m_root)
-					m_root = nodeToBeDeleted->right;
-				else
-				{
-					*parentPointer = nodeToBeDeleted->right;
-					nodeToBeDeleted->right->parent = nodeToBeDeleted->parent;
-				}
-			}
-		}
-		if (m_root)
-			m_root->parent = nullptr;
+		if (savedColor == BLACK)
+			fixErasure(x);
+
+//		fixNil();
+//		if (m_root)
+//			m_root->parent = m_nil;
 		delete nodeToBeDeleted;
 		--m_size;
 		return 1;
@@ -553,7 +678,7 @@ namespace ft
 	{
 		Node *ptr = m_root;
 		key_compare comp;
-		while (ptr)
+		while (ptr != m_nil)
 		{
 			if (ptr->pair.first == k)
 				return Iterator(this, ptr);
@@ -562,7 +687,7 @@ namespace ft
 			else
 				ptr = ptr->left;
 		}
-		return Iterator(this, m_end);
+		return Iterator(this, m_nil);
 	}
 
 	/// OBSERVERS
@@ -577,6 +702,49 @@ namespace ft
 		typename map<Key, T, Compare>::value_compare map<Key, T, Compare>::value_com() const
 	{
 		return value_compare();
+	}
+
+	/// UTILS
+	template<class Key, class T, class Compare>
+	void map<Key, T, Compare>::addChildToParent(Node* parent, bool side, Node* child)
+	{
+		if (side == RIGHT)
+			parent->right = child;
+		else
+			parent->left = child;
+		child->parent = parent;
+	}
+
+	template<class Key, class T, class Compare>
+	typename map<Key, T, Compare>::Node* map<Key, T, Compare>::getGrandfather(Node* ptr)
+	{
+		if (ptr != m_nil && ptr->parent)
+			return ptr->parent->parent;
+		return m_nil;
+	}
+
+	template<class Key, class T, class Compare>
+	typename map<Key, T, Compare>::Node* map<Key, T, Compare>::getBrother(Node* ptr)
+	{
+		if (ptr->parent->left == ptr)
+			return ptr->parent->right;
+		else
+			return ptr->parent->left;
+	}
+
+	template<class Key, class T, class Compare>
+	typename map<Key, T, Compare>::Node* map<Key, T, Compare>::getUncle(Node* ptr)
+	{
+		Node*	grandfather = getGrandfather();
+
+		if (grandfather != m_nil)
+		{
+			if (grandfather->left == ptr->parent)
+				return grandfather->right;
+			else
+				return grandfather->left;
+		}
+		return m_nil;
 	}
 
 //////////////////////////////////////////!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -600,16 +768,16 @@ namespace ft
 		if (debug)
 		{
 			std::cout << "_____________________\n";
-			if (ptr->parent)
+			if (ptr->parent != m_nil)
 				std::cout << "Parent: " << ptr->parent->pair.first << "\n";
 			else
 				std::cout << "Parent: NULL" << "\n";
 			std::cout << "Value: " << ptr->pair.first << "\n";
-			if (ptr->right)
+			if (ptr->right != m_nil)
 				std::cout << "Right: " << ptr->right->pair.first << "\n";
 			else
 				std::cout << "Right: NULL" << "\n";
-			if (ptr->left)
+			if (ptr->left != m_nil)
 				std::cout << "Left: " << ptr->left->pair.first << "\n";
 			else
 				std::cout << "Left: NULL" << "\n";
@@ -621,18 +789,18 @@ namespace ft
 	void map<Key, T, Compare>::drawTree(Node *root, int space, int debug)
 	{
 		// Base case
-		if (root == NULL)
+		if (root == m_nil)
 			return;
 
 		// Increase distance between levels
-		space += 10;
+		space += 7;
 
 		// Process right child first
+//		std::cout << std::endl;
 		drawTree(root->right, space, debug);
 
 		// Print current node after space
 		// count
-		std::cout << std::endl;
 		for (int i = 10; i < space; i++)
 			std::cout << " ";
 		drawNode(root, debug);
