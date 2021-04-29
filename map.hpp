@@ -15,12 +15,6 @@ namespace ft
 		RED
 	};
 
-	enum TreeSide
-	{
-		LEFT,
-		RIGHT
-	};
-
 	/// MAP CLASS
 	template<   class Key,                                   // map::key_type
 				class T,                                     // map::mapped_type
@@ -87,6 +81,7 @@ namespace ft
 		Node*		transplant			(Node* parent, Node* child);
 		Node*		newNode				(const map::value_type &val);
 		Node*		min					(Node* ptr);
+		Node*		max					(Node* ptr);
 		void		fillNil				();
 
 ///DELEEEEEEEEETE!@!!!!@!@!!#$!#!#!$!@! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -122,11 +117,11 @@ namespace ft
 			bool			operator== (const Iterator &other)	{ return this->m_ptr == other.m_ptr; }
 			bool			operator!= (const Iterator &other)	{ return this->m_ptr != other.m_ptr; }
 
-			Node *			getNode   () 						{ return m_ptr; }
+			Node*			getNode   () 						{ return m_ptr; }////////!////////////////////////////////
 
 		private:
-			map<Key, T, Compare> *	m_map;
-			Node *					m_ptr;
+			map<Key, T, Compare>*	m_map;
+			Node*					m_ptr;
 
 		};
 
@@ -136,8 +131,10 @@ namespace ft
 			typedef	std::bidirectional_iterator_tag		iterator_category;
 
 			ReverseIterator() {}
-			explicit ReverseIterator(Node *ptr) : m_ptr(ptr) {}
-			explicit ReverseIterator(const Node *ptr) : m_ptr(const_cast<Node *> (ptr)) {}
+			explicit ReverseIterator(map<Key, T, Compare>* parentMap, Node *ptr)
+					: m_map(parentMap), m_ptr(ptr) {}
+			explicit ReverseIterator(map<Key, T, Compare>* parentMap, const Node *ptr)
+					: m_map(parentMap), m_ptr(const_cast<Node *> (ptr)) {}
 
 			reference				operator*  () const 						{ return m_ptr->pair; }
 			pointer					operator-> () const 						{ return &m_ptr->pair; }
@@ -152,7 +149,8 @@ namespace ft
 			bool					operator!= (const ReverseIterator &other)	{ return this->m_ptr != other.m_ptr; }
 
 		private:
-			Node *	m_ptr;
+			map<Key, T, Compare>*	m_map;
+			Node*					m_ptr;
 		};
 		/// ITERATORS --END--
 
@@ -165,25 +163,36 @@ namespace ft
 
 		map(const map &x);
 
+
 		///ITERATORS
-		iterator		begin();
-		const_iterator	begin() const;
-		iterator		end();
-		const_iterator	end() const;
+		iterator		begin	();
+		const_iterator	begin	() const;
+		iterator		end		();
+		const_iterator	end		() const;
+
+		reverse_iterator		rbegin	();
+		const_reverse_iterator	rbegin	() const;
+		reverse_iterator		rend	();
+		const_reverse_iterator	rend	() const;
+
 
 		/// DESTRUCTOR
+
 
 		/// CAPACITY
 		bool		empty	() const;
 		size_type	size	() const;
 		size_type	max_size() const;
 
+
 		/// OBSERVERS
 		value_compare	value_com	() const;
 		key_compare		key_comp	() const;
 
+
 		/// ELEMENT ACCESS
 		mapped_type& operator[] (const key_type& k);
+
 
 		/// MODIFIERS
 		std::pair<iterator, bool>	insert	(const value_type& val);
@@ -223,7 +232,7 @@ namespace ft
 
 	/// ITERATORS
 	template<class Key, class T, class Compare>
-	typename map<Key, T, Compare>::Iterator& map<Key, T, Compare>::Iterator::operator++()
+	typename map<Key, T, Compare>::Iterator&				map<Key, T, Compare>::Iterator::operator++()
 	{
 		Node		*ptr = m_ptr;
 
@@ -247,7 +256,7 @@ namespace ft
 	}
 
 	template< class Key, class T, class Compare >
-	typename map<Key, T, Compare>::Iterator map<Key, T, Compare>::Iterator::operator++(int)
+	typename map<Key, T, Compare>::Iterator					map<Key, T, Compare>::Iterator::operator++(int)
 	{
 		Iterator	it	= *this;
 		Node*		ptr	= m_ptr;
@@ -272,7 +281,60 @@ namespace ft
 	}
 
 	template< class Key, class T, class Compare >
-	typename map<Key, T, Compare>::Iterator& map<Key, T, Compare>::Iterator::operator--()
+	typename map<Key, T, Compare>::Iterator&				map<Key, T, Compare>::Iterator::operator--()
+	{
+		Node		*ptr = m_ptr;
+
+		if (ptr == m_map->m_nil)
+		{
+			m_ptr = m_map->max(m_map->m_root);
+			return *this;
+		}
+		if (ptr->left != m_map->m_nil)
+		{
+			ptr = ptr->left;
+			while (ptr->right != m_map->m_nil)
+				ptr = ptr->right;
+			m_ptr = ptr;
+		}
+		else
+		{
+			while (ptr->parent->left == ptr && ptr != m_map->m_nil)
+				ptr = ptr->parent;
+			m_ptr = ptr->parent;
+		}
+		return *this;
+	}
+
+	template< class Key, class T, class Compare >
+	typename map<Key, T, Compare>::Iterator					map<Key, T, Compare>::Iterator::operator--(int)
+	{
+		Iterator	it	= *this;
+		Node*		ptr = m_ptr;
+
+		if (ptr == m_map->m_nil)
+		{
+			m_ptr = m_map->max(m_map->m_root);
+			return it;
+		}
+		if (ptr->left != m_map->m_nil)
+		{
+			ptr = ptr->left;
+			while (ptr->right != m_map->m_nil)
+				ptr = ptr->right;
+			m_ptr = ptr;
+		}
+		else
+		{
+			while (ptr->parent->left == ptr && ptr != m_map->m_nil)
+				ptr = ptr->parent;
+			m_ptr = ptr->parent;
+		}
+		return it;
+	}
+
+	template<class Key, class T, class Compare>
+	typename map<Key, T, Compare>::ReverseIterator&			map<Key, T, Compare>::ReverseIterator::operator++()
 	{
 		Node		*ptr = m_ptr;
 
@@ -292,8 +354,8 @@ namespace ft
 		return *this;
 	}
 
-	template< class Key, class T, class Compare >
-	typename map<Key, T, Compare>::Iterator map<Key, T, Compare>::Iterator::operator--(int)
+	template<class Key, class T, class Compare>
+	typename map<Key, T, Compare>::ReverseIterator			map<Key, T, Compare>::ReverseIterator::operator++(int)
 	{
 		Iterator	it	= *this;
 		Node*		ptr = m_ptr;
@@ -315,7 +377,67 @@ namespace ft
 	}
 
 	template<class Key, class T, class Compare>
-	typename map<Key, T, Compare>::iterator map<Key, T, Compare>::begin()
+	typename map<Key, T, Compare>::ReverseIterator&			map<Key, T, Compare>::ReverseIterator::operator--()
+	{
+		Node		*ptr = m_ptr;
+
+		if (ptr == m_map->m_nil)
+		{
+			m_ptr = m_map->min(m_map->m_root);
+			return *this;
+		}
+		if (ptr->right != m_map->m_nil)
+		{
+			ptr = ptr->right;
+			while (ptr->left != m_map->m_nil)
+				ptr = ptr->left;
+			m_ptr = ptr;
+		}
+		else
+		{
+			while (ptr != m_map->m_nil && ptr->parent->right == ptr)
+				ptr = ptr->parent;
+			if (ptr->parent == m_map->m_nil)
+				m_ptr = m_map->m_nil;
+			else
+				m_ptr = ptr->parent;
+		}
+		return *this;
+	}
+
+	template<class Key, class T, class Compare>
+	typename map<Key, T, Compare>::ReverseIterator			map<Key, T, Compare>::ReverseIterator::operator--(int)
+	{
+		Iterator	it	= *this;
+		Node*		ptr	= m_ptr;
+
+		if (ptr == m_map->m_nil)
+		{
+			m_ptr = m_map->max(m_map->m_root);
+			return it;
+		}
+		if (ptr->right != m_map->m_nil)
+		{
+			ptr = ptr->right;
+			while (ptr->left != m_map->m_nil)
+				ptr = ptr->left;
+			m_ptr = ptr;
+		}
+		else
+		{
+			while (ptr != m_map->m_nil && ptr->parent->right == ptr)
+				ptr = ptr->parent;
+			if (ptr->parent == m_map->m_nil)
+				m_ptr = m_map->m_nil;
+			else
+				m_ptr = ptr->parent;
+		}
+		return it;
+	}
+
+
+	template<class Key, class T, class Compare>
+	typename map<Key, T, Compare>::iterator					map<Key, T, Compare>::begin()
 	{
 		Node *ptr = m_root;
 
@@ -326,7 +448,7 @@ namespace ft
 	}
 
 	template<class Key, class T, class Compare>
-	typename map<Key, T, Compare>::const_iterator map<Key, T, Compare>::begin() const
+	typename map<Key, T, Compare>::const_iterator			map<Key, T, Compare>::begin() const
 	{
 		Node *ptr = m_root;
 
@@ -337,15 +459,49 @@ namespace ft
 	}
 
 	template<class Key, class T, class Compare>
-	typename map<Key, T, Compare>::iterator map<Key, T, Compare>::end()
+	typename map<Key, T, Compare>::iterator					map<Key, T, Compare>::end()
 	{
 		return Iterator(this, m_nil);
 	}
 
 	template<class Key, class T, class Compare>
-	typename map<Key, T, Compare>::const_iterator map<Key, T, Compare>::end() const
+	typename map<Key, T, Compare>::const_iterator			map<Key, T, Compare>::end() const
 	{
 		return Iterator(this, m_nil);
+	}
+
+	template<class Key, class T, class Compare>
+	typename map<Key, T, Compare>::reverse_iterator			map<Key, T, Compare>::rbegin()
+	{
+		Node *ptr = m_root;
+
+		while (ptr->right != m_nil)
+			ptr = ptr->right;
+
+		return ReverseIterator(this, ptr);
+	}
+
+	template<class Key, class T, class Compare>
+	typename map<Key, T, Compare>::const_reverse_iterator	map<Key, T, Compare>::rbegin() const
+	{
+		Node *ptr = m_root;
+
+		while (ptr->right != m_nil)
+			ptr = ptr->right;
+
+		return ReverseIterator(this, ptr);
+	}
+
+	template<class Key, class T, class Compare>
+	typename map<Key, T, Compare>::reverse_iterator			map<Key, T, Compare>::rend()
+	{
+		return ReverseIterator(this, m_nil);
+	}
+
+	template<class Key, class T, class Compare>
+	typename map<Key, T, Compare>::const_reverse_iterator	map<Key, T, Compare>::rend() const
+	{
+		return ReverseIterator(this, m_nil);
 	}
 
 	/// CAPACITY
@@ -358,13 +514,13 @@ namespace ft
 	}
 
 	template<class Key, class T, class Compare>
-		typename map<Key, T, Compare>::size_type map<Key, T, Compare>::size() const
+		typename map<Key, T, Compare>::size_type			map<Key, T, Compare>::size() const
 	{
 		return m_size;
 	}
 
 	template<class Key, class T, class Compare>
-	typename map<Key, T, Compare>::size_type map<Key, T, Compare>::max_size() const
+	typename map<Key, T, Compare>::size_type				map<Key, T, Compare>::max_size() const
 	{
 		return SIZE_T_MAX / sizeof(Node);
 	}
@@ -373,7 +529,7 @@ namespace ft
 
 	/// ELEMENT ACCESS
 	template<class Key, class T, class Compare>
-	typename map<Key, T, Compare>::mapped_type &map<Key, T, Compare>::operator[](const key_type &k)
+	typename map<Key, T, Compare>::mapped_type&				map<Key, T, Compare>::operator[](const key_type &k)
 	{
 		key_type key = k;
 		iterator it = find(key);
@@ -568,7 +724,8 @@ namespace ft
 	}
 
 	template<class Key, class T, class Compare>
-	typename map<Key, T, Compare>::Node* map<Key, T, Compare>::eraseTwoChildren(Node* nodeToBeDeleted, TreeColor& originalColor)
+	typename map<Key, T, Compare>::Node* map<Key, T, Compare>
+	        ::eraseTwoChildren(Node* nodeToBeDeleted, TreeColor& originalColor)
 	{
 		Node* minNode = min(nodeToBeDeleted->right);
 		Node* x = minNode->right;
@@ -590,10 +747,19 @@ namespace ft
 	}
 
 	template<class Key, class T, class Compare>
-	typename map<Key, T, Compare>::Node* map<Key, T, Compare>::min(Node* ptr)
+	typename map<Key, T, Compare>::Node*			map<Key, T, Compare>::min(Node* ptr)
 	{
 		while (ptr->left != m_nil)
 			ptr = ptr->left;
+		return ptr;
+	}
+
+
+	template<class Key, class T, class Compare>
+	typename map<Key, T, Compare>::Node*			map<Key, T, Compare>::max(map::Node* ptr)
+	{
+		while (ptr->right != m_nil)
+			ptr = ptr->right;
 		return ptr;
 	}
 
@@ -727,6 +893,24 @@ namespace ft
 		return Iterator(this, m_nil);
 	}
 
+
+	template<class Key, class T, class Compare>
+	typename map<Key, T, Compare>::const_iterator map<Key, T, Compare>::find(const key_type& k) const
+	{
+		Node *ptr = m_root;
+		key_compare comp;
+		while (ptr != m_nil)
+		{
+			if (ptr->pair.first == k)
+				return Iterator(this, ptr);
+			else if (comp(ptr->pair.first, k))
+				ptr = ptr->right;
+			else
+				ptr = ptr->left;
+		}
+		return Iterator(this, m_nil);
+	}
+
 	/// OBSERVERS
 	template<class Key, class T, class Compare>
 		typename map<Key, T, Compare>::key_compare map<Key, T, Compare>::key_comp() const
@@ -815,7 +999,6 @@ namespace ft
 		// Process left child
 		drawTree(root->left, space, debug);
 	}
-
 
 //////////////////////////////////////////!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
