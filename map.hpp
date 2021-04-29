@@ -24,7 +24,7 @@ namespace ft
 	public:
 		class Iterator;
 		class ReverseIterator;
-		class value_comp;/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		class value_comp; /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 		typedef Key										key_type;
 		typedef T										mapped_type;
@@ -42,17 +42,18 @@ namespace ft
 		typedef std::ptrdiff_t							difference_type;
 		typedef std::size_t								size_type;
 
+
 		/// NODE STRUCT
 	private:
 		struct Node
 		{
 			value_type		pair;
 
-			Node *			parent;
-			Node *			left;
-			Node *			right;
+			Node*			parent;
+			Node*			left;
+			Node*			right;
 
-			TreeColor		color; //BLACK = 0, RED = 1
+			TreeColor		color; // BLACK = 0, RED = 1
 
 			Node(const std::pair<Key, T> pair_)
 					: pair(pair_)
@@ -67,28 +68,15 @@ namespace ft
 
 		/// MEMBERS
 		size_type			m_size;
-		Node *				m_root;
-		Node *				m_nil;
-//!		Node *				m_end; /!//////////////////////////////////////////////////////////////////////////////////////////////////////!
-
-		/// UTILS MEMBER FUNCTIONS
-		Node *		addNode				(const map::value_type &val);
-		void		fixInsertion		(Node* ptr);
-		void 		leftRotate			(Node* ptr);
-		void 		rightRotate			(Node* ptr);
-		Node*		eraseTwoChildren	(Node* nodeToBeDeleted, TreeColor& originalColor);
-		void		fixErasure			(Node* ptr);
-		Node*		transplant			(Node* parent, Node* child);
-		Node*		newNode				(const map::value_type &val);
-		Node*		min					(Node* ptr);
-		Node*		max					(Node* ptr);
-		void		fillNil				();
+		Node*				m_root;
+		Node*				m_nil;
+//!		Node*				m_end; /!//////////////////////////////////////////////////////////////////////////////////////////////////////!
 
 ///DELEEEEEEEEETE!@!!!!@!@!!#$!#!#!$!@! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	public:																	///////////////////////////////////////////////////////////////!
 		void 		drawTree		(Node *root, int space, int debug); 	///////////////////////////////////////////////////////////////!
 		void		drawNode		(const Node *ptr, int debug);			///////////////////////////////////////////////////////////////!
-		Node *		getRoot			() { return m_root; }					///////////////////////////////////////////////////////////////!
+		Node*		getRoot			() { return m_root; }					///////////////////////////////////////////////////////////////!
 ///DELEEEEEEEEETE!@!!!!@!@!!#$!#!#!$!@! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 	public:
@@ -102,8 +90,8 @@ namespace ft
 			Iterator() {}
 			Iterator(map<Key, T, Compare>* parentMap, Node *ptr)
 				: m_map(parentMap), m_ptr(ptr) {}
-			Iterator(map<Key, T, Compare>* parentMap, const Node *ptr)
-				: m_map(parentMap), m_ptr(const_cast<Node *> (ptr)) {}
+			Iterator(const map<Key, T, Compare>* parentMap, const Node *ptr)
+				: m_map(const_cast<map<Key, T, Compare>*> (parentMap)), m_ptr(const_cast<Node *> (ptr)) {}
 
 			reference		operator*  () const 				{ return m_ptr->pair; }
 			pointer			operator-> () const 				{ return &m_ptr->pair; }
@@ -155,20 +143,17 @@ namespace ft
 		/// ITERATORS --END--
 
 		/// CONSTRUCTORS
-		explicit map(const key_compare &comp = key_compare());
-
+		explicit map(const key_compare& comp = key_compare());
 		template<class InputIterator>
-		map(InputIterator first, InputIterator last,
-			const key_compare &comp = key_compare());
-
+			map(InputIterator first, InputIterator last, const key_compare& comp = key_compare());
 		map(const map &x);
 
 
 		///ITERATORS
-		iterator		begin	();
-		const_iterator	begin	() const;
-		iterator		end		();
-		const_iterator	end		() const;
+		iterator				begin	();
+		const_iterator			begin	() const;
+		iterator				end		();
+		const_iterator			end		() const;
 
 		reverse_iterator		rbegin	();
 		const_reverse_iterator	rbegin	() const;
@@ -177,12 +162,25 @@ namespace ft
 
 
 		/// DESTRUCTOR
+		~map();
+
+
+		/// ASSIGN OPERATOR OVERLOAD
+		map& operator= (const map& x)
+		{
+			if (this != &x)
+			{
+				clear();
+				insert(x.begin(), x.end());
+			}
+			return *this;
+		}
 
 
 		/// CAPACITY
-		bool		empty	() const;
-		size_type	size	() const;
-		size_type	max_size() const;
+		bool			empty	() const;
+		size_type		size	() const;
+		size_type		max_size() const;
 
 
 		/// OBSERVERS
@@ -191,7 +189,7 @@ namespace ft
 
 
 		/// ELEMENT ACCESS
-		mapped_type& operator[] (const key_type& k);
+		mapped_type&	operator[]	(const key_type& k);
 
 
 		/// MODIFIERS
@@ -202,17 +200,35 @@ namespace ft
 			void insert (InputIterator first, InputIterator last);
 
 
-		void						erase	(iterator position);
-		size_type					erase	(const key_type& k);
-		void						erase	(iterator first, iterator last);
-		void						clear	();
+		void			erase	(iterator position);
+		size_type		erase	(const key_type& k);
+		void			erase	(iterator first, iterator last);
+		void			clear	();
+		void			swap	(map& x);
+
 
 		/// OPERATIONS
 		iterator		find	(const key_type& k);
 		const_iterator	find	(const key_type& k) const;
+		size_type		count	(const key_type& k) const;
 
 
-	};
+
+		/// UTILS MEMBER FUNCTIONS
+		void		fillNil				();
+		Node*		newNode				(const map::value_type &val);
+		Node*		addNode				(const map::value_type &val);
+		void		fixInsertion		(Node* ptr);
+		void 		leftRotate			(Node* ptr);
+		void 		rightRotate			(Node* ptr);
+		Node*		transplant			(Node* parent, Node* child);
+		Node*		eraseTwoChildren	(Node* nodeToBeDeleted, TreeColor& originalColor);
+		void		fixErasure			(Node* ptr);
+		Node*		min					(Node* ptr);
+		Node*		max					(Node* ptr);
+
+	}; //! End of [Map Class] !//
+
 
 	/// CONSTRUCTORS
 	template<class Key, class T, class Compare>
@@ -224,11 +240,32 @@ namespace ft
 
 	template<class Key, class T, class Compare>
 		template<class InputIterator>
-			map<Key, T, Compare>::map(InputIterator first, InputIterator last, const key_compare &comp)
+			map<Key, T, Compare>::map(InputIterator first, InputIterator last, const key_compare& comp)
+				: m_size(0)
 	{
 		fillNil();
-
+		for (; first != last ; ++first)
+			insert(*first);
 	}
+
+	template<class Key, class T, class Compare>
+	map<Key, T, Compare>::map(const map &x)
+			: m_size(0)
+	{
+		fillNil();
+		insert(x.begin(), x.end());
+	}
+
+
+	/// DESTRUCTOR
+	template<class Key, class T, class Compare>
+	map<Key, T, Compare>::~map()
+	{
+		for (iterator it = begin(); it != end() ; ++it)
+			erase(it);
+		delete m_nil;
+	}
+
 
 	/// ITERATORS
 	template<class Key, class T, class Compare>
@@ -504,6 +541,7 @@ namespace ft
 		return ReverseIterator(this, m_nil);
 	}
 
+
 	/// CAPACITY
 	template<class Key, class T, class Compare>
 		bool map<Key, T, Compare>::empty() const
@@ -525,7 +563,9 @@ namespace ft
 		return SIZE_T_MAX / sizeof(Node);
 	}
 
+
 	/// OBSERVERS
+
 
 	/// ELEMENT ACCESS
 	template<class Key, class T, class Compare>
@@ -543,6 +583,7 @@ namespace ft
 			return it.getNode()->pair.second;
 		}
 	}
+
 
 	/// MODIFIERS
 	template<class Key, class T, class Compare>
@@ -724,6 +765,22 @@ namespace ft
 	}
 
 	template<class Key, class T, class Compare>
+	typename ft::map<Key, T, Compare>::iterator
+	        map<Key, T, Compare>::insert(map::iterator position, const map::value_type& val)
+	{
+		position = position;
+		return insert(val);
+	}
+
+	template<class Key, class T, class Compare>
+	template<class InputIterator>
+	void map<Key, T, Compare>::insert(InputIterator first, InputIterator last)
+	{
+		for (; first != last; ++first)
+			insert(*first);
+	}
+
+	template<class Key, class T, class Compare>
 	typename map<Key, T, Compare>::Node* map<Key, T, Compare>
 	        ::eraseTwoChildren(Node* nodeToBeDeleted, TreeColor& originalColor)
 	{
@@ -744,23 +801,6 @@ namespace ft
 		minNode->left->parent = minNode;
 		minNode->color = nodeToBeDeleted->color;
 		return x;
-	}
-
-	template<class Key, class T, class Compare>
-	typename map<Key, T, Compare>::Node*			map<Key, T, Compare>::min(Node* ptr)
-	{
-		while (ptr->left != m_nil)
-			ptr = ptr->left;
-		return ptr;
-	}
-
-
-	template<class Key, class T, class Compare>
-	typename map<Key, T, Compare>::Node*			map<Key, T, Compare>::max(map::Node* ptr)
-	{
-		while (ptr->right != m_nil)
-			ptr = ptr->right;
-		return ptr;
 	}
 
 	template<class Key, class T, class Compare>
@@ -849,15 +889,13 @@ namespace ft
 	}
 
 	template<class Key, class T, class Compare>
-	typename map<Key, T, Compare>::size_type map<Key, T, Compare>::erase(const key_type &k)
+	void map<Key, T, Compare>::erase(map::iterator position)
 	{
-		Iterator it = find(k);
+		if (position.getNode() == m_nil)
+			return;
 
-		if (it == end())
-			return 0;
-
-		Node * nodeToBeDeleted = it.getNode();
-		TreeColor savedColor = nodeToBeDeleted->color;
+		Node*		nodeToBeDeleted = position.getNode();
+		TreeColor	savedColor = nodeToBeDeleted->color;
 
 		Node* x;
 		if (nodeToBeDeleted->left == m_nil)							// If left child is NIL
@@ -872,8 +910,47 @@ namespace ft
 
 		delete nodeToBeDeleted;
 		--m_size;
+	}
+
+	template<class Key, class T, class Compare>
+	typename map<Key, T, Compare>::size_type map<Key, T, Compare>::erase(const key_type &k)
+	{
+		Iterator it = find(k);
+
+		if (it == end())
+			return 0;
+
+		erase(it);
 		return 1;
 	}
+
+	template<class Key, class T, class Compare>
+	void map<Key, T, Compare>::erase(map::iterator first, map::iterator last)
+	{
+		iterator tmp;
+		while (first != last)
+		{
+			tmp = first;
+			++first;
+			erase(tmp);
+		}
+	}
+
+	template<class Key, class T, class Compare>
+	void map<Key, T, Compare>::clear()
+	{
+		erase(begin(), end());
+	}
+
+	template<class Key, class T, class Compare>
+	void map<Key, T, Compare>::swap(map& x)
+	{
+		map<Key, T, Compare> tmp = *this;
+
+		*this = x;
+		x = tmp;
+	}
+
 
 	/// OPERATIONS
 	template<class Key, class T, class Compare>
@@ -911,6 +988,16 @@ namespace ft
 		return Iterator(this, m_nil);
 	}
 
+	template<class Key, class T, class Compare>
+	typename map<Key, T, Compare>::size_type map<Key, T, Compare>::count(const key_type& k) const
+	{
+		Iterator it = find(k);
+		if (it != end())
+			return 1;
+		return 0;
+	}
+
+
 	/// OBSERVERS
 	template<class Key, class T, class Compare>
 		typename map<Key, T, Compare>::key_compare map<Key, T, Compare>::key_comp() const
@@ -918,12 +1005,12 @@ namespace ft
 		return key_compare();
 	}
 
-
 	template<class Key, class T, class Compare>
 		typename map<Key, T, Compare>::value_compare map<Key, T, Compare>::value_com() const
 	{
 		return value_compare();
 	}
+
 
 	/// UTILS
 	template<class Key, class T, class Compare>
@@ -936,6 +1023,22 @@ namespace ft
 		m_nil->color = BLACK;
 
 		m_root = m_nil;
+	}
+
+	template<class Key, class T, class Compare>
+	typename map<Key, T, Compare>::Node*			map<Key, T, Compare>::min(Node* ptr)
+	{
+		while (ptr->left != m_nil)
+			ptr = ptr->left;
+		return ptr;
+	}
+
+	template<class Key, class T, class Compare>
+	typename map<Key, T, Compare>::Node*			map<Key, T, Compare>::max(map::Node* ptr)
+	{
+		while (ptr->right != m_nil)
+			ptr = ptr->right;
+		return ptr;
 	}
 
 //////////////////////////////////////////!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!

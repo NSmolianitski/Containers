@@ -2093,41 +2093,22 @@ void mapTest()
 		ft_map.insert(std::pair<int, int>(9, 20));
 		ft_map.insert(std::pair<int, int>(10, 20));
 
-//		ft_map.erase(4);
-//		ft_map.erase(5);
-//		ft_map.erase(1);
-//		ft_map.erase(8);
-//		ft_map.erase(2);
-//		ft_map.erase(9);
-//		ft_map.erase(7);
-//		ft_map.erase(3);
-//		ft_map.erase(3);
+		ft::map<int, int> map2;
+		map2.insert(std::pair<int, int>(140, 2));
+		map2.insert(std::pair<int, int>(1, 2));
+
 //--------------------------------------------------------------------------------------//
 		std::cout << "\n\n\n\n";
+		map2.drawTree(map2.getRoot(), 0, 0);
+		ft_map.drawTree(ft_map.getRoot(), 0, 0);
+
+		map2.swap(ft_map);
+
+		std::cout << "______________________" << std::endl;
+		map2.drawTree(map2.getRoot(), 0, 0);
+		std::cout << "______________________" << std::endl;
 		ft_map.drawTree(ft_map.getRoot(), 0, 0);
 //		getchar();
-		ft::map<int, int>::iterator ft_it = ft_map.end();
-		std::cout << "Begin iterator key: " << ft_it->first << std::endl;
-		ft_it--;
-		std::cout << "Begin iterator key: " << (*ft_it).first << std::endl;
-		--ft_it;
-		std::cout << "Begin iterator key: " << (*ft_it).first << std::endl;
-		--ft_it;
-		std::cout << "Begin iterator key: " << (*ft_it).first << std::endl;
-		--ft_it;
-		std::cout << "Begin iterator key: " << (*ft_it).first << std::endl;
-		--ft_it;
-		std::cout << "Begin iterator key: " << (*ft_it).first << std::endl;
-		ft_it++;
-		std::cout << "Begin iterator key: " << (*ft_it).first << std::endl;
-		ft_it++;
-		std::cout << "Begin iterator key: " << (*ft_it).first << std::endl;
-		ft_it++;
-		std::cout << "Begin iterator key: " << (*ft_it).first << std::endl;
-		--ft_it;
-		std::cout << "Begin iterator key: " << (*ft_it).first << std::endl;
-		--ft_it;
-		std::cout << "Begin iterator key: " << (*ft_it).first << std::endl;
 	}
 }
 
@@ -2138,5 +2119,5 @@ int main()
 //	stackTest();
 //	queueTest();
 	mapTest();
-//	getchar();
+	getchar();
 }
