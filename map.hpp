@@ -208,13 +208,15 @@ namespace ft
 
 
 		/// OPERATIONS
-		iterator		find		(const key_type& k);
-		const_iterator	find		(const key_type& k) const;
-		size_type		count		(const key_type& k) const;
-		iterator		lower_bound (const key_type& k);
-		const_iterator	lower_bound (const key_type& k) const;
-		iterator		upper_bound (const key_type& k);
-		const_iterator	upper_bound (const key_type& k) const;
+		iterator									find		(const key_type& k);
+		const_iterator								find		(const key_type& k) const;
+		size_type									count		(const key_type& k) const;
+		iterator									lower_bound (const key_type& k);
+		const_iterator								lower_bound (const key_type& k) const;
+		iterator									upper_bound (const key_type& k);
+		const_iterator								upper_bound (const key_type& k) const;
+		std::pair<iterator,iterator>				equal_range (const key_type& k);
+		std::pair<const_iterator,const_iterator>	equal_range (const key_type& k) const;
 
 
 		/// UTILS MEMBER FUNCTIONS
@@ -1070,6 +1072,22 @@ namespace ft
 		return it;
 	}
 
+	template<class Key, class T, class Compare>
+	std::pair<typename  map<Key, T, Compare>::iterator, typename  map<Key, T, Compare>::iterator>
+				map<Key, T, Compare>::equal_range(const key_type& k)
+	{
+		Iterator it = lower_bound(k);
+		return std::pair<iterator, iterator>(it, it);
+	}
+
+	template<class Key, class T, class Compare>
+	std::pair<typename  map<Key, T, Compare>::const_iterator, typename  map<Key, T, Compare>::const_iterator>
+				map<Key, T, Compare>::equal_range(const key_type& k) const
+	{
+		Iterator it = lower_bound(k);
+		return std::pair<iterator, iterator>(it, it);
+	}
+
 	/// UTILS
 	template<class Key, class T, class Compare>
 	void map<Key, T, Compare>::fillNil()
@@ -1160,7 +1178,6 @@ namespace ft
 		// Process left child
 		drawTree(root->left, space, debug);
 	}
-
 
 //////////////////////////////////////////!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 

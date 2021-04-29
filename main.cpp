@@ -2065,11 +2065,20 @@ void mapTest()
 		std::map<int, int> map;
 		std::cout << "Max size: " << map.max_size() << std::endl;
 
-		map.insert(std::pair<int, int>(10, 20));
-		map.insert(std::pair<int, int>(20, 20));
-		map.insert(std::pair<int, int>(4, 20));
-		map.insert(std::pair<int, int>(50, 20));
+//		map.insert(std::pair<int, int>(10, 20));
+//		map.insert(std::pair<int, int>(20, 20));
+//		map.insert(std::pair<int, int>(4, 20));
+//		map.insert(std::pair<int, int>(50, 20));
+//		map.insert(std::pair<int, int>(1, 20));
 		map.insert(std::pair<int, int>(1, 20));
+		map.insert(std::pair<int, int>(3, 20));
+		map.insert(std::pair<int, int>(5, 20));
+		map.insert(std::pair<int, int>(7, 20));
+		map.insert(std::pair<int, int>(9, 20));
+		map.insert(std::pair<int, int>(12, 20));
+		map.insert(std::pair<int, int>(18, 20));
+		map.insert(std::pair<int, int>(-10, 20));
+		map.insert(std::pair<int, int>(-20, 20));
 
 		std::map<int, int>::iterator it = map.begin();
 		std::cout << "Begin iterator key: " << it->first << std::endl;
@@ -2108,7 +2117,11 @@ void mapTest()
 		std::cout << "______________________" << std::endl;
 		ft_map.drawTree(ft_map.getRoot(), 0, 0);
 
-		std::cout << ft_map.upper_bound(19)->first << std::endl;
+		std::cout << ft_map.upper_bound(3)->first << std::endl;
+		std::cout << ft_map.equal_range(3).first->first << std::endl;
+
+		std::cout << map.upper_bound(3)->first << std::endl;
+		std::cout << map.equal_range(3).first->first << std::endl;
 //		getchar();
 	}
 }
