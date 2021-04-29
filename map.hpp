@@ -184,7 +184,7 @@ namespace ft
 
 
 		/// OBSERVERS
-		value_compare	value_com	() const;
+		value_compare	value_comp	() const;
 		key_compare		key_comp	() const;
 
 
@@ -200,18 +200,21 @@ namespace ft
 			void insert (InputIterator first, InputIterator last);
 
 
-		void			erase	(iterator position);
-		size_type		erase	(const key_type& k);
-		void			erase	(iterator first, iterator last);
-		void			clear	();
-		void			swap	(map& x);
+		void			erase		(iterator position);
+		size_type		erase		(const key_type& k);
+		void			erase		(iterator first, iterator last);
+		void			clear		();
+		void			swap		(map& x);
 
 
 		/// OPERATIONS
-		iterator		find	(const key_type& k);
-		const_iterator	find	(const key_type& k) const;
-		size_type		count	(const key_type& k) const;
-
+		iterator		find		(const key_type& k);
+		const_iterator	find		(const key_type& k) const;
+		size_type		count		(const key_type& k) const;
+		iterator		lower_bound (const key_type& k);
+		const_iterator	lower_bound (const key_type& k) const;
+		iterator		upper_bound (const key_type& k);
+		const_iterator	upper_bound (const key_type& k) const;
 
 
 		/// UTILS MEMBER FUNCTIONS
@@ -1000,17 +1003,72 @@ namespace ft
 
 	/// OBSERVERS
 	template<class Key, class T, class Compare>
-		typename map<Key, T, Compare>::key_compare map<Key, T, Compare>::key_comp() const
+		typename map<Key, T, Compare>::key_compare		map<Key, T, Compare>::key_comp() const
 	{
 		return key_compare();
 	}
 
 	template<class Key, class T, class Compare>
-		typename map<Key, T, Compare>::value_compare map<Key, T, Compare>::value_com() const
+		typename map<Key, T, Compare>::value_compare	map<Key, T, Compare>::value_comp() const
 	{
 		return value_compare();
 	}
 
+	template<class Key, class T, class Compare>
+	typename map<Key, T, Compare>::iterator				map<Key, T, Compare>::lower_bound(const key_type& k)
+	{
+		Iterator	it = begin();
+		key_compare	comp;
+
+		for (; it != end(); ++it)
+		{
+			if (k == it.getNode()->pair.first || comp(k, it.getNode()->pair.first))
+				return it;
+		}
+		return it;
+	}
+
+	template<class Key, class T, class Compare>
+	typename map<Key, T, Compare>::const_iterator		map<Key, T, Compare>::lower_bound(const key_type& k) const
+	{
+		Iterator	it = begin();
+		key_compare	comp;
+
+		for (; it != end(); ++it)
+		{
+			if (k == it.getNode()->pair.first || comp(k, it.getNode()->pair.first))
+				return it;
+		}
+		return it;
+	}
+
+	template<class Key, class T, class Compare>
+	typename map<Key, T, Compare>::iterator				map<Key, T, Compare>::upper_bound(const key_type& k)
+	{
+		Iterator	it = begin();
+		key_compare	comp;
+
+		for (; it != end(); ++it)
+		{
+			if (comp(k, it.getNode()->pair.first))
+				return it;
+		}
+		return it;
+	}
+
+	template<class Key, class T, class Compare>
+	typename map<Key, T, Compare>::const_iterator		map<Key, T, Compare>::upper_bound(const key_type& k) const
+	{
+		Iterator	it = begin();
+		key_compare	comp;
+
+		for (; it != end(); ++it)
+		{
+			if (comp(k, it.getNode()->pair.first))
+				return it;
+		}
+		return it;
+	}
 
 	/// UTILS
 	template<class Key, class T, class Compare>
@@ -1102,6 +1160,7 @@ namespace ft
 		// Process left child
 		drawTree(root->left, space, debug);
 	}
+
 
 //////////////////////////////////////////!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 

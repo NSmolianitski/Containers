@@ -2083,15 +2083,14 @@ void mapTest()
 		std::cout << "Max size: " << ft_map.max_size() << std::endl;
 
 		ft_map.insert(std::pair<int, int>(1, 20));
-		ft_map.insert(std::pair<int, int>(2, 20));
 		ft_map.insert(std::pair<int, int>(3, 20));
-		ft_map.insert(std::pair<int, int>(4, 20));
 		ft_map.insert(std::pair<int, int>(5, 20));
-		ft_map.insert(std::pair<int, int>(6, 20));
 		ft_map.insert(std::pair<int, int>(7, 20));
-		ft_map.insert(std::pair<int, int>(8, 20));
 		ft_map.insert(std::pair<int, int>(9, 20));
-		ft_map.insert(std::pair<int, int>(10, 20));
+		ft_map.insert(std::pair<int, int>(12, 20));
+		ft_map.insert(std::pair<int, int>(18, 20));
+		ft_map.insert(std::pair<int, int>(-10, 20));
+		ft_map.insert(std::pair<int, int>(-20, 20));
 
 		ft::map<int, int> map2;
 		map2.insert(std::pair<int, int>(140, 2));
@@ -2102,12 +2101,14 @@ void mapTest()
 		map2.drawTree(map2.getRoot(), 0, 0);
 		ft_map.drawTree(ft_map.getRoot(), 0, 0);
 
-		map2.swap(ft_map);
+//		map2.swap(ft_map);
 
 		std::cout << "______________________" << std::endl;
 		map2.drawTree(map2.getRoot(), 0, 0);
 		std::cout << "______________________" << std::endl;
 		ft_map.drawTree(ft_map.getRoot(), 0, 0);
+
+		std::cout << ft_map.upper_bound(19)->first << std::endl;
 //		getchar();
 	}
 }
