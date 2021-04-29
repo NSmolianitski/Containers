@@ -6,8 +6,78 @@
 #define FT_CONTAINERS_MAP_HPP
 
 #include <iomanip> ///////////////////////////////////////////////////////////////!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+#include <utility>
+
 namespace ft
 {
+	template< class T1, class T2 >
+	struct	pair
+	{
+		T1	first;
+		T2	second;
+
+		pair() {}
+		pair (const T1& a, const T2& b) : first(a), second(b) {}
+
+		template<class U, class V>
+			pair (const pair<U, V>& pr) : first(pr.first), second(pr.second) {}
+
+		pair&	operator= (const pair& other)
+		{
+			this->first = other.first;
+			this->second = other.second;
+		}
+	};
+
+	template< class T1, class T2 >
+	bool operator==(const pair<T1, T2>& lhs, const pair<T1, T2>& rhs)
+	{
+		if (lhs.first == rhs.first && lhs.second == rhs.second)
+			return true;
+		else
+			return false;
+	}
+
+	template< class T1, class T2 >
+	bool operator!= (const pair<T1, T2>& lhs, const pair<T1, T2>& rhs)
+	{
+		if (lhs.first != rhs.first && lhs.second != rhs.second)
+			return true;
+		else
+			return false;
+	}
+
+	template< class T1, class T2 >
+	bool operator< (const std::pair<T1, T2>& lhs, const std::pair<T1, T2>& rhs)
+	{
+		if (lhs.first < rhs.first)
+			return true;
+		else if (rhs.first < lhs.first)
+			return false;
+		else if (lhs.second < rhs.second)
+			return true;
+		else
+			return false;
+	}
+
+	template< class T1, class T2 >
+	bool operator<= (const std::pair<T1, T2>& lhs, const std::pair<T1, T2>& rhs)
+	{
+		return !(rhs < lhs);
+	}
+
+	template< class T1, class T2 >
+	bool operator> (const std::pair<T1, T2>& lhs, const std::pair<T1, T2>& rhs)
+	{
+		return rhs < lhs;
+	}
+
+	template< class T1, class T2 >
+	bool operator>= (const std::pair<T1,T2>& lhs, const std::pair<T1,T2>& rhs)
+	{
+		return !(lhs < rhs);
+	}
+
 	/// RED-BLACK TREE ENUMS
 	enum TreeColor
 	{
@@ -595,7 +665,7 @@ namespace ft
 	void map<Key, T, Compare>::leftRotate(Node *ptr)
 	{
 		Node* tmp = ptr->right;
-		
+
 		ptr->right = tmp->left;
 		if (tmp->left != m_nil)
 			tmp->left->parent = ptr;
