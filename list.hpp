@@ -152,7 +152,7 @@ namespace ft
 			explicit Iterator(const Node *ptr) : m_ptr(const_cast<Node *> (ptr)) {}
 
 			reference		operator*  () const 				{ return m_ptr->m_value; }
-			pointer			operator-> () const 				{ return m_ptr->m_value; }
+			pointer			operator-> () const 				{ return &m_ptr->m_value; }
 
 			Iterator&		operator++ ()						{ m_ptr = m_ptr->m_next; return *this; }
 			Iterator		operator++ (int)					{ Iterator tmp = *this; tmp.m_ptr = tmp.m_ptr->m_next; return tmp; }

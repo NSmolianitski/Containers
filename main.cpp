@@ -2091,20 +2091,25 @@ void mapTest()
 		ft::map<int, int> ft_map;
 		std::cout << "Max size: " << ft_map.max_size() << std::endl;
 
-		ft_map.insert(std::pair<int, int>(1, 20));
-		ft_map.insert(std::pair<int, int>(3, 20));
-		ft_map.insert(std::pair<int, int>(5, 20));
-		ft_map.insert(std::pair<int, int>(7, 20));
-		ft_map.insert(std::pair<int, int>(9, 20));
-		ft_map.insert(std::pair<int, int>(12, 20));
-		ft_map.insert(std::pair<int, int>(18, 20));
-		ft_map.insert(std::pair<int, int>(-10, 20));
-		ft_map.insert(std::pair<int, int>(-20, 20));
+		ft_map.insert(ft::pair<int, int>(1, 20));
+		ft_map.insert(ft::pair<int, int>(3, 20));
+		ft_map.insert(ft::pair<int, int>(5, 20));
+		ft_map.insert(ft::pair<int, int>(7, 20));
+		ft_map.insert(ft::pair<int, int>(9, 20));
+		ft_map.insert(ft::pair<int, int>(12, 20));
+		ft_map.insert(ft::pair<int, int>(18, 20));
+		ft_map.insert(ft::pair<int, int>(-10, 20));
+		ft_map.insert(ft::pair<int, int>(-20, 20));
 
 		ft::map<int, int> map2;
-		map2.insert(std::pair<int, int>(140, 2));
-		map2.insert(std::pair<int, int>(1, 2));
+		map2.insert(ft::pair<int, int>(140, 2));
+		map2.insert(ft::pair<int, int>(1, 2));
 
+		std::map<int, int>::const_iterator it4 = map.begin();
+		ft::map<int, int>::const_iterator it12 = ft_map.begin();
+		it4->second = 12;
+		++it12;
+		it12->second = 10;
 //--------------------------------------------------------------------------------------//
 		std::cout << "\n\n\n\n";
 		map2.drawTree(map2.getRoot(), 0, 0);
@@ -2133,5 +2138,6 @@ int main()
 //	stackTest();
 //	queueTest();
 	mapTest();
-	getchar();
 }
+
+//!List: remove getNode
