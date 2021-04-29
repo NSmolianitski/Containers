@@ -75,6 +75,7 @@ namespace ft
 		size_type			m_size;
 		Node *				m_root;
 		Node *				m_nil;
+//!		Node *				m_end; /!//////////////////////////////////////////////////////////////////////////////////////////////////////!
 
 		/// UTILS MEMBER FUNCTIONS
 		Node *		addNode				(const map::value_type &val);
@@ -86,6 +87,7 @@ namespace ft
 		Node*		transplant			(Node* parent, Node* child);
 		Node*		newNode				(const map::value_type &val);
 		Node*		min					(Node* ptr);
+		void		fillNil				();
 
 ///DELEEEEEEEEETE!@!!!!@!@!!#$!#!#!$!@! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	public:																	///////////////////////////////////////////////////////////////!
@@ -208,20 +210,15 @@ namespace ft
 		map<Key, T, Compare>::map(const key_compare &comp)
 			: m_size(0)
 	{
-		m_nil = new Node();
-		m_nil->parent = m_nil;
-		m_nil->left = m_nil;
-		m_nil->right = m_nil;
-		m_nil->color = BLACK;
-
-		m_root = m_nil;
+		fillNil();
 	}
 
 	template<class Key, class T, class Compare>
 		template<class InputIterator>
 			map<Key, T, Compare>::map(InputIterator first, InputIterator last, const key_compare &comp)
 	{
-		// Fill here
+		fillNil();
+
 	}
 
 	/// ITERATORS
@@ -247,6 +244,74 @@ namespace ft
 				m_ptr = ptr->parent;
 		}
 		return *this;
+	}
+
+	template< class Key, class T, class Compare >
+	typename map<Key, T, Compare>::Iterator map<Key, T, Compare>::Iterator::operator++(int)
+	{
+		Iterator	it	= *this;
+		Node*		ptr	= m_ptr;
+
+		if (ptr->right != m_map->m_nil)
+		{
+			ptr = ptr->right;
+			while (ptr->left != m_map->m_nil)
+				ptr = ptr->left;
+			m_ptr = ptr;
+		}
+		else
+		{
+			while (ptr != m_map->m_nil && ptr->parent->right == ptr)
+				ptr = ptr->parent;
+			if (ptr->parent == m_map->m_nil)
+				m_ptr = m_map->m_nil;
+			else
+				m_ptr = ptr->parent;
+		}
+		return it;
+	}
+
+	template< class Key, class T, class Compare >
+	typename map<Key, T, Compare>::Iterator& map<Key, T, Compare>::Iterator::operator--()
+	{
+		Node		*ptr = m_ptr;
+
+		if (ptr->left != m_map->m_nil)
+		{
+			ptr = ptr->left;
+			while (ptr->right != m_map->m_nil)
+				ptr = ptr->right;
+			m_ptr = ptr;
+		}
+		else
+		{
+			while (ptr->parent->left == ptr && ptr != m_map->m_nil)
+				ptr = ptr->parent;
+			m_ptr = ptr->parent;
+		}
+		return *this;
+	}
+
+	template< class Key, class T, class Compare >
+	typename map<Key, T, Compare>::Iterator map<Key, T, Compare>::Iterator::operator--(int)
+	{
+		Iterator	it	= *this;
+		Node*		ptr = m_ptr;
+
+		if (ptr->left != m_map->m_nil)
+		{
+			ptr = ptr->left;
+			while (ptr->right != m_map->m_nil)
+				ptr = ptr->right;
+			m_ptr = ptr;
+		}
+		else
+		{
+			while (ptr->parent->left == ptr && ptr != m_map->m_nil)
+				ptr = ptr->parent;
+			m_ptr = ptr->parent;
+		}
+		return it;
 	}
 
 	template<class Key, class T, class Compare>
@@ -317,7 +382,7 @@ namespace ft
 			return it.getNode()->pair.second;
 		else
 		{
-			insert(std::pair<Key, T>(key, 0));  ///////////////// try T() if something is wrong
+			insert(std::pair<Key, T>(key, 0));  ///////////////// try T() if something is wrong //////////////////
 			it = find(key);
 			return it.getNode()->pair.second;
 		}
@@ -677,6 +742,17 @@ namespace ft
 	}
 
 	/// UTILS
+	template<class Key, class T, class Compare>
+	void map<Key, T, Compare>::fillNil()
+	{
+		m_nil = new Node();
+		m_nil->parent = m_nil;
+		m_nil->left = m_nil;
+		m_nil->right = m_nil;
+		m_nil->color = BLACK;
+
+		m_root = m_nil;
+	}
 
 //////////////////////////////////////////!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 

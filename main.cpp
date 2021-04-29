@@ -2073,7 +2073,7 @@ void mapTest()
 
 		std::map<int, int>::iterator it = map.begin();
 		std::cout << "Begin iterator key: " << it->first << std::endl;
-		++it;
+		std::cout << (*(it++)).first << std::endl;
 		std::cout << "++Iterator key: " << (*it).first << std::endl;
 
 
@@ -2093,42 +2093,64 @@ void mapTest()
 		ft_map.insert(std::pair<int, int>(9, 20));
 		ft_map.insert(std::pair<int, int>(10, 20));
 
-		ft_map.erase(4);
-		ft_map.erase(5);
-		ft_map.erase(1);
-		ft_map.erase(8);
-		ft_map.erase(2);
-		ft_map.erase(9);
-		ft_map.erase(7);
-		ft_map.erase(3);
-		ft_map.erase(3);
+//		ft_map.erase(4);
+//		ft_map.erase(5);
+//		ft_map.erase(1);
+//		ft_map.erase(8);
+//		ft_map.erase(2);
+//		ft_map.erase(9);
+//		ft_map.erase(7);
+//		ft_map.erase(3);
+//		ft_map.erase(3);
 //--------------------------------------------------------------------------------------//
 		std::cout << "\n\n\n\n";
 		ft_map.drawTree(ft_map.getRoot(), 0, 0);
-		getchar();
+//		getchar();
 		ft::map<int, int>::iterator ft_it = ft_map.begin();
 		std::cout << "Begin iterator key: " << ft_it->first << std::endl;
-		++ft_it;
+		std::cout << RED << (*(ft_it++)).first << CLR << std::endl;
 		std::cout << "Begin iterator key: " << (*ft_it).first << std::endl;
-		++ft_it;
+		ft_it++;
 		std::cout << "Begin iterator key: " << (*ft_it).first << std::endl;
-		++ft_it;
+		ft_it++;
 		std::cout << "Begin iterator key: " << (*ft_it).first << std::endl;
-		++ft_it;
+		ft_it++;
 		std::cout << "Begin iterator key: " << (*ft_it).first << std::endl;
-		++ft_it;
+		ft_it++;
 		std::cout << "Begin iterator key: " << (*ft_it).first << std::endl;
-		++ft_it;
+		ft_it++;
 		std::cout << "Begin iterator key: " << (*ft_it).first << std::endl;
-		++ft_it;
+		ft_it++;
 		std::cout << "Begin iterator key: " << (*ft_it).first << std::endl;
-		++ft_it;
+		ft_it++;
 		std::cout << "Begin iterator key: " << (*ft_it).first << std::endl;
-		++ft_it;
+		--ft_it;
 		std::cout << "Begin iterator key: " << (*ft_it).first << std::endl;
-		++ft_it;
+		--ft_it;
 		std::cout << "Begin iterator key: " << (*ft_it).first << std::endl;
-		++ft_it;
+		--ft_it;
+		std::cout << "Begin iterator key: " << (*ft_it).first << std::endl;
+		--ft_it;
+		std::cout << "Begin iterator key: " << (*ft_it).first << std::endl;
+		--ft_it;
+		std::cout << "Begin iterator key: " << (*ft_it).first << std::endl;
+		--ft_it;
+		std::cout << "Begin iterator key: " << (*ft_it).first << std::endl;
+		--ft_it;
+		std::cout << "Begin iterator key: " << (*ft_it).first << std::endl;
+		--ft_it;
+		std::cout << "Begin iterator key: " << (*ft_it).first << std::endl;
+		ft_it++;
+		std::cout << "Begin iterator key: " << (*ft_it).first << std::endl;
+		ft_it++;
+		std::cout << "Begin iterator key: " << (*ft_it).first << std::endl;
+		ft_it++;
+		std::cout << "Begin iterator key: " << (*ft_it).first << std::endl;
+		--ft_it;
+		std::cout << "Begin iterator key: " << (*ft_it).first << std::endl;
+		--ft_it;
+		std::cout << "Begin iterator key: " << (*ft_it).first << std::endl;
+		--ft_it;
 		std::cout << "Begin iterator key: " << (*ft_it).first << std::endl;
 	}
 }
