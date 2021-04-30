@@ -160,7 +160,6 @@ namespace ft
 		class Iterator
 		{
 		public:
-			friend class map<Key, T, Compare>;
 			typedef	std::bidirectional_iterator_tag			iterator_category;
 
 			Iterator() {}
@@ -168,8 +167,6 @@ namespace ft
 				: m_map(parentMap), m_ptr(ptr) {}
 			Iterator(const Iterator& it)
 					: m_map(it.m_map), m_ptr(it.m_ptr) {}
-			Iterator(const ConstIterator& it)
-					: m_map(it.m_map), m_ptr(const_cast<Node*>(it.m_ptr)) {}
 
 			reference		operator*  () const { return m_ptr->pair; }
 			pointer		 	operator-> () const { return &m_ptr->pair; }
@@ -273,7 +270,8 @@ namespace ft
 			bool			operator== (const Iterator& other)	{ return this->m_ptr == other.m_ptr; }
 			bool			operator!= (const Iterator& other)	{ return this->m_ptr != other.m_ptr; }
 
-			Node*			getNode   () 						{ return m_ptr; }////////!////////////////////////////////
+			Node*						getNode	() const		{ return m_ptr; }
+			map<Key, T, Compare>*	getMap	() const		{ return m_map; }
 
 		private:
 			map<Key, T, Compare>*		m_map;
@@ -283,7 +281,6 @@ namespace ft
 		class ConstIterator
 		{
 		public:
-			friend class map<Key, T, Compare>;
 			typedef	std::bidirectional_iterator_tag			iterator_category;
 
 			ConstIterator() {}
@@ -292,7 +289,7 @@ namespace ft
 			ConstIterator(const ConstIterator& it)
 					: m_map(it.m_map), m_ptr(it.m_ptr) {}
 			ConstIterator(const Iterator& it)
-				: m_map(it.m_map), m_ptr(it.m_ptr) {}
+				: m_map(it.getMap()), m_ptr(it.getNode()) {}
 
 			const_reference		operator*  () const { return m_ptr->pair; }
 			const_pointer 		operator-> () const 	{ return &m_ptr->pair; }
@@ -393,10 +390,11 @@ namespace ft
 				return it;
 			}
 
-			bool			operator== (const Iterator& other)	{ return this->m_ptr == other.m_ptr; }
-			bool			operator!= (const Iterator& other)	{ return this->m_ptr != other.m_ptr; }
+			bool				operator== (const ConstIterator& other)	{ return this->m_ptr == other.m_ptr; }
+			bool				operator!= (const ConstIterator& other)	{ return this->m_ptr != other.m_ptr; }
 
-			Node*			getNode   () 						{ return m_ptr; }////////!////////////////////////////////
+			const Node*					getNode	() const			{ return m_ptr; }
+			const map<Key, T, Compare>*	getMap	() const			{ return m_map; }
 
 		private:
 			map<Key, T, Compare>*		m_map;
@@ -413,8 +411,6 @@ namespace ft
 						: m_map(parentMap), m_ptr(ptr) {}
 			ReverseIterator(const ReverseIterator& it)
 						: m_map(it.m_map), m_ptr(it.m_ptr) {}
-			ReverseIterator(const ConstReverseIterator& it)
-						: m_map(it.m_map), m_ptr(const_cast<Node*>(it.m_ptr)) {}
 
 			reference			operator*  () const 		{ return m_ptr->pair; }
 			pointer				operator-> () const 		{ return &m_ptr->pair; }
@@ -518,6 +514,9 @@ namespace ft
 			bool	operator== (const ReverseIterator& other)	{ return this->m_ptr == other.m_ptr; }
 			bool	operator!= (const ReverseIterator& other)	{ return this->m_ptr != other.m_ptr; }
 
+			Node*					getNode	() const			{ return m_ptr; }
+			map<Key, T, Compare>*	getMap	() const			{ return m_map; }
+
 		private:
 			map<Key, T, Compare>*	m_map;
 			Node*					m_ptr;
@@ -534,7 +533,7 @@ namespace ft
 			ConstReverseIterator(const ConstReverseIterator& it)
 							: m_map(it.m_map), m_ptr(it.m_ptr) {}
 			ConstReverseIterator(const ReverseIterator& it)
-							: m_map(it.m_map), m_ptr(it.m_ptr) {}
+							: m_map(it.getMap()), m_ptr(it.getNode()) {}
 
 			const_reference 		operator*  () const 		{ return m_ptr->pair; }
 			const_pointer 			operator-> () const 		{ return &m_ptr->pair; }
@@ -638,9 +637,12 @@ namespace ft
 			bool	operator== (const ConstReverseIterator& other)	{ return this->m_ptr == other.m_ptr; }
 			bool	operator!= (const ConstReverseIterator& other)	{ return this->m_ptr != other.m_ptr; }
 
+			const Node*					getNode	() const			{ return m_ptr; }
+			const map<Key, T, Compare>*	getMap	() const			{ return m_map; }
+
 		private:
 			map<Key, T, Compare>*	m_map;
-			Node*					m_ptr;
+			const Node*				m_ptr;
 		};
 		/// ITERATORS --END--
 

@@ -2105,7 +2105,7 @@ void mapTest()
 		map2.insert(ft::pair<int, int>(140, 2));
 		map2.insert(ft::pair<int, int>(1, 2));
 
-		std::map<int, int>::const_iterator it4 = map.begin();
+		std::map<int, int>::iterator it4 = map.begin();
 		std::map<int, int>::iterator it5 = map.begin();
 		ft::map<int, int>::const_iterator it12(ft_map.begin());
 		ft::map<int, int>::const_iterator it122(it12);
@@ -2116,7 +2116,7 @@ void mapTest()
 			std::cout << "True" << std::endl;
 		else
 			std::cout << "False" << std::endl;
-//		it4->second = 12;
+		it4->second = 12;
 		++it12;
 //		it12->second = 10;
 		++it152;
@@ -2142,13 +2142,83 @@ void mapTest()
 	}
 }
 
+void iteratorTest()
+{
+	ft::map<int, int> map;
+	map.insert(ft::pair<int, int>(1, 2));
+	map.insert(ft::pair<int, int>(2, 2));
+	map.insert(ft::pair<int, int>(3, 2));
+	map.insert(ft::pair<int, int>(4, 2));
+	map.insert(ft::pair<int, int>(5, 2));
+	map.insert(ft::pair<int, int>(6, 2));
+	map.insert(ft::pair<int, int>(7, 2));
+	map.insert(ft::pair<int, int>(8, 2));
+	map.insert(ft::pair<int, int>(9, 2));
+	map.insert(ft::pair<int, int>(10, 2));
+
+	ft::map<int, int>::iterator it;
+	ft::map<int, int>::const_iterator const_it;
+	ft::map<int, int>::reverse_iterator rev_it;
+	ft::map<int, int>::const_reverse_iterator const_rev_it;
+
+	it				= map.begin();
+	const_it		= map.begin();
+	rev_it			= map.rbegin();
+	const_rev_it	= map.rbegin();
+
+	(*it).second = 10;
+	it->second = 10;
+//	(*const_it).second = 10;
+//	const_it->second = 10;
+	(*rev_it).second = 10;
+	rev_it->second = 10;
+//	(*const_rev_it).second = 10;
+//	const_rev_it->second = 10;
+}
+
+void stdIteratorTest()
+{
+	std::map<int, int> map;
+	map.insert(std::pair<int, int>(1, 2));
+	map.insert(std::pair<int, int>(2, 2));
+	map.insert(std::pair<int, int>(3, 2));
+	map.insert(std::pair<int, int>(4, 2));
+	map.insert(std::pair<int, int>(5, 2));
+	map.insert(std::pair<int, int>(6, 2));
+	map.insert(std::pair<int, int>(7, 2));
+	map.insert(std::pair<int, int>(8, 2));
+	map.insert(std::pair<int, int>(9, 2));
+	map.insert(std::pair<int, int>(10, 2));
+
+	std::map<int, int>::iterator it;
+	std::map<int, int>::const_iterator const_it;
+	std::map<int, int>::reverse_iterator rev_it;
+	std::map<int, int>::const_reverse_iterator const_rev_it;
+
+	it				= map.begin();
+	const_it		= map.begin();
+	rev_it			= map.rbegin();
+	const_rev_it	= map.rbegin();
+
+	(*it).second = 10;
+	it->second = 10;
+//	(*const_it).second = 10;
+//	const_it->second = 10;
+	(*rev_it).second = 10;
+	rev_it->second = 10;
+//	(*const_rev_it).second = 10;
+//	const_rev_it->second = 10;
+}
+
 int main()
 {
 //	vectorTest();
 //	listTest();
 //	stackTest();
 //	queueTest();
-	mapTest();
+//	mapTest();
+	iteratorTest();
+	stdIteratorTest();
 }
 
 //!List: remove getNode
