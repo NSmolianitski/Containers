@@ -2106,10 +2106,21 @@ void mapTest()
 		map2.insert(ft::pair<int, int>(1, 2));
 
 		std::map<int, int>::const_iterator it4 = map.begin();
-		ft::map<int, int>::const_iterator it12 = ft_map.begin();
-		it4->second = 12;
+		std::map<int, int>::iterator it5 = map.begin();
+		ft::map<int, int>::const_iterator it12(ft_map.begin());
+		ft::map<int, int>::const_iterator it122(it12);
+		ft::map<int, int>::iterator it152(ft_map.begin());
+		++it152;
+
+		if (it12 == it12)
+			std::cout << "True" << std::endl;
+		else
+			std::cout << "False" << std::endl;
+//		it4->second = 12;
 		++it12;
-		it12->second = 10;
+//		it12->second = 10;
+		++it152;
+		it152->second = 10;
 //--------------------------------------------------------------------------------------//
 		std::cout << "\n\n\n\n";
 		map2.drawTree(map2.getRoot(), 0, 0);
