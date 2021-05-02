@@ -19,13 +19,16 @@ namespace ft
 	};
 
 	template <typename T>
-	struct IsIterator
+	struct IsIteratorOrPointer
 	{
 		typedef char yes[1];
+		typedef char yesPtr[1];
 		typedef char no[2];
 
 		template <typename Iterator>
 			static yes& test(typename Iterator::iterator_category *) {};
+		template <typename Pointer>
+			static yesPtr& test(Pointer) {};
 
 		template <typename>
 			static no& test(...) {};
@@ -58,7 +61,7 @@ namespace ft
 		vector();
 		explicit vector (size_type n, const value_type& val = value_type());
 		template <class InputIterator>
-			vector (InputIterator first, typename enable_if<IsIterator<InputIterator>::value, InputIterator>::type last);
+			vector (InputIterator first, typename enable_if<IsIteratorOrPointer<InputIterator>::value, InputIterator>::type last);
 		vector (const vector& x);
 
 		~vector();
@@ -86,7 +89,8 @@ namespace ft
 
 		/// MODIFIERS
 		template <typename InputIterator>
-			typename enable_if<IsIterator<InputIterator>::value, void>::type assign(InputIterator first, InputIterator last);
+			typename enable_if<IsIteratorOrPointer<InputIterator>::value, void>::type
+										assign(InputIterator first, InputIterator last);
 
 		void					assign		(size_type n, const value_type& val);
 		void					push_back	(const value_type& val);
@@ -95,7 +99,7 @@ namespace ft
 		void					swap		(vector& x);
 
 		template <class InputIterator>
-			typename enable_if<IsIterator<InputIterator>::value, void>::type insert
+			typename enable_if<IsIteratorOrPointer<InputIterator>::value, void>::type insert
 				(iterator position, InputIterator first, InputIterator last);
 
 		iterator				insert		(iterator position, const value_type& val);
@@ -322,7 +326,10 @@ namespace ft
 
 	template<typename T>
 	template<class InputIterator>
-	vector<T>::vector (InputIterator first, typename enable_if<IsIterator<InputIterator>::value, InputIterator>::type last) : m_size(last - first), m_capacity(last - first)
+	vector<T>::vector (InputIterator first
+					, typename enable_if<IsIteratorOrPointer<InputIterator>::value
+					, InputIterator>::type last)
+							: m_size(last - first), m_capacity(last - first)
 	{
 		m_array = new value_type [m_capacity];
 		for (int i = 0; first != last; ++i)
@@ -518,7 +525,8 @@ namespace ft
 
 	template<typename T>
 	template<typename InputIterator>
-		typename enable_if<IsIterator<InputIterator>::value, void>::type vector<T>::assign(InputIterator first, InputIterator last)
+		typename enable_if<IsIteratorOrPointer<InputIterator>::value, void>::type
+		        vector<T>::assign(InputIterator first, InputIterator last)
 	{
 		if ((last - first) > m_capacity)
 		{
@@ -717,7 +725,7 @@ namespace ft
 
 	template<typename T>
 	template<class InputIterator>
-		typename enable_if<IsIterator<InputIterator>::value, void>::type vector<T>::insert
+		typename enable_if<IsIteratorOrPointer<InputIterator>::value, void>::type vector<T>::insert
 			(vector::iterator position, InputIterator first, InputIterator last)
 	{
 		if (first > last)
@@ -780,7 +788,7 @@ namespace ft
 		for (size_type i = 0; i < (last - first); ++i)
 			(*(first + i)).~T();
 		int i = 0;
-		for (; first < last + 1; ++first)
+		for (; first < end(); ++first)
 		{
 			*first = *(last + i);
 			++i;

@@ -2217,10 +2217,6 @@ void stdIteratorTest()
 	const_rev_it++;
 }
 
-using namespace ft;
-using std::cout;
-using std::string;
-
 /*
 ** This is a minimal set of ANSI/VT100 color codes
 */
@@ -2253,6 +2249,10 @@ using std::string;
 # define _ICYAN			"\x1b[46m"
 # define _IWHITE		"\x1b[47m"
 
+using namespace ft;
+//using namespace std;
+using std::cout;
+using std::string;
 
 template <class Key, class T>
 void	print(map<Key, T>& lst)
@@ -2264,8 +2264,29 @@ void	print(map<Key, T>& lst)
 
 int main()
 {
+	vector<int> myvector;
+
+	// set some values (from 1 to 10)
+	for (int i=1; i<=10; i++) myvector.push_back(i);
+	cout << "myvector contains:";
+	for (unsigned i=0; i<myvector.size(); ++i)
+		cout << ' ' << myvector[i];
+	cout << '\n';
+
+	// erase the 6th element
+	myvector.erase (myvector.begin()+5);
+	cout << "myvector contains:";
+	for (unsigned i=0; i<myvector.size(); ++i)
+		cout << ' ' << myvector[i];
+	cout << '\n';
+
+	// erase the first 3 elements:
+	myvector.erase (myvector.begin(),myvector.begin()+3);
+
+	cout << "myvector contains:";
+	for (unsigned i=0; i<myvector.size(); ++i)
+		cout << ' ' << myvector[i];
+	cout << '\n';
 
 	return 0;
 }
-
-//!List: remove getNode

@@ -62,7 +62,7 @@ namespace ft
 
 		//Constructors and destructor
 		template<class InputIterator>
-			list		(InputIterator first, typename enable_if<IsIterator<InputIterator>::value, InputIterator>::type last);
+			list		(InputIterator first, typename enable_if<IsIteratorOrPointer<InputIterator>::value, InputIterator>::type last);
 
 		list			();
 		list			(const list &x);
@@ -95,7 +95,7 @@ namespace ft
 		//Modifiers
 		template <class InputIterator>
 			void assign (InputIterator first,
-				typename enable_if<IsIterator<InputIterator>::value, InputIterator>::type last);
+				typename enable_if<IsIteratorOrPointer<InputIterator>::value, InputIterator>::type last);
 
 		void assign		(size_type n, const value_type& val);
 		void push_front	(const value_type& val);
@@ -105,7 +105,7 @@ namespace ft
 
 		template <class InputIterator>
 			void insert (iterator position, InputIterator first,
-				typename enable_if<IsIterator<InputIterator>::value, InputIterator>::type last);
+				typename enable_if<IsIteratorOrPointer<InputIterator>::value, InputIterator>::type last);
 
 		iterator	insert	(iterator position, const value_type& val);
 		void		insert	(iterator position, size_type n, const value_type& val);
@@ -336,7 +336,7 @@ namespace ft
 
 	template<typename T>
 	template<class InputIterator>
-	list<T>::list(InputIterator first, typename enable_if<IsIterator<InputIterator>::value, InputIterator>::type last)
+	list<T>::list(InputIterator first, typename enable_if<IsIteratorOrPointer<InputIterator>::value, InputIterator>::type last)
 	{
 		m_head = new Node(*first);
 		++first;
@@ -515,7 +515,7 @@ namespace ft
 	//Modifiers
 	template<typename T>
 		template<class InputIterator>
-	void list<T>::assign(InputIterator first, typename enable_if<IsIterator<InputIterator>::value, InputIterator>::type last)
+	void list<T>::assign(InputIterator first, typename enable_if<IsIteratorOrPointer<InputIterator>::value, InputIterator>::type last)
 	{
 		if (m_size > 0)
 			clear();
@@ -631,7 +631,7 @@ namespace ft
 
 	template<typename T>
 		template<class InputIterator>
-	void list<T>::insert(list::iterator position, InputIterator first, typename enable_if<IsIterator<InputIterator>::value, InputIterator>::type last)
+	void list<T>::insert(list::iterator position, InputIterator first, typename enable_if<IsIteratorOrPointer<InputIterator>::value, InputIterator>::type last)
 	{
 		Node *ptr = new Node(*first);
 		if (first != last)
