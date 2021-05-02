@@ -74,7 +74,7 @@ namespace ft
 			> class map
 	{
 	public:
-		class value_comp; /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		class value_comp;
 
 	private:
 		class Iterator;
@@ -102,12 +102,12 @@ namespace ft
 
 		class value_compare
 		{
-			friend class map;
 		protected:
 			Compare comp;
 
-			explicit value_compare(Compare c) : comp(c) {}
 		public:
+			explicit value_compare(Compare c) : comp(c) {}
+
 			typedef bool		result_type;
 			typedef value_type	first_argument_type;
 			typedef value_type	second_argument_type;
@@ -146,12 +146,11 @@ namespace ft
 		Node*				m_root;
 		Node*				m_nil;
 
-///DELEEEEEEEEETE!@!!!!@!@!!#$!#!#!$!@! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-	public:																	///////////////////////////////////////////////////////////////!
-		void 		drawTree		(Node *root, int space, int debug); 	///////////////////////////////////////////////////////////////!
-		void		drawNode		(const Node *ptr, int debug);			///////////////////////////////////////////////////////////////!
-		Node*		getRoot			() { return m_root; }					///////////////////////////////////////////////////////////////!
-///DELEEEEEEEEETE!@!!!!@!@!!#$!#!#!$!@! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+//		/// SNEAKY_UTILS
+//	public:																//////!
+//		void 		drawTree		(Node *root, int space, int debug); //////!
+//		void		drawNode		(const Node *ptr, int debug);		//////!
+//		Node*		getRoot			() { return m_root; }				//////!
 
 	private:
 		/// ITERATORS --START--
@@ -961,9 +960,6 @@ namespace ft
 	}
 
 
-	/// OBSERVERS
-
-
 	/// ELEMENT ACCESS
 	template<class Key, class T, class Compare>
 	typename map<Key, T, Compare>::mapped_type&				map<Key, T, Compare>::operator[](const key_type &k)
@@ -1519,69 +1515,67 @@ namespace ft
 		return ptr;
 	}
 
-//////////////////////////////////////////!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+//	/// SNEAKY UTILS
 
-#define WHITE	"\033[97m"
-
-#define BRED	"\033[41m"
-#define BBLACK	"\033[40m"
-
-#define BOLD	"\033[1m"
-#define CLR		"\033[0m"
-
-
-	template<class Key, class T, class Compare>
-	void map<Key, T, Compare>::drawNode(const Node *ptr, int debug)
-	{
-		std::string color = BBLACK;
-		if (ptr->color == RED)
-			color = BRED;
-		std::cout << BOLD WHITE << color << "[" << std::setw(5) << ptr->pair.first << "]" CLR << std::endl;
-		if (debug)
-		{
-			std::cout << "_____________________\n";
-			if (ptr->parent != m_nil)
-				std::cout << "Parent: " << ptr->parent->pair.first << "\n";
-			else
-				std::cout << "Parent: NULL" << "\n";
-			std::cout << "Value: " << ptr->pair.first << "\n";
-			if (ptr->right != m_nil)
-				std::cout << "Right: " << ptr->right->pair.first << "\n";
-			else
-				std::cout << "Right: NULL" << "\n";
-			if (ptr->left != m_nil)
-				std::cout << "Left: " << ptr->left->pair.first << "\n";
-			else
-				std::cout << "Left: NULL" << "\n";
-			std::cout << "_____________________\n";
-		}
-	}
-
-	template<class Key, class T, class Compare>
-	void map<Key, T, Compare>::drawTree(Node *root, int space, int debug)
-	{
-		// Base case
-		if (root == m_nil)
-			return;
-
-		// Increase distance between levels
-		space += 7;
-
-		// Process right child first
-//		std::cout << std::endl;
-		drawTree(root->right, space, debug);
-
-		// Print current node after space
-		// count
-		for (int i = 10; i < space; i++)
-			std::cout << " ";
-		drawNode(root, debug);
-
-		// Process left child
-		drawTree(root->left, space, debug);
-	}
-
-//////////////////////////////////////////!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+//#define WHITE	"\033[97m"
+//
+//#define BRED	"\033[41m"
+//#define BBLACK	"\033[40m"
+//
+//#define BOLD	"\033[1m"
+//#define CLR		"\033[0m"
+//
+//
+//	template<class Key, class T, class Compare>
+//	void map<Key, T, Compare>::drawNode(const Node *ptr, int debug)
+//	{
+//		std::string color = BBLACK;
+//		if (ptr->color == RED)
+//			color = BRED;
+//		std::cout << BOLD WHITE << color << "[" << std::setw(5) << ptr->pair.first << "]" CLR << std::endl;
+//		if (debug)
+//		{
+//			std::cout << "_____________________\n";
+//			if (ptr->parent != m_nil)
+//				std::cout << "Parent: " << ptr->parent->pair.first << "\n";
+//			else
+//				std::cout << "Parent: NULL" << "\n";
+//			std::cout << "Value: " << ptr->pair.first << "\n";
+//			if (ptr->right != m_nil)
+//				std::cout << "Right: " << ptr->right->pair.first << "\n";
+//			else
+//				std::cout << "Right: NULL" << "\n";
+//			if (ptr->left != m_nil)
+//				std::cout << "Left: " << ptr->left->pair.first << "\n";
+//			else
+//				std::cout << "Left: NULL" << "\n";
+//			std::cout << "_____________________\n";
+//		}
+//	}
+//
+//	template<class Key, class T, class Compare>
+//	void map<Key, T, Compare>::drawTree(Node *root, int space, int debug)
+//	{
+//		// Base case
+//		if (root == m_nil)
+//			return;
+//
+//		// Increase distance between levels
+//		space += 7;
+//
+//		// Process right child first
+////		std::cout << std::endl;
+//		drawTree(root->right, space, debug);
+//
+//		// Print current node after space
+//		// count
+//		for (int i = 10; i < space; i++)
+//			std::cout << " ";
+//		drawNode(root, debug);
+//
+//		// Process left child
+//		drawTree(root->left, space, debug);
+//	}
 
 	template< class Key, class T, class Compare>
 	void swap(map<Key,T,Compare>& lhs, map<Key,T,Compare>& rhs)

@@ -2121,15 +2121,6 @@ void mapTest()
 		it152->second = 10;
 //--------------------------------------------------------------------------------------//
 		std::cout << "\n\n\n\n";
-		map2.drawTree(map2.getRoot(), 0, 0);
-		ft_map.drawTree(ft_map.getRoot(), 0, 0);
-
-//		map2.swap(ft_map);
-
-		std::cout << "______________________" << std::endl;
-		map2.drawTree(map2.getRoot(), 0, 0);
-		std::cout << "______________________" << std::endl;
-		ft_map.drawTree(ft_map.getRoot(), 0, 0);
 
 		std::cout << ft_map.upper_bound(3)->first << std::endl;
 		std::cout << ft_map.equal_range(3).first->first << std::endl;
