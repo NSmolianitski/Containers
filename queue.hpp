@@ -19,7 +19,6 @@ namespace ft
 
 	private:
 		Container m_container;
-		queue(const queue<T, Container> &other) { std::cout << other.size(); };
 
 	public:
 		//Constructors

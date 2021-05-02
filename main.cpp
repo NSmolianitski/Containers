@@ -2264,22 +2264,79 @@ void	print(map<Key, T>& lst)
 
 int main()
 {
-	map<char,int> mymap;
+	cout << _WHITE << "# test_queue" << _END << std::endl;
+	cout << _YELLOW <<  "/* ********************************************************************** */" << std::endl;
+	cout << "/*                          "<< _WHITE << "BASIC TESTS" << _YELLOW << "                                   */" << std::endl;
+	cout << "/* ********************************************************************** */" << _END << std::endl;
+	queue<int> myqueue;
 
-	mymap['x']=1001;
-	mymap['y']=2002;
-	mymap['z']=3003;
+	cout << "queue<" << _PURPLE << "int" << _END << "> myqueue" << std::endl;
+	cout << std::endl;
 
-	cout << "mymap contains:\n";
 
-	pair<char,int> highest = *mymap.rbegin();          // last element
+	cout << _WHITE << "# empty" << _END << std::endl;
+	cout << "myqueue.empty(): " <<  myqueue.empty() << std::endl;
+	cout << "myqueue.size(): " << myqueue.size() << std::endl;
+	cout << _WHITE << "# one element" << _END << std::endl;
+	myqueue.push(42);
+	cout << "myqueue.push(42)" << std::endl;
+	cout << "myqueue.empty(): " <<  myqueue.empty() << std::endl;
+	cout << "myqueue.size(): " << myqueue.size() << std::endl;
+	cout << "myqueue.back(): " << myqueue.back() << std::endl;
+	cout << "myqueue.front(): " << myqueue.front() << std::endl;
+	cout << _WHITE << "# two element" << _END << std::endl;
+	myqueue.push(2);
+	cout << "myqueue.push(2)" << std::endl;
+	cout << "myqueue.size(): " << myqueue.size() << std::endl;
+	cout << "myqueue.back(): " << myqueue.back() << std::endl;
+	cout << "myqueue.front(): " << myqueue.front() << std::endl;
+	cout << _WHITE << "# pop element" << _END << std::endl;
+	myqueue.pop();
+	cout << "myqueue.pop()" << std::endl;
+	cout << "myqueue.size(): " << myqueue.size() << std::endl;
+	cout << "myqueue.back(): " << myqueue.back() << std::endl;
+	cout << "myqueue.front(): " << myqueue.front() << std::endl;
+	cout << std::endl;
 
-	map<char,int>::iterator it = mymap.begin();
-	do
-	{
-		cout << it->first << " => " << it->second << '\n';
-	}
-	while (mymap.value_comp()(*it++, highest));
+	queue<int, list<int> > myqueue2;
+
+	cout << "queue<" << _PURPLE << "int" << _END << ", " << _PURPLE << "list" << _END << "> myqueue2" << std::endl;
+	cout << std::endl;
+
+
+	cout << _WHITE << "# empty" << _END << std::endl;
+	cout << "myqueue2.empty(): " <<  myqueue2.empty() << std::endl;
+	cout << "myqueue2.size(): " << myqueue2.size() << std::endl;
+	cout << _WHITE << "# one element" << _END << std::endl;
+	myqueue2.push(42);
+	cout << "myqueue2.push(42)" << std::endl;
+	cout << "myqueue2.empty(): " <<  myqueue2.empty() << std::endl;
+	cout << "myqueue2.size(): " << myqueue2.size() << std::endl;
+	cout << "myqueue.back(): " << myqueue.back() << std::endl;
+	cout << "myqueue2.front(): " << myqueue2.front() << std::endl;
+	cout << _WHITE << "# two element" << _END << std::endl;
+	myqueue2.push(2);
+	cout << "myqueue2.push(2)" << std::endl;
+	cout << "myqueue2.size(): " << myqueue2.size() << std::endl;
+	cout << "myqueue.back(): " << myqueue.back() << std::endl;
+	cout << "myqueue2.front(): " << myqueue2.front() << std::endl;
+	cout << _WHITE << "# pop element" << _END << std::endl;
+	myqueue2.pop();
+	cout << "myqueue2.pop()" << std::endl;
+	cout << "myqueue2.size(): " << myqueue2.size() << std::endl;
+	cout << "myqueue.back(): " << myqueue.back() << std::endl;
+	cout << "myqueue2.front(): " << myqueue2.front() << std::endl;
+	cout << std::endl;
+
+	cout << _WHITE << "# test cpy and equality" << _END << std::endl;
+	queue<int>	cpyqueue = myqueue;
+	cout << "queue<" << _PURPLE << "int" << _END << "> cpyqueue = myqueue" << std::endl;
+	cout << std::endl;
+
+	cout << "cpyqueue == myqueue:" << (cpyqueue == myqueue) << std::endl;
+	cpyqueue.push(7);
+	cout << "cpyqueue.push(7)" << std::endl;
+	cout << "cpyqueue == myqueue:" << (cpyqueue == myqueue) << std::endl;
 
 	return 0;
 }
