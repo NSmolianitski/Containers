@@ -394,8 +394,8 @@ namespace ft
 				return it;
 			}
 
-			bool				operator== (const ConstIterator& other)	{ return this->m_ptr == other.m_ptr; }
-			bool				operator!= (const ConstIterator& other)	{ return this->m_ptr != other.m_ptr; }
+			bool	operator== (const ConstIterator& other)	{ return this->m_ptr == other.m_ptr; }
+			bool	operator!= (const ConstIterator& other)	{ return this->m_ptr != other.m_ptr; }
 
 			Node*	getNode	() const { return m_ptr; }
 			Node*	getRoot	() const { return m_root; }
@@ -787,18 +787,20 @@ namespace ft
 		{
 			if (lhs.m_size != rhs.m_size)
 				return false;
-			typename map<Key, T, Compare>::const_iterator itR = rhs.begin();
-			for (typename map<Key, T, Compare>::const_iterator itL = lhs.begin(); itL != lhs.end(); ++itL, ++itR)
+			const_iterator itR = rhs.begin();
+			for (const_iterator itL = lhs.begin(); itL != lhs.end(); ++itL, ++itR)
 			{
-				if (itL->first != itR->first || itL->second != itR->second)
+				if (itL != itR)
 					return false;
 			}
 			return true;
 		}
 		friend bool operator!=	(const map& lhs, const map& rhs)
 		{
-			typename map<Key, T, Compare>::const_iterator itR = rhs.begin();
-			for (typename map<Key, T, Compare>::const_iterator itL = lhs.begin(); itL != lhs.end(); ++itL, ++itR)
+			if (lhs.size() != rhs.size())
+				return true;
+			const_iterator itR = rhs.begin();
+			for (const_iterator itL = lhs.begin(); itL != lhs.end(); ++itL, ++itR)
 			{
 				if (*itL != *itR)
 					return true;
