@@ -89,7 +89,6 @@ namespace ft
 		typedef T										mapped_type;
 		typedef pair<const key_type, mapped_type>		value_type;
 		typedef Compare									key_compare;
-		typedef value_comp								value_compare;
 		typedef value_type &							reference;
 		typedef const value_type &						const_reference;
 		typedef value_type *							pointer;
@@ -100,6 +99,24 @@ namespace ft
 		typedef ConstReverseIterator					const_reverse_iterator;
 		typedef std::ptrdiff_t							difference_type;
 		typedef std::size_t								size_type;
+
+		class value_compare
+		{
+			friend class map;
+		protected:
+			Compare comp;
+
+			explicit value_compare(Compare c) : comp(c) {}
+		public:
+			typedef bool		result_type;
+			typedef value_type	first_argument_type;
+			typedef value_type	second_argument_type;
+
+			bool operator() (const value_type& x, const value_type& y) const
+			{
+				return comp(x.first, y.first);
+			}
+		};
 
 
 		/// NODE STRUCT
@@ -766,7 +783,6 @@ namespace ft
 		Node*		min					(Node* ptr);
 		Node*		max					(Node* ptr);
 
-
 	public:
 		friend bool operator== 	(const map& lhs, const map& rhs)
 		{
@@ -1398,7 +1414,7 @@ namespace ft
 	template<class Key, class T, class Compare>
 		typename map<Key, T, Compare>::value_compare	map<Key, T, Compare>::value_comp() const
 	{
-		return value_compare();
+		return value_compare(key_compare());
 	}
 
 	template<class Key, class T, class Compare>

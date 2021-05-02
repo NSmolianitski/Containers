@@ -2273,19 +2273,22 @@ void	print(map<Key, T>& lst)
 
 int main()
 {
-	map<char,int> foo,bar;
-	foo['a']=100;
-	foo['b']=200;
-	bar['a']=10;
-	bar['z']=1000;
+	map<char,int> mymap;
 
-	// foo ({{a,100},{b,200}}) vs bar ({a,10},{z,1000}}):
-	if (foo==bar) cout << "foo and bar are equal\n";
-	if (foo!=bar) cout << "foo and bar are not equal\n";
-	if (foo< bar) cout << "foo is less than bar\n";
-	if (foo> bar) cout << "foo is greater than bar\n";
-	if (foo<=bar) cout << "foo is less than or equal to bar\n";
-	if (foo>=bar) cout << "foo is greater than or equal to bar\n";
+	mymap['x']=1001;
+	mymap['y']=2002;
+	mymap['z']=3003;
+
+	cout << "mymap contains:\n";
+
+	pair<char,int> highest = *mymap.rbegin();          // last element
+
+	map<char,int>::iterator it = mymap.begin();
+	do
+	{
+		cout << it->first << " => " << it->second << '\n';
+	}
+	while (mymap.value_comp()(*it++, highest));
 
 	return 0;
 }
