@@ -197,6 +197,118 @@ namespace ft
 
 		/// UTILS
 		size_type		getNearestPowerOfTwo(size_type x);
+		/// COMPARISON
+		friend bool operator== (const vector<T>& lhs, const vector<T>& rhs)
+		{
+			if (lhs.size() != rhs.size())
+				return false;
+
+			typename ft::vector<T>::iterator lhsIt = lhs.begin();
+			typename ft::vector<T>::iterator rhsIt = rhs.begin();
+			typename ft::vector<T>::iterator lhsItEnd = const_cast< vector<T> & >(lhs).end();
+			typename ft::vector<T>::iterator rhsItEnd = const_cast< vector<T> & >(rhs).end();
+
+			for (; lhsIt != lhsItEnd && rhsIt != rhsItEnd; ++lhsIt, ++rhsIt)
+			{
+				if (*lhsIt != *rhsIt)
+					return false;
+			}
+			return true;
+		}
+
+		friend bool operator!= (const vector<T>& lhs, const vector<T>& rhs)
+		{
+			if (lhs.size() != rhs.size())
+				return true;
+
+			typename ft::vector<T>::iterator lhsIt = lhs.begin();
+			typename ft::vector<T>::iterator rhsIt = rhs.begin();
+			typename ft::vector<T>::iterator lhsItEnd = const_cast< vector<T> & >(lhs).end();
+			typename ft::vector<T>::iterator rhsItEnd = const_cast< vector<T> & >(rhs).end();
+
+			for (; lhsIt != lhsItEnd && rhsIt != rhsItEnd; ++lhsIt, ++rhsIt)
+			{
+				if (*lhsIt != *rhsIt)
+					return true;
+			}
+			return false;
+		}
+
+		friend bool operator<  (const vector<T>& lhs, const vector<T>& rhs)
+		{
+			typename ft::vector<T>::iterator lhsIt = lhs.begin();
+			typename ft::vector<T>::iterator rhsIt = rhs.begin();
+			typename ft::vector<T>::iterator lhsItEnd = const_cast< vector<T> & >(lhs).end();
+			typename ft::vector<T>::iterator rhsItEnd = const_cast< vector<T> & >(rhs).end();
+
+			for (; lhsIt != lhsItEnd && rhsIt != rhsItEnd; ++lhsIt, ++rhsIt)
+			{
+				if (*lhsIt < *rhsIt)
+					return true;
+				else if (*lhsIt > *rhsIt)
+					return false;
+			}
+			if (lhs.size() < rhs.size())
+				return true;
+			return false;
+		}
+
+		friend bool operator<= (const vector<T>& lhs, const vector<T>& rhs)
+		{
+			typename ft::vector<T>::iterator lhsIt = lhs.begin();
+			typename ft::vector<T>::iterator rhsIt = rhs.begin();
+			typename ft::vector<T>::iterator lhsItEnd = const_cast< vector<T> & >(lhs).end();
+			typename ft::vector<T>::iterator rhsItEnd = const_cast< vector<T> & >(rhs).end();
+
+			for (; lhsIt != lhsItEnd && rhsIt != rhsItEnd; ++lhsIt, ++rhsIt)
+			{
+				if (*lhsIt < *rhsIt)
+					return true;
+				else if (*lhsIt > *rhsIt)
+					return false;
+			}
+			if (lhs.size() <= rhs.size())
+				return true;
+			return false;
+		}
+
+		friend bool operator>  (const vector<T>& lhs, const vector<T>& rhs)
+		{
+			typename ft::vector<T>::iterator lhsIt = lhs.begin();
+			typename ft::vector<T>::iterator rhsIt = rhs.begin();
+			typename ft::vector<T>::iterator lhsItEnd = const_cast< vector<T> & >(lhs).end();
+			typename ft::vector<T>::iterator rhsItEnd = const_cast< vector<T> & >(rhs).end();
+
+			for (; lhsIt != lhsItEnd && rhsIt != rhsItEnd; ++lhsIt, ++rhsIt)
+			{
+				if (*lhsIt > *rhsIt)
+					return true;
+				else if (*lhsIt < *rhsIt)
+					return false;
+			}
+			if (lhs.size() > rhs.size())
+				return true;
+			return false;
+		}
+
+		friend bool operator>= (const vector<T>& lhs, const vector<T>& rhs)
+		{
+			typename ft::vector<T>::iterator lhsIt = lhs.begin();
+			typename ft::vector<T>::iterator rhsIt = rhs.begin();
+			typename ft::vector<T>::iterator lhsItEnd = const_cast< vector<T> & >(lhs).end();
+			typename ft::vector<T>::iterator rhsItEnd = const_cast< vector<T> & >(rhs).end();
+
+			for (; lhsIt != lhsItEnd && rhsIt != rhsItEnd; ++lhsIt, ++rhsIt)
+			{
+				if (*lhsIt > *rhsIt)
+					return true;
+				else if (*lhsIt < *rhsIt)
+					return false;
+			}
+			if (lhs.size() >= rhs.size())
+				return true;
+			return false;
+		}
 	};
 
 	/// CONSTRUCTORS			************************************************************
@@ -678,125 +790,6 @@ namespace ft
 		}
 		m_size -= last - tmpPosition;
 		return tmpPosition;
-	}
-
-	/// COMPARISON
-	template <class T>
-	bool operator== (const vector<T>& lhs, const vector<T>& rhs)
-	{
-		if (lhs.size() != rhs.size())
-			return false;
-
-		typename ft::vector<T>::iterator lhsIt = lhs.begin();
-		typename ft::vector<T>::iterator rhsIt = rhs.begin();
-		typename ft::vector<T>::iterator lhsItEnd = const_cast< vector<T> & >(lhs).end();
-		typename ft::vector<T>::iterator rhsItEnd = const_cast< vector<T> & >(rhs).end();
-
-		for (; lhsIt != lhsItEnd && rhsIt != rhsItEnd; ++lhsIt, ++rhsIt)
-		{
-			if (*lhsIt != *rhsIt)
-				return false;
-		}
-		return true;
-	}
-
-	template <class T>
-	bool operator!= (const vector<T>& lhs, const vector<T>& rhs)
-	{
-		if (lhs.size() != rhs.size())
-			return true;
-
-		typename ft::vector<T>::iterator lhsIt = lhs.begin();
-		typename ft::vector<T>::iterator rhsIt = rhs.begin();
-		typename ft::vector<T>::iterator lhsItEnd = const_cast< vector<T> & >(lhs).end();
-		typename ft::vector<T>::iterator rhsItEnd = const_cast< vector<T> & >(rhs).end();
-
-		for (; lhsIt != lhsItEnd && rhsIt != rhsItEnd; ++lhsIt, ++rhsIt)
-		{
-			if (*lhsIt != *rhsIt)
-				return true;
-		}
-		return false;
-	}
-
-	template <class T>
-	bool operator<  (const vector<T>& lhs, const vector<T>& rhs)
-	{
-		typename ft::vector<T>::iterator lhsIt = lhs.begin();
-		typename ft::vector<T>::iterator rhsIt = rhs.begin();
-		typename ft::vector<T>::iterator lhsItEnd = const_cast< vector<T> & >(lhs).end();
-		typename ft::vector<T>::iterator rhsItEnd = const_cast< vector<T> & >(rhs).end();
-
-		for (; lhsIt != lhsItEnd && rhsIt != rhsItEnd; ++lhsIt, ++rhsIt)
-		{
-			if (*lhsIt < *rhsIt)
-				return true;
-			else if (*lhsIt > *rhsIt)
-				return false;
-		}
-		if (lhs.size() < rhs.size())
-			return true;
-		return false;
-	}
-
-	template <class T>
-	bool operator<= (const vector<T>& lhs, const vector<T>& rhs)
-	{
-		typename ft::vector<T>::iterator lhsIt = lhs.begin();
-		typename ft::vector<T>::iterator rhsIt = rhs.begin();
-		typename ft::vector<T>::iterator lhsItEnd = const_cast< vector<T> & >(lhs).end();
-		typename ft::vector<T>::iterator rhsItEnd = const_cast< vector<T> & >(rhs).end();
-
-		for (; lhsIt != lhsItEnd && rhsIt != rhsItEnd; ++lhsIt, ++rhsIt)
-		{
-			if (*lhsIt < *rhsIt)
-				return true;
-			else if (*lhsIt > *rhsIt)
-				return false;
-		}
-		if (lhs.size() <= rhs.size())
-			return true;
-		return false;
-	}
-
-	template <class T>
-	bool operator>  (const vector<T>& lhs, const vector<T>& rhs)
-	{
-		typename ft::vector<T>::iterator lhsIt = lhs.begin();
-		typename ft::vector<T>::iterator rhsIt = rhs.begin();
-		typename ft::vector<T>::iterator lhsItEnd = const_cast< vector<T> & >(lhs).end();
-		typename ft::vector<T>::iterator rhsItEnd = const_cast< vector<T> & >(rhs).end();
-
-		for (; lhsIt != lhsItEnd && rhsIt != rhsItEnd; ++lhsIt, ++rhsIt)
-		{
-			if (*lhsIt > *rhsIt)
-				return true;
-			else if (*lhsIt < *rhsIt)
-				return false;
-		}
-		if (lhs.size() > rhs.size())
-			return true;
-		return false;
-	}
-
-	template <class T>
-	bool operator>= (const vector<T>& lhs, const vector<T>& rhs)
-	{
-		typename ft::vector<T>::iterator lhsIt = lhs.begin();
-		typename ft::vector<T>::iterator rhsIt = rhs.begin();
-		typename ft::vector<T>::iterator lhsItEnd = const_cast< vector<T> & >(lhs).end();
-		typename ft::vector<T>::iterator rhsItEnd = const_cast< vector<T> & >(rhs).end();
-
-		for (; lhsIt != lhsItEnd && rhsIt != rhsItEnd; ++lhsIt, ++rhsIt)
-		{
-			if (*lhsIt > *rhsIt)
-				return true;
-			else if (*lhsIt < *rhsIt)
-				return false;
-		}
-		if (lhs.size() >= rhs.size())
-			return true;
-		return false;
 	}
 }
 

@@ -28,56 +28,50 @@ namespace ft
 			second = other.second;
 			return *this;
 		}
+
+		friend bool operator==(const pair<T1, T2>& lhs, const pair<T1, T2>& rhs)
+		{
+			if (lhs.first == rhs.first && lhs.second == rhs.second)
+				return true;
+			else
+				return false;
+		}
+
+		friend bool operator!= (const pair<T1, T2>& lhs, const pair<T1, T2>& rhs)
+		{
+			if (lhs.first != rhs.first && lhs.second != rhs.second)
+				return true;
+			else
+				return false;
+		}
+
+		friend bool operator< (const pair<T1, T2>& lhs, const pair<T1, T2>& rhs)
+		{
+			if (lhs.first < rhs.first)
+				return true;
+			else if (rhs.first < lhs.first)
+				return false;
+			else if (lhs.second < rhs.second)
+				return true;
+			else
+				return false;
+		}
+
+		friend bool operator<= (const pair<T1, T2>& lhs, const pair<T1, T2>& rhs)
+		{
+			return !(rhs < lhs);
+		}
+
+		friend bool operator> (const pair<T1, T2>& lhs, const pair<T1, T2>& rhs)
+		{
+			return rhs < lhs;
+		}
+
+		friend bool operator>= (const pair<T1,T2>& lhs, const pair<T1,T2>& rhs)
+		{
+			return !(lhs < rhs);
+		}
 	};
-
-	template< class T1, class T2 >
-	bool operator==(const pair<T1, T2>& lhs, const pair<T1, T2>& rhs)
-	{
-		if (lhs.first == rhs.first && lhs.second == rhs.second)
-			return true;
-		else
-			return false;
-	}
-
-	template< class T1, class T2 >
-	bool operator!= (const pair<T1, T2>& lhs, const pair<T1, T2>& rhs)
-	{
-		if (lhs.first != rhs.first && lhs.second != rhs.second)
-			return true;
-		else
-			return false;
-	}
-
-	template< class T1, class T2 >
-	bool operator< (const pair<T1, T2>& lhs, const pair<T1, T2>& rhs)
-	{
-		if (lhs.first < rhs.first)
-			return true;
-		else if (rhs.first < lhs.first)
-			return false;
-		else if (lhs.second < rhs.second)
-			return true;
-		else
-			return false;
-	}
-
-	template< class T1, class T2 >
-	bool operator<= (const pair<T1, T2>& lhs, const pair<T1, T2>& rhs)
-	{
-		return !(rhs < lhs);
-	}
-
-	template< class T1, class T2 >
-	bool operator> (const pair<T1, T2>& lhs, const pair<T1, T2>& rhs)
-	{
-		return rhs < lhs;
-	}
-
-	template< class T1, class T2 >
-	bool operator>= (const pair<T1,T2>& lhs, const pair<T1,T2>& rhs)
-	{
-		return !(lhs < rhs);
-	}
 
 	/// RED-BLACK TREE ENUMS
 	enum TreeColor
@@ -167,6 +161,8 @@ namespace ft
 				: m_map(parentMap), m_ptr(ptr) {}
 			Iterator(const Iterator& it)
 					: m_map(it.m_map), m_ptr(it.m_ptr) {}
+			Iterator(const ConstIterator& it)
+					: m_map(it.getMap()), m_ptr(const_cast<Node*>(it.getNode())) {}
 
 			reference		operator*  () const { return m_ptr->pair; }
 			pointer		 	operator-> () const { return &m_ptr->pair; }
@@ -270,12 +266,12 @@ namespace ft
 			bool			operator== (const Iterator& other)	{ return this->m_ptr == other.m_ptr; }
 			bool			operator!= (const Iterator& other)	{ return this->m_ptr != other.m_ptr; }
 
-			Node*						getNode	() const		{ return m_ptr; }
-			map<Key, T, Compare>*	getMap	() const		{ return m_map; }
+			Node*					getNode	() const { return m_ptr; }
+			map<Key, T, Compare>*	getMap	() const { return m_map; }
 
 		private:
 			map<Key, T, Compare>*		m_map;
-			Node*						m_ptr;
+			Node*							m_ptr;
 		};
 
 		class ConstIterator
@@ -284,15 +280,15 @@ namespace ft
 			typedef	std::bidirectional_iterator_tag			iterator_category;
 
 			ConstIterator() {}
-			ConstIterator(map<Key, T, Compare>* parentMap, const Node* ptr)
-				: m_map(parentMap), m_ptr(ptr) {}
-			ConstIterator(const ConstIterator& it)
-					: m_map(it.m_map), m_ptr(it.m_ptr) {}
+			ConstIterator(const map<Key, T, Compare>* parentMap, const Node* ptr)
+					: m_map(const_cast<map<Key, T, Compare>*>(parentMap)), m_ptr(ptr) {}
+//			ConstIterator(const ConstIterator& it)
+//					: m_map(it.m_map), m_ptr(it.m_ptr) {}
 			ConstIterator(const Iterator& it)
 				: m_map(it.getMap()), m_ptr(it.getNode()) {}
 
 			const_reference		operator*  () const { return m_ptr->pair; }
-			const_pointer 		operator-> () const 	{ return &m_ptr->pair; }
+			const_pointer 		operator-> () const { return &m_ptr->pair; }
 
 			ConstIterator&		operator++ ()
 			{
@@ -319,7 +315,7 @@ namespace ft
 			ConstIterator		operator++ (int)
 			{
 				ConstIterator	it	= *this;
-				Node*			ptr	= m_ptr;
+				const Node*		ptr	= m_ptr;
 
 				if (ptr->right != m_map->m_nil)
 				{
@@ -342,7 +338,7 @@ namespace ft
 
 			ConstIterator&		operator-- ()
 			{
-				Node		*ptr = m_ptr;
+				const Node		*ptr = m_ptr;
 
 				if (ptr == m_map->m_nil)
 				{
@@ -366,8 +362,8 @@ namespace ft
 			}
 			ConstIterator		operator-- (int)
 			{
-				Iterator	it	= *this;
-				Node*		ptr = m_ptr;
+				ConstIterator	it	= *this;
+				const Node*		ptr = m_ptr;
 
 				if (ptr == m_map->m_nil)
 				{
@@ -393,8 +389,8 @@ namespace ft
 			bool				operator== (const ConstIterator& other)	{ return this->m_ptr == other.m_ptr; }
 			bool				operator!= (const ConstIterator& other)	{ return this->m_ptr != other.m_ptr; }
 
-			const Node*					getNode	() const			{ return m_ptr; }
-			const map<Key, T, Compare>*	getMap	() const			{ return m_map; }
+			const Node*					getNode	() const { return m_ptr; }
+			map<Key, T, Compare>*		getMap	() const { return m_map; }
 
 		private:
 			map<Key, T, Compare>*		m_map;
@@ -514,12 +510,12 @@ namespace ft
 			bool	operator== (const ReverseIterator& other)	{ return this->m_ptr == other.m_ptr; }
 			bool	operator!= (const ReverseIterator& other)	{ return this->m_ptr != other.m_ptr; }
 
-			Node*					getNode	() const			{ return m_ptr; }
-			map<Key, T, Compare>*	getMap	() const			{ return m_map; }
+			Node*						getNode	() const			{ return m_ptr; }
+			const map<Key, T, Compare>*	getMap	() const		{ return m_map; }
 
 		private:
-			map<Key, T, Compare>*	m_map;
-			Node*					m_ptr;
+			map<Key, T, Compare>*		m_map;
+			Node*						m_ptr;
 		};
 
 		class ConstReverseIterator
@@ -540,7 +536,7 @@ namespace ft
 
 			ConstReverseIterator&	operator++ ()
 			{
-				Node		*ptr = m_ptr;
+				const Node		*ptr = m_ptr;
 
 				if (ptr->left != m_map->m_nil)
 				{
@@ -559,8 +555,8 @@ namespace ft
 			}
 			ConstReverseIterator	operator++ (int)
 			{
-				ReverseIterator	it	= *this;
-				Node*		ptr = m_ptr;
+				ConstReverseIterator	it	= *this;
+				const Node*		ptr = m_ptr;
 
 				if (ptr->left != m_map->m_nil)
 				{
@@ -580,7 +576,7 @@ namespace ft
 
 			ConstReverseIterator&	operator-- ()
 			{
-				Node		*ptr = m_ptr;
+				const Node		*ptr = m_ptr;
 
 				if (ptr == m_map->m_nil)
 				{
@@ -607,8 +603,8 @@ namespace ft
 			}
 			ConstReverseIterator	operator-- (int)
 			{
-				ReverseIterator	it	= *this;
-				Node*		ptr	= m_ptr;
+				ConstReverseIterator	it	= *this;
+				const Node*		ptr	= m_ptr;
 
 				if (ptr == m_map->m_nil)
 				{
@@ -637,12 +633,12 @@ namespace ft
 			bool	operator== (const ConstReverseIterator& other)	{ return this->m_ptr == other.m_ptr; }
 			bool	operator!= (const ConstReverseIterator& other)	{ return this->m_ptr != other.m_ptr; }
 
-			const Node*					getNode	() const			{ return m_ptr; }
-			const map<Key, T, Compare>*	getMap	() const			{ return m_map; }
+			Node*						getNode	() const { return m_ptr; }
+			const map<Key, T, Compare>*	getMap	() const { return m_map; }
 
 		private:
-			map<Key, T, Compare>*	m_map;
-			const Node*				m_ptr;
+			const map<Key, T, Compare>*	m_map;
+			const Node*					m_ptr;
 		};
 		/// ITERATORS --END--
 
@@ -725,6 +721,7 @@ namespace ft
 		pair<const_iterator,const_iterator>			equal_range (const key_type& k) const;
 
 
+	private:
 		/// UTILS MEMBER FUNCTIONS
 		void		fillNil				();
 		Node*		newNode				(const map::value_type &val);
@@ -738,6 +735,70 @@ namespace ft
 		Node*		min					(Node* ptr);
 		Node*		max					(Node* ptr);
 
+
+	public:
+		friend bool operator== 	(const map& lhs, const map& rhs)
+		{
+			if (lhs.m_size != rhs.m_size)
+				return false;
+			typename map<Key, T, Compare>::iterator itR = rhs.begin();
+			for (typename map<Key, T, Compare>::iterator itL = lhs.begin(); itL != lhs.end(); ++itL, ++itR)
+			{
+				if (itL->first != itR->first || itL->second != itR->second)
+					return false;
+			}
+			return true;
+		}
+		friend bool operator!=	(const map& lhs, const map& rhs)
+		{
+			typename map<Key, T, Compare>::iterator itR = rhs.begin();
+			for (typename map<Key, T, Compare>::iterator itL = lhs.begin(); itL != lhs.end(); ++itL, ++itR)
+			{
+				if (itL->first != itR->first || itL->second != itR->second)
+					return true;
+			}
+			return false;
+		}
+		friend bool operator<	(const map& lhs, const map& rhs)
+		{
+			typename map<Key, T, Compare>::iterator itR = rhs.begin();
+			for (typename map<Key, T, Compare>::iterator itL = lhs.begin(); itL != lhs.end(); ++itL, ++itR)
+			{
+				if (itL->first >= itR->first || itL->second >= itR->second)
+					return false;
+			}
+			return true;
+		}
+		friend bool operator<=	(const map& lhs, const map& rhs)
+		{
+			typename map<Key, T, Compare>::iterator itR = rhs.begin();
+			for (typename map<Key, T, Compare>::iterator itL = lhs.begin(); itL != lhs.end(); ++itL, ++itR)
+			{
+				if (itL->first > itR->first || itL->second > itR->second)
+					return false;
+			}
+			return true;
+		}
+		friend bool operator>	(const map& lhs, const map& rhs)
+		{
+			typename map<Key, T, Compare>::iterator itR = rhs.begin();
+			for (typename map<Key, T, Compare>::iterator itL = lhs.begin(); itL != lhs.end(); ++itL, ++itR)
+			{
+				if (itL->first <= itR->first || itL->second <= itR->second)
+					return false;
+			}
+			return true;
+		}
+		friend bool operator>=	(const map& lhs, const map& rhs)
+		{
+			typename map<Key, T, Compare>::iterator itR = rhs.begin();
+			for (typename map<Key, T, Compare>::iterator itL = lhs.begin(); itL != lhs.end(); ++itL, ++itR)
+			{
+				if (itL->first < itR->first || itL->second < itR->second)
+					return false;
+			}
+			return true;
+		}
 	}; //! End of [Map Class] !//
 
 
@@ -1075,7 +1136,9 @@ namespace ft
 	        map<Key, T, Compare>::insert(map::iterator position, const map::value_type& val)
 	{
 		position = position;
-		return insert(val);
+		insert(val);
+		iterator it = find(val.first);
+		return it;
 	}
 
 	template<class Key, class T, class Compare>
@@ -1251,10 +1314,17 @@ namespace ft
 	template<class Key, class T, class Compare>
 	void map<Key, T, Compare>::swap(map& x)
 	{
-		map<Key, T, Compare> tmp = *this;
+		size_type	tmpSize = this->m_size;
+		Node*		tmpRoot = this->m_root;
+		Node* 		tmpNil	= this->m_nil;
 
-		*this = x;
-		x = tmp;
+		m_size = x.m_size;
+		m_root = x.m_root;
+		m_nil = x.m_nil;
+
+		x.m_size = tmpSize;
+		x.m_root = tmpRoot;
+		x.m_nil = tmpNil;
 	}
 
 
@@ -1377,8 +1447,9 @@ namespace ft
 	pair<typename  map<Key, T, Compare>::iterator, typename  map<Key, T, Compare>::iterator>
 				map<Key, T, Compare>::equal_range(const key_type& k)
 	{
-		iterator it = lower_bound(k);
-		return pair<iterator, iterator>(it, it);
+		iterator low_bound = lower_bound(k);
+		iterator up_bound = upper_bound(k);
+		return pair<iterator, iterator>(low_bound, up_bound);
 	}
 
 	template<class Key, class T, class Compare>
@@ -1482,6 +1553,11 @@ namespace ft
 
 //////////////////////////////////////////!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
+	template< class Key, class T, class Compare>
+	void swap(map<Key,T,Compare>& lhs, map<Key,T,Compare>& rhs)
+	{
+		lhs.swap(rhs);
+	}
 }
 
 
