@@ -319,7 +319,7 @@ namespace ft
 	vector<T>::vector(vector::size_type n, const value_type &val) : m_size(n), m_capacity(n)
 	{
 		m_array = new value_type [n];
-		for (int i = 0; i < n; ++i)
+		for (size_type i = 0; i < n; ++i)
 			m_array[i] = val;
 	}
 
@@ -340,7 +340,7 @@ namespace ft
 	{
 		m_array = new value_type [x.m_capacity];
 
-		for (int i = 0; i < x.m_size; ++i)
+		for (size_type i = 0; i < x.m_size; ++i)
 			m_array[i] = x[i];
 	}
 
@@ -403,23 +403,23 @@ namespace ft
 				if (n > 9)
 					m_capacity = n;
 				value_type *newArr = new value_type [m_capacity];
-				for (int i = 0; i < m_size; ++i)
+				for (size_type i = 0; i < m_size; ++i)
 					newArr[i] = m_array[i];
-				for (int i = m_size; i < n; ++i)
+				for (size_type i = m_size; i < n; ++i)
 					newArr[i] = val;
 				delete [] m_array;
 				m_array = newArr;
 			}
 			else
 			{
-				for (int i = m_size; i < n; ++i)
+				for (size_type i = m_size; i < n; ++i)
 					m_array[i] = val;
 			}
 			m_size = n;
 		}
 		else if (n < m_size)
 		{
-			for (int i = m_size - 1; i >= n; --i)
+			for (size_type i = m_size - 1; i >= n; --i)
 				m_array[i].~T();
 			m_size = n;
 		}
@@ -505,7 +505,7 @@ namespace ft
 		{
 			m_capacity = getNearestPowerOfTwo(m_size + 1);
 			value_type *newArr = new value_type [m_capacity];
-			for (int i = 0; i < m_size; ++i)
+			for (size_type i = 0; i < m_size; ++i)
 				newArr[i] = m_array[i];
 			delete [] m_array;
 			m_array = newArr;
@@ -548,7 +548,7 @@ namespace ft
 			m_capacity = n;
 			m_array = new value_type [m_capacity];
 		}
-		for (int i = 0; i < n; ++i)
+		for (size_type i = 0; i < n; ++i)
 			m_array[i] = val;
 		m_size = n;
 	}
@@ -577,7 +577,7 @@ namespace ft
 		{
 			m_capacity = n;
 			value_type *newArr = new value_type [m_capacity];
-			for (int i = 0; i < m_size; ++i)
+			for (size_type i = 0; i < m_size; ++i)
 				newArr[i] = m_array[i];
 			delete [] m_array;
 			m_array = newArr;
@@ -664,7 +664,7 @@ namespace ft
 		{
 			m_capacity = getNearestPowerOfTwo(m_size + 1);
 			value_type *newArr = new value_type [m_capacity];
-			int i = m_size;
+			size_type i = m_size;
 			for (; i > (position - begin()); --i)
 				newArr[i] = m_array[i - 1];
 			newArr[i] = val;
@@ -691,10 +691,10 @@ namespace ft
 		{
 			m_capacity = getNearestPowerOfTwo(m_size + n + 1);
 			value_type *newArr = new value_type [m_capacity];
-			int i = m_size + n - 1;
+			size_type i = m_size + n - 1;
 			for (; i >= (position - begin() + n); --i)
 				newArr[i] = m_array[i - n];
-			for (int j = 0; j < n; ++j)
+			for (size_type j = 0; j < n; ++j)
 			{
 				newArr[i] = val;
 				--i;
@@ -709,7 +709,7 @@ namespace ft
 			iterator it = end() + n - 1;
 			for (; it >= position + n; --it)
 				*it = *(it - n);
-			for (int i = 0; i < n; ++i)
+			for (size_type i = 0; i < n; ++i)
 			{
 				*position = val;
 				++position;
@@ -727,7 +727,7 @@ namespace ft
 			return;
 		size_type n = last - first;
 		value_type tmpArr[n];
-		for (int i = 0; i < n; ++i)
+		for (size_type i = 0; i < n; ++i)
 		{
 			tmpArr[i] = *first;
 			++first;
@@ -736,7 +736,7 @@ namespace ft
 		{
 			m_capacity = getNearestPowerOfTwo(m_size + n + 1);
 			value_type *newArr = new value_type [m_capacity];
-			int i = m_size + n - 1;
+			size_type i = m_size + n - 1;
 			for (; i >= (position - begin() + n); --i)
 				newArr[i] = m_array[i - n];
 			for (int j = static_cast<int>(n) - 1; j >= 0; --j)
@@ -754,7 +754,7 @@ namespace ft
 			iterator it = end() + n - 1;
 			for (; it >= position + n; --it)
 				*it = *(it - n);
-			for (int i = 0; i < n; ++i)
+			for (size_type i = 0; i < n; ++i)
 			{
 				*position = tmpArr[i];
 				++position;
@@ -780,7 +780,7 @@ namespace ft
 		if (last < first)
 			return first;
 		vector::iterator tmpPosition = first;
-		for (int i = 0; i < (last - first); ++i)
+		for (size_type i = 0; i < (last - first); ++i)
 			(*(first + i)).~T();
 		int i = 0;
 		for (; first < last + 1; ++first)

@@ -315,7 +315,7 @@ namespace ft
 	//Constructors and destructor
 	template<typename T>
 	list<T>::list()
-		: m_size(0), m_head(&m_end), m_tail(&m_end) { m_tail->m_next = &m_end; }
+		: m_head(&m_end), m_tail(&m_end), m_size(0) { m_tail->m_next = &m_end; }
 
 	template<typename T>
 	list<T>::list(size_type n, const value_type &val) : m_size(n)
@@ -708,14 +708,14 @@ namespace ft
 		Node *old = position.getNode();
 
 		if (m_size == 0)
-			for (int i = 0; i < n; ++i)
+			for (size_type i = 0; i < n; ++i)
 				push_back(val);
 		else if (old == m_head)
-			for (int i = 0; i < n; ++i)
+			for (size_type i = 0; i < n; ++i)
 				push_front(val);
 		else
 		{
-			for (int i = 0; i < n; ++i)
+			for (size_type i = 0; i < n; ++i)
 			{
 				Node *ptr = new Node(val);
 				ptr->m_prev = old->m_prev;
@@ -928,7 +928,7 @@ namespace ft
 		Node *ptr = m_head->m_prev;
 		m_tail = m_head;
 		m_end.m_prev = m_tail;
-		for (int i = 0; i < m_size; ++i)
+		for (size_type i = 0; i < m_size; ++i)
 		{
 			m_head->m_prev = m_head->m_next;
 			m_head->m_next = ptr;

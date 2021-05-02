@@ -31,30 +31,17 @@ namespace ft
 
 		friend bool operator==(const pair<T1, T2>& lhs, const pair<T1, T2>& rhs)
 		{
-			if (lhs.first == rhs.first && lhs.second == rhs.second)
-				return true;
-			else
-				return false;
+			return (lhs.first == rhs.first && lhs.second == rhs.second);
 		}
 
 		friend bool operator!= (const pair<T1, T2>& lhs, const pair<T1, T2>& rhs)
 		{
-			if (lhs.first != rhs.first && lhs.second != rhs.second)
-				return true;
-			else
-				return false;
+			return !(lhs == rhs);
 		}
 
 		friend bool operator< (const pair<T1, T2>& lhs, const pair<T1, T2>& rhs)
 		{
-			if (lhs.first < rhs.first)
-				return true;
-			else if (rhs.first < lhs.first)
-				return false;
-			else if (lhs.second < rhs.second)
-				return true;
-			else
-				return false;
+			return lhs.first < rhs.first || (!(rhs.first < lhs.first) && lhs.second < rhs.second);
 		}
 
 		friend bool operator<= (const pair<T1, T2>& lhs, const pair<T1, T2>& rhs)
@@ -157,12 +144,10 @@ namespace ft
 			typedef	std::bidirectional_iterator_tag			iterator_category;
 
 			Iterator() {}
-			Iterator(map<Key, T, Compare>* parentMap, Node* ptr)
-				: m_map(parentMap), m_ptr(ptr) {}
+			Iterator(Node* ptr, Node* root, Node* nil)
+					: m_ptr(ptr), m_root(root), m_nil(nil) {}
 			Iterator(const Iterator& it)
-					: m_map(it.m_map), m_ptr(it.m_ptr) {}
-			Iterator(const ConstIterator& it)
-					: m_map(it.getMap()), m_ptr(const_cast<Node*>(it.getNode())) {}
+					: m_ptr(it.m_ptr), m_root(it.m_root), m_nil(it.m_nil) {}
 
 			reference		operator*  () const { return m_ptr->pair; }
 			pointer		 	operator-> () const { return &m_ptr->pair; }
@@ -171,19 +156,19 @@ namespace ft
 			{
 				Node*	ptr = m_ptr;
 
-				if (ptr->right != m_map->m_nil)
+				if (ptr->right != m_nil)
 				{
 					ptr = ptr->right;
-					while (ptr->left != m_map->m_nil)
+					while (ptr->left != m_nil)
 						ptr = ptr->left;
 					m_ptr = ptr;
 				}
 				else
 				{
-					while (ptr != m_map->m_nil && ptr->parent->right == ptr)
+					while (ptr != m_nil && ptr->parent->right == ptr)
 						ptr = ptr->parent;
-					if (ptr->parent == m_map->m_nil)
-						m_ptr = m_map->m_nil;
+					if (ptr->parent == m_nil)
+						m_ptr = m_nil;
 					else
 						m_ptr = ptr->parent;
 				}
@@ -194,19 +179,19 @@ namespace ft
 				Iterator	it	= *this;
 				Node*		ptr	= m_ptr;
 
-				if (ptr->right != m_map->m_nil)
+				if (ptr->right != m_nil)
 				{
 					ptr = ptr->right;
-					while (ptr->left != m_map->m_nil)
+					while (ptr->left != m_nil)
 						ptr = ptr->left;
 					m_ptr = ptr;
 				}
 				else
 				{
-					while (ptr != m_map->m_nil && ptr->parent->right == ptr)
+					while (ptr != m_nil && ptr->parent->right == ptr)
 						ptr = ptr->parent;
-					if (ptr->parent == m_map->m_nil)
-						m_ptr = m_map->m_nil;
+					if (ptr->parent == m_nil)
+						m_ptr = m_nil;
 					else
 						m_ptr = ptr->parent;
 				}
@@ -217,21 +202,21 @@ namespace ft
 			{
 				Node		*ptr = m_ptr;
 
-				if (ptr == m_map->m_nil)
+				if (ptr == m_nil)
 				{
-					m_ptr = m_map->max(m_map->m_root);
+					m_ptr = max(m_root);
 					return *this;
 				}
-				if (ptr->left != m_map->m_nil)
+				if (ptr->left != m_nil)
 				{
 					ptr = ptr->left;
-					while (ptr->right != m_map->m_nil)
+					while (ptr->right != m_nil)
 						ptr = ptr->right;
 					m_ptr = ptr;
 				}
 				else
 				{
-					while (ptr->parent->left == ptr && ptr != m_map->m_nil)
+					while (ptr->parent->left == ptr && ptr != m_nil)
 						ptr = ptr->parent;
 					m_ptr = ptr->parent;
 				}
@@ -242,21 +227,21 @@ namespace ft
 				Iterator	it	= *this;
 				Node*		ptr = m_ptr;
 
-				if (ptr == m_map->m_nil)
+				if (ptr == m_nil)
 				{
-					m_ptr = m_map->max(m_map->m_root);
+					m_ptr = max(m_root);
 					return it;
 				}
-				if (ptr->left != m_map->m_nil)
+				if (ptr->left != m_nil)
 				{
 					ptr = ptr->left;
-					while (ptr->right != m_map->m_nil)
+					while (ptr->right != m_nil)
 						ptr = ptr->right;
 					m_ptr = ptr;
 				}
 				else
 				{
-					while (ptr->parent->left == ptr && ptr != m_map->m_nil)
+					while (ptr->parent->left == ptr && ptr != m_nil)
 						ptr = ptr->parent;
 					m_ptr = ptr->parent;
 				}
@@ -266,12 +251,21 @@ namespace ft
 			bool			operator== (const Iterator& other)	{ return this->m_ptr == other.m_ptr; }
 			bool			operator!= (const Iterator& other)	{ return this->m_ptr != other.m_ptr; }
 
-			Node*					getNode	() const { return m_ptr; }
-			map<Key, T, Compare>*	getMap	() const { return m_map; }
+			Node*	getNode	() const { return m_ptr; }
+			Node*	getRoot	() const { return m_root; }
+			Node*	getNil	() const { return m_nil; }
 
 		private:
-			map<Key, T, Compare>*		m_map;
-			Node*							m_ptr;
+			Node*	max(Node* ptr)
+			{
+				while (ptr->right != m_nil)
+					ptr = ptr->right;
+				return ptr;
+			}
+
+			Node*						m_ptr;
+			Node*						m_root;
+			Node*						m_nil;
 		};
 
 		class ConstIterator
@@ -280,33 +274,31 @@ namespace ft
 			typedef	std::bidirectional_iterator_tag			iterator_category;
 
 			ConstIterator() {}
-			ConstIterator(const map<Key, T, Compare>* parentMap, const Node* ptr)
-					: m_map(const_cast<map<Key, T, Compare>*>(parentMap)), m_ptr(ptr) {}
-//			ConstIterator(const ConstIterator& it)
-//					: m_map(it.m_map), m_ptr(it.m_ptr) {}
+			ConstIterator(Node* ptr, Node* root, Node* nil)
+					: m_ptr(ptr), m_root(root), m_nil(nil) {}
 			ConstIterator(const Iterator& it)
-				: m_map(it.getMap()), m_ptr(it.getNode()) {}
+					: m_ptr(it.getNode()), m_root(it.getRoot()), m_nil(it.getNil()) {}
 
 			const_reference		operator*  () const { return m_ptr->pair; }
 			const_pointer 		operator-> () const { return &m_ptr->pair; }
 
 			ConstIterator&		operator++ ()
 			{
-				const Node*	ptr = m_ptr;
+				Node*	ptr = m_ptr;
 
-				if (ptr->right != m_map->m_nil)
+				if (ptr->right != m_nil)
 				{
 					ptr = ptr->right;
-					while (ptr->left != m_map->m_nil)
+					while (ptr->left != m_nil)
 						ptr = ptr->left;
 					m_ptr = ptr;
 				}
 				else
 				{
-					while (ptr != m_map->m_nil && ptr->parent->right == ptr)
+					while (ptr != m_nil && ptr->parent->right == ptr)
 						ptr = ptr->parent;
-					if (ptr->parent == m_map->m_nil)
-						m_ptr = m_map->m_nil;
+					if (ptr->parent == m_nil)
+						m_ptr = m_nil;
 					else
 						m_ptr = ptr->parent;
 				}
@@ -315,21 +307,21 @@ namespace ft
 			ConstIterator		operator++ (int)
 			{
 				ConstIterator	it	= *this;
-				const Node*		ptr	= m_ptr;
+				Node*			ptr	= m_ptr;
 
-				if (ptr->right != m_map->m_nil)
+				if (ptr->right != m_nil)
 				{
 					ptr = ptr->right;
-					while (ptr->left != m_map->m_nil)
+					while (ptr->left != m_nil)
 						ptr = ptr->left;
 					m_ptr = ptr;
 				}
 				else
 				{
-					while (ptr != m_map->m_nil && ptr->parent->right == ptr)
+					while (ptr != m_nil && ptr->parent->right == ptr)
 						ptr = ptr->parent;
-					if (ptr->parent == m_map->m_nil)
-						m_ptr = m_map->m_nil;
+					if (ptr->parent == m_nil)
+						m_ptr = m_nil;
 					else
 						m_ptr = ptr->parent;
 				}
@@ -338,23 +330,23 @@ namespace ft
 
 			ConstIterator&		operator-- ()
 			{
-				const Node		*ptr = m_ptr;
+				Node		*ptr = m_ptr;
 
-				if (ptr == m_map->m_nil)
+				if (ptr == m_nil)
 				{
-					m_ptr = m_map->max(m_map->m_root);
+					m_ptr = max(m_root);
 					return *this;
 				}
-				if (ptr->left != m_map->m_nil)
+				if (ptr->left != m_nil)
 				{
 					ptr = ptr->left;
-					while (ptr->right != m_map->m_nil)
+					while (ptr->right != m_nil)
 						ptr = ptr->right;
 					m_ptr = ptr;
 				}
 				else
 				{
-					while (ptr->parent->left == ptr && ptr != m_map->m_nil)
+					while (ptr->parent->left == ptr && ptr != m_nil)
 						ptr = ptr->parent;
 					m_ptr = ptr->parent;
 				}
@@ -363,23 +355,23 @@ namespace ft
 			ConstIterator		operator-- (int)
 			{
 				ConstIterator	it	= *this;
-				const Node*		ptr = m_ptr;
+				Node*			ptr = m_ptr;
 
-				if (ptr == m_map->m_nil)
+				if (ptr == m_nil)
 				{
-					m_ptr = m_map->max(m_map->m_root);
+					m_ptr = max(m_root);
 					return it;
 				}
-				if (ptr->left != m_map->m_nil)
+				if (ptr->left != m_nil)
 				{
 					ptr = ptr->left;
-					while (ptr->right != m_map->m_nil)
+					while (ptr->right != m_nil)
 						ptr = ptr->right;
 					m_ptr = ptr;
 				}
 				else
 				{
-					while (ptr->parent->left == ptr && ptr != m_map->m_nil)
+					while (ptr->parent->left == ptr && ptr != m_nil)
 						ptr = ptr->parent;
 					m_ptr = ptr->parent;
 				}
@@ -389,12 +381,21 @@ namespace ft
 			bool				operator== (const ConstIterator& other)	{ return this->m_ptr == other.m_ptr; }
 			bool				operator!= (const ConstIterator& other)	{ return this->m_ptr != other.m_ptr; }
 
-			const Node*					getNode	() const { return m_ptr; }
-			map<Key, T, Compare>*		getMap	() const { return m_map; }
+			Node*	getNode	() const { return m_ptr; }
+			Node*	getRoot	() const { return m_root; }
+			Node*	getNil	() const { return m_nil; }
 
 		private:
-			map<Key, T, Compare>*		m_map;
-			const Node*					m_ptr;
+			Node*	max(Node* ptr)
+			{
+				while (ptr->right != m_nil)
+					ptr = ptr->right;
+				return ptr;
+			}
+
+			Node*	m_ptr;
+			Node*	m_root;
+			Node*	m_nil;
 		};
 
 		class ReverseIterator
@@ -403,10 +404,10 @@ namespace ft
 			typedef	std::bidirectional_iterator_tag		iterator_category;
 
 			ReverseIterator() {}
-			ReverseIterator(map<Key, T, Compare>* parentMap, Node* ptr)
-						: m_map(parentMap), m_ptr(ptr) {}
+			ReverseIterator(Node* ptr, Node* root, Node* nil)
+						: m_ptr(ptr), m_root(root), m_nil(nil) {}
 			ReverseIterator(const ReverseIterator& it)
-						: m_map(it.m_map), m_ptr(it.m_ptr) {}
+						: m_ptr(it.m_ptr), m_root(it.m_root), m_nil(it.m_nil) {}
 
 			reference			operator*  () const 		{ return m_ptr->pair; }
 			pointer				operator-> () const 		{ return &m_ptr->pair; }
@@ -415,16 +416,16 @@ namespace ft
 			{
 				Node		*ptr = m_ptr;
 
-				if (ptr->left != m_map->m_nil)
+				if (ptr->left != m_nil)
 				{
 					ptr = ptr->left;
-					while (ptr->right != m_map->m_nil)
+					while (ptr->right != m_nil)
 						ptr = ptr->right;
 					m_ptr = ptr;
 				}
 				else
 				{
-					while (ptr->parent->left == ptr && ptr != m_map->m_nil)
+					while (ptr->parent->left == ptr && ptr != m_nil)
 						ptr = ptr->parent;
 					m_ptr = ptr->parent;
 				}
@@ -435,16 +436,16 @@ namespace ft
 				ReverseIterator	it	= *this;
 				Node*		ptr = m_ptr;
 
-				if (ptr->left != m_map->m_nil)
+				if (ptr->left != m_nil)
 				{
 					ptr = ptr->left;
-					while (ptr->right != m_map->m_nil)
+					while (ptr->right != m_nil)
 						ptr = ptr->right;
 					m_ptr = ptr;
 				}
 				else
 				{
-					while (ptr->parent->left == ptr && ptr != m_map->m_nil)
+					while (ptr->parent->left == ptr && ptr != m_nil)
 						ptr = ptr->parent;
 					m_ptr = ptr->parent;
 				}
@@ -455,24 +456,24 @@ namespace ft
 			{
 				Node		*ptr = m_ptr;
 
-				if (ptr == m_map->m_nil)
+				if (ptr == m_nil)
 				{
-					m_ptr = m_map->min(m_map->m_root);
+					m_ptr = min(m_root);
 					return *this;
 				}
-				if (ptr->right != m_map->m_nil)
+				if (ptr->right != m_nil)
 				{
 					ptr = ptr->right;
-					while (ptr->left != m_map->m_nil)
+					while (ptr->left != m_nil)
 						ptr = ptr->left;
 					m_ptr = ptr;
 				}
 				else
 				{
-					while (ptr != m_map->m_nil && ptr->parent->right == ptr)
+					while (ptr != m_nil && ptr->parent->right == ptr)
 						ptr = ptr->parent;
-					if (ptr->parent == m_map->m_nil)
-						m_ptr = m_map->m_nil;
+					if (ptr->parent == m_nil)
+						m_ptr = m_nil;
 					else
 						m_ptr = ptr->parent;
 				}
@@ -483,24 +484,24 @@ namespace ft
 				ReverseIterator	it	= *this;
 				Node*		ptr	= m_ptr;
 
-				if (ptr == m_map->m_nil)
+				if (ptr == m_nil)
 				{
-					m_ptr = m_map->max(m_map->m_root);
+					m_ptr = max(m_root);
 					return it;
 				}
-				if (ptr->right != m_map->m_nil)
+				if (ptr->right != m_nil)
 				{
 					ptr = ptr->right;
-					while (ptr->left != m_map->m_nil)
+					while (ptr->left != m_nil)
 						ptr = ptr->left;
 					m_ptr = ptr;
 				}
 				else
 				{
-					while (ptr != m_map->m_nil && ptr->parent->right == ptr)
+					while (ptr != m_nil && ptr->parent->right == ptr)
 						ptr = ptr->parent;
-					if (ptr->parent == m_map->m_nil)
-						m_ptr = m_map->m_nil;
+					if (ptr->parent == m_nil)
+						m_ptr = m_nil;
 					else
 						m_ptr = ptr->parent;
 				}
@@ -510,12 +511,27 @@ namespace ft
 			bool	operator== (const ReverseIterator& other)	{ return this->m_ptr == other.m_ptr; }
 			bool	operator!= (const ReverseIterator& other)	{ return this->m_ptr != other.m_ptr; }
 
-			Node*						getNode	() const			{ return m_ptr; }
-			const map<Key, T, Compare>*	getMap	() const		{ return m_map; }
+			Node*	getNode	() const { return m_ptr; }
+			Node*	getRoot	() const { return m_root; }
+			Node*	getNil	() const { return m_nil; }
 
 		private:
-			map<Key, T, Compare>*		m_map;
-			Node*						m_ptr;
+			Node*	max(Node* ptr)
+			{
+				while (ptr->right != m_nil)
+					ptr = ptr->right;
+				return ptr;
+			}
+			Node*	min(Node* ptr)
+			{
+				while (ptr->left != m_nil)
+					ptr = ptr->left;
+				return ptr;
+			}
+
+			Node*	m_ptr;
+			Node*	m_root;
+			Node*	m_nil;
 		};
 
 		class ConstReverseIterator
@@ -524,30 +540,30 @@ namespace ft
 			typedef	std::bidirectional_iterator_tag		iterator_category;
 
 			ConstReverseIterator() {}
-			ConstReverseIterator(map<Key, T, Compare>* parentMap, const Node* ptr)
-							: m_map(parentMap), m_ptr(ptr) {}
+			ConstReverseIterator(Node* ptr, Node* root, Node* nil)
+					: m_ptr(ptr), m_root(root), m_nil(nil) {}
 			ConstReverseIterator(const ConstReverseIterator& it)
-							: m_map(it.m_map), m_ptr(it.m_ptr) {}
+					: m_ptr(it.getNode()), m_root(it.getRoot()), m_nil(it.getNil()) {}
 			ConstReverseIterator(const ReverseIterator& it)
-							: m_map(it.getMap()), m_ptr(it.getNode()) {}
+					: m_ptr(it.getNode()), m_root(it.getRoot()), m_nil(it.getNil()) {}
 
 			const_reference 		operator*  () const 		{ return m_ptr->pair; }
 			const_pointer 			operator-> () const 		{ return &m_ptr->pair; }
 
 			ConstReverseIterator&	operator++ ()
 			{
-				const Node		*ptr = m_ptr;
+				Node		*ptr = m_ptr;
 
-				if (ptr->left != m_map->m_nil)
+				if (ptr->left != m_nil)
 				{
 					ptr = ptr->left;
-					while (ptr->right != m_map->m_nil)
+					while (ptr->right != m_nil)
 						ptr = ptr->right;
 					m_ptr = ptr;
 				}
 				else
 				{
-					while (ptr->parent->left == ptr && ptr != m_map->m_nil)
+					while (ptr->parent->left == ptr && ptr != m_nil)
 						ptr = ptr->parent;
 					m_ptr = ptr->parent;
 				}
@@ -556,18 +572,18 @@ namespace ft
 			ConstReverseIterator	operator++ (int)
 			{
 				ConstReverseIterator	it	= *this;
-				const Node*		ptr = m_ptr;
+				Node*		ptr = m_ptr;
 
-				if (ptr->left != m_map->m_nil)
+				if (ptr->left != m_nil)
 				{
 					ptr = ptr->left;
-					while (ptr->right != m_map->m_nil)
+					while (ptr->right != m_nil)
 						ptr = ptr->right;
 					m_ptr = ptr;
 				}
 				else
 				{
-					while (ptr->parent->left == ptr && ptr != m_map->m_nil)
+					while (ptr->parent->left == ptr && ptr != m_nil)
 						ptr = ptr->parent;
 					m_ptr = ptr->parent;
 				}
@@ -576,26 +592,26 @@ namespace ft
 
 			ConstReverseIterator&	operator-- ()
 			{
-				const Node		*ptr = m_ptr;
+				Node		*ptr = m_ptr;
 
-				if (ptr == m_map->m_nil)
+				if (ptr == m_nil)
 				{
-					m_ptr = m_map->min(m_map->m_root);
+					m_ptr = min(m_root);
 					return *this;
 				}
-				if (ptr->right != m_map->m_nil)
+				if (ptr->right != m_nil)
 				{
 					ptr = ptr->right;
-					while (ptr->left != m_map->m_nil)
+					while (ptr->left != m_nil)
 						ptr = ptr->left;
 					m_ptr = ptr;
 				}
 				else
 				{
-					while (ptr != m_map->m_nil && ptr->parent->right == ptr)
+					while (ptr != m_nil && ptr->parent->right == ptr)
 						ptr = ptr->parent;
-					if (ptr->parent == m_map->m_nil)
-						m_ptr = m_map->m_nil;
+					if (ptr->parent == m_nil)
+						m_ptr = m_nil;
 					else
 						m_ptr = ptr->parent;
 				}
@@ -604,26 +620,26 @@ namespace ft
 			ConstReverseIterator	operator-- (int)
 			{
 				ConstReverseIterator	it	= *this;
-				const Node*		ptr	= m_ptr;
+				Node*					ptr	= m_ptr;
 
-				if (ptr == m_map->m_nil)
+				if (ptr == m_nil)
 				{
-					m_ptr = m_map->max(m_map->m_root);
+					m_ptr = max(m_root);
 					return it;
 				}
-				if (ptr->right != m_map->m_nil)
+				if (ptr->right != m_nil)
 				{
 					ptr = ptr->right;
-					while (ptr->left != m_map->m_nil)
+					while (ptr->left != m_nil)
 						ptr = ptr->left;
 					m_ptr = ptr;
 				}
 				else
 				{
-					while (ptr != m_map->m_nil && ptr->parent->right == ptr)
+					while (ptr != m_nil && ptr->parent->right == ptr)
 						ptr = ptr->parent;
-					if (ptr->parent == m_map->m_nil)
-						m_ptr = m_map->m_nil;
+					if (ptr->parent == m_nil)
+						m_ptr = m_nil;
 					else
 						m_ptr = ptr->parent;
 				}
@@ -633,12 +649,27 @@ namespace ft
 			bool	operator== (const ConstReverseIterator& other)	{ return this->m_ptr == other.m_ptr; }
 			bool	operator!= (const ConstReverseIterator& other)	{ return this->m_ptr != other.m_ptr; }
 
-			Node*						getNode	() const { return m_ptr; }
-			const map<Key, T, Compare>*	getMap	() const { return m_map; }
+			Node*	getNode	() const { return m_ptr; }
+			Node*	getRoot	() const { return m_root; }
+			Node*	getNil	() const { return m_nil; }
 
 		private:
-			const map<Key, T, Compare>*	m_map;
-			const Node*					m_ptr;
+			Node*	max(Node* ptr)
+			{
+				while (ptr->right != m_nil)
+					ptr = ptr->right;
+				return ptr;
+			}
+			Node*	min(Node* ptr)
+			{
+				while (ptr->left != m_nil)
+					ptr = ptr->left;
+				return ptr;
+			}
+
+			Node*	m_ptr;
+			Node*	m_root;
+			Node*	m_nil;
 		};
 		/// ITERATORS --END--
 
@@ -741,8 +772,8 @@ namespace ft
 		{
 			if (lhs.m_size != rhs.m_size)
 				return false;
-			typename map<Key, T, Compare>::iterator itR = rhs.begin();
-			for (typename map<Key, T, Compare>::iterator itL = lhs.begin(); itL != lhs.end(); ++itL, ++itR)
+			typename map<Key, T, Compare>::const_iterator itR = rhs.begin();
+			for (typename map<Key, T, Compare>::const_iterator itL = lhs.begin(); itL != lhs.end(); ++itL, ++itR)
 			{
 				if (itL->first != itR->first || itL->second != itR->second)
 					return false;
@@ -751,62 +782,44 @@ namespace ft
 		}
 		friend bool operator!=	(const map& lhs, const map& rhs)
 		{
-			typename map<Key, T, Compare>::iterator itR = rhs.begin();
-			for (typename map<Key, T, Compare>::iterator itL = lhs.begin(); itL != lhs.end(); ++itL, ++itR)
+			typename map<Key, T, Compare>::const_iterator itR = rhs.begin();
+			for (typename map<Key, T, Compare>::const_iterator itL = lhs.begin(); itL != lhs.end(); ++itL, ++itR)
 			{
-				if (itL->first != itR->first || itL->second != itR->second)
+				if (*itL != *itR)
 					return true;
 			}
 			return false;
 		}
 		friend bool operator<	(const map& lhs, const map& rhs)
 		{
-			typename map<Key, T, Compare>::iterator itR = rhs.begin();
-			for (typename map<Key, T, Compare>::iterator itL = lhs.begin(); itL != lhs.end(); ++itL, ++itR)
-			{
-				if (itL->first >= itR->first || itL->second >= itR->second)
-					return false;
-			}
-			return true;
+			return lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
 		}
-		friend bool operator<=	(const map& lhs, const map& rhs)
-		{
-			typename map<Key, T, Compare>::iterator itR = rhs.begin();
-			for (typename map<Key, T, Compare>::iterator itL = lhs.begin(); itL != lhs.end(); ++itL, ++itR)
-			{
-				if (itL->first > itR->first || itL->second > itR->second)
-					return false;
-			}
-			return true;
-		}
-		friend bool operator>	(const map& lhs, const map& rhs)
-		{
-			typename map<Key, T, Compare>::iterator itR = rhs.begin();
-			for (typename map<Key, T, Compare>::iterator itL = lhs.begin(); itL != lhs.end(); ++itL, ++itR)
-			{
-				if (itL->first <= itR->first || itL->second <= itR->second)
-					return false;
-			}
-			return true;
-		}
-		friend bool operator>=	(const map& lhs, const map& rhs)
-		{
-			typename map<Key, T, Compare>::iterator itR = rhs.begin();
-			for (typename map<Key, T, Compare>::iterator itL = lhs.begin(); itL != lhs.end(); ++itL, ++itR)
-			{
-				if (itL->first < itR->first || itL->second < itR->second)
-					return false;
-			}
-			return true;
-		}
+		friend bool operator<=	(const map& lhs, const map& rhs) { return !(rhs < lhs); }
+		friend bool operator>	(const map& lhs, const map& rhs) { return rhs < lhs; }
+		friend bool operator>=	(const map& lhs, const map& rhs) { return !(lhs < rhs); }
 	}; //! End of [Map Class] !//
 
+	template<typename Iterator1, typename Iterator2>
+	bool lexicographical_compare(Iterator1 first1, Iterator1 last1,
+							  	 Iterator2 first2, Iterator2 last2)
+	{
+		for (; (first1 != last1) && (first2 != last2); ++first1, ++first2)
+		{
+			if (*first1 < *first2)
+				return true;
+			if (*first2 < *first1)
+				return false;
+		}
+		return (first1 == last1) && (first2 != last2);
+	}
 
 	/// CONSTRUCTORS
 	template<class Key, class T, class Compare>
 		map<Key, T, Compare>::map(const key_compare &comp)
 			: m_size(0)
 	{
+		key_compare useless;;
+		useless = comp;
 		fillNil();
 	}
 
@@ -815,6 +828,7 @@ namespace ft
 			map<Key, T, Compare>::map(InputIterator first, InputIterator last, const key_compare& comp)
 				: m_size(0)
 	{
+		key_compare tmp = comp;
 		fillNil();
 		for (; first != last ; ++first)
 			insert(*first);
@@ -848,7 +862,7 @@ namespace ft
 		while (ptr->left != m_nil)
 			ptr = ptr->left;
 
-		return iterator(this, ptr);
+		return iterator(ptr, m_root, m_nil);
 	}
 
 	template<class Key, class T, class Compare>
@@ -859,19 +873,19 @@ namespace ft
 		while (ptr->left != m_nil)
 			ptr = ptr->left;
 
-		return const_iterator(this, ptr);
+		return iterator(ptr, m_root, m_nil);
 	}
 
 	template<class Key, class T, class Compare>
 	typename map<Key, T, Compare>::iterator					map<Key, T, Compare>::end()
 	{
-		return iterator(this, m_nil);
+		return iterator(m_nil, m_root, m_nil);
 	}
 
 	template<class Key, class T, class Compare>
 	typename map<Key, T, Compare>::const_iterator			map<Key, T, Compare>::end() const
 	{
-		return const_iterator(this, m_nil);
+		return iterator(m_nil, m_root, m_nil);
 	}
 
 	template<class Key, class T, class Compare>
@@ -882,7 +896,7 @@ namespace ft
 		while (ptr->right != m_nil)
 			ptr = ptr->right;
 
-		return reverse_iterator(this, ptr);
+		return reverse_iterator(ptr, m_root, m_nil);
 	}
 
 	template<class Key, class T, class Compare>
@@ -893,19 +907,19 @@ namespace ft
 		while (ptr->right != m_nil)
 			ptr = ptr->right;
 
-		return const_reverse_iterator(this, ptr);
+		return reverse_iterator(this, ptr);
 	}
 
 	template<class Key, class T, class Compare>
 	typename map<Key, T, Compare>::reverse_iterator			map<Key, T, Compare>::rend()
 	{
-		return reverse_iterator(this, m_nil);
+		return reverse_iterator(m_nil, m_root, m_nil);
 	}
 
 	template<class Key, class T, class Compare>
 	typename map<Key, T, Compare>::const_reverse_iterator	map<Key, T, Compare>::rend() const
 	{
-		return const_reverse_iterator(this, m_nil);
+		return reverse_iterator(m_nil, m_root, m_nil);
 	}
 
 
@@ -945,7 +959,7 @@ namespace ft
 			return it.getNode()->pair.second;
 		else
 		{
-			insert(pair<Key, T>(key, 0));  ///////////////// try T() if something is wrong //////////////////
+			insert(pair<Key, T>(key, T()));
 			it = find(key);
 			return it.getNode()->pair.second;
 		}
@@ -1121,21 +1135,21 @@ namespace ft
 			{
 				Node *ptr = addNode(val);	// Assign leaf parent as new Node parent
 				fixInsertion(ptr);			// Fix tree if needed
-				return pair<iterator, bool>(iterator(this, ptr), true);
+				return pair<iterator, bool>(iterator(ptr, m_root, m_nil), true);
 			}
 			else
 				return pair<iterator, bool>(it, false);
 		}
 		++m_size;
 		fixInsertion(m_root);
-		return pair<iterator, bool>(iterator(this, m_root), true);
+		return pair<iterator, bool>(iterator(m_root, m_root, m_nil), true);
 	}
 
 	template<class Key, class T, class Compare>
 	typename ft::map<Key, T, Compare>::iterator
 	        map<Key, T, Compare>::insert(map::iterator position, const map::value_type& val)
 	{
-		position = position;
+		iterator useless = position;
 		insert(val);
 		iterator it = find(val.first);
 		return it;
@@ -1337,13 +1351,13 @@ namespace ft
 		while (ptr != m_nil)
 		{
 			if (ptr->pair.first == k)
-				return iterator(this, ptr);
+				return iterator(ptr, m_root, m_nil);
 			else if (comp(ptr->pair.first, k))
 				ptr = ptr->right;
 			else
 				ptr = ptr->left;
 		}
-		return iterator(this, m_nil);
+		return iterator(m_nil, m_root, m_nil);
 	}
 
 
@@ -1355,19 +1369,19 @@ namespace ft
 		while (ptr != m_nil)
 		{
 			if (ptr->pair.first == k)
-				return const_iterator(this, ptr);
+				return const_iterator(ptr, m_root, m_nil);
 			else if (comp(ptr->pair.first, k))
 				ptr = ptr->right;
 			else
 				ptr = ptr->left;
 		}
-		return const_iterator(this, m_nil);
+		return const_iterator(m_nil, m_root, m_nil);
 	}
 
 	template<class Key, class T, class Compare>
 	typename map<Key, T, Compare>::size_type map<Key, T, Compare>::count(const key_type& k) const
 	{
-		iterator it = find(k);
+		const_iterator it = find(k);
 		if (it != end())
 			return 1;
 		return 0;

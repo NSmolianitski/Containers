@@ -19,7 +19,7 @@ namespace ft
 
 	private:
 		Container m_container;
-		stack(const stack<T, Container> &other) {};
+		stack(const stack<T, Container> &other) { std::cout << other.size(); };
 
 	public:
 		//Constructors
