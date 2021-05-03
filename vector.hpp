@@ -5,6 +5,8 @@
 #ifndef FT_CONTAINERS_VECTOR_HPP
 #define FT_CONTAINERS_VECTOR_HPP
 
+#include "utils.hpp"
+
 #include <sstream>
 
 namespace ft
@@ -153,7 +155,7 @@ namespace ft
 			bool	operator>= (const Iterator &other)	{ return this->m_ptr >= other.m_ptr; }
 			bool	operator<= (const Iterator &other)	{ return this->m_ptr <= other.m_ptr; }
 
-			pointer			getPointer() { return m_ptr; }
+			pointer			getPointer() const { return m_ptr; }
 
 		private:
 			pointer	m_ptr;
@@ -173,16 +175,16 @@ namespace ft
 			const_reference	operator[] (int num) const 			{ return *(m_ptr + num); }
 
 			size_type 		operator+  (const Iterator &other)	{ return (this->m_ptr + other.m_ptr); }
-			ConstIterator	operator+  (int a)					{ Iterator it; it.m_ptr = m_ptr + a; return it; }
+			ConstIterator	operator+  (int a)					{ ConstIterator it; it.m_ptr = m_ptr + a; return it; }
 			ConstIterator&	operator+= (int a)					{ m_ptr += a; return *this; }
 			ConstIterator&	operator++ ()						{ ++m_ptr; return *this; }
-			ConstIterator	operator++ (int)					{ Iterator tmp = *this; ++(*this); return tmp; }
+			ConstIterator	operator++ (int)					{ ConstIterator tmp = *this; ++(*this); return tmp; }
 
 			size_type		operator-  (const Iterator &other)	{ return (this->m_ptr - other.m_ptr); }
-			ConstIterator	operator-  (int a)					{ Iterator it; it.m_ptr = m_ptr - a; return it; }
+			ConstIterator	operator-  (int a)					{ ConstIterator it; it.m_ptr = m_ptr - a; return it; }
 			ConstIterator&	operator-= (int a)					{ m_ptr -= a; return *this; }
 			ConstIterator&	operator-- ()						{ --m_ptr; return *this; }
-			ConstIterator	operator-- (int)					{ Iterator tmp = *this; --(*this); return tmp; }
+			ConstIterator	operator-- (int)					{ ConstIterator tmp = *this; --(*this); return tmp; }
 
 			bool	operator== (const ConstIterator &other)	{ return this->m_ptr == other.m_ptr; }
 			bool	operator!= (const ConstIterator &other)	{ return this->m_ptr != other.m_ptr; }
@@ -229,7 +231,7 @@ namespace ft
 			bool	operator>= (const ReverseIterator &other)			{ return this->m_ptr >= other.m_ptr; }
 			bool	operator<= (const ReverseIterator &other)			{ return this->m_ptr <= other.m_ptr; }
 
-			pointer	getPointer() { return m_ptr; }
+			pointer	getPointer() const { return m_ptr; }
 
 		private:
 			pointer	m_ptr;
@@ -248,17 +250,17 @@ namespace ft
 			const_pointer	operator-> () const 		{ return m_ptr; }
 			const_reference	operator[] (int num) const 	{ return *(m_ptr - num); }
 
-			size_type 				operator+  (const ReverseIterator &other)	{ return (this->m_ptr - other.m_ptr); }
-			ConstReverseIterator	operator+  (int a)	{ ConstReverseIterator it; it.m_ptr = m_ptr - a; return it; }
-			ConstReverseIterator&	operator+= (int a)	{ m_ptr -= a; return *this; }
-			ConstReverseIterator&	operator++ ()		{ --m_ptr; return *this; }
-			ConstReverseIterator	operator++ (int)	{ ConstReverseIterator tmp = *this; --(*this); return tmp; }
+			size_type 				operator+  (const ReverseIterator &other)		{ return (this->m_ptr - other.m_ptr); }
+			ConstReverseIterator	operator+  (int a)								{ ConstReverseIterator it; it.m_ptr = m_ptr - a; return it; }
+			ConstReverseIterator&	operator+= (int a)								{ m_ptr -= a; return *this; }
+			ConstReverseIterator&	operator++ ()									{ --m_ptr; return *this; }
+			ConstReverseIterator	operator++ (int)								{ ConstReverseIterator tmp = *this; --(*this); return tmp; }
 
 			size_type				operator-  (const ConstReverseIterator &other)	{ return (this->m_ptr + other.m_ptr); }
-			ConstReverseIterator	operator-  (int a)	{ ConstReverseIterator it; it.m_ptr = m_ptr + a; return it; }
-			ConstReverseIterator&	operator-= (int a)	{ m_ptr += a; return *this; }
-			ConstReverseIterator&	operator-- ()		{ ++m_ptr; return *this; }
-			ConstReverseIterator	operator-- (int)	{ ConstReverseIterator tmp = *this; ++(*this); return tmp; }
+			ConstReverseIterator	operator-  (int a)								{ ConstReverseIterator it; it.m_ptr = m_ptr + a; return it; }
+			ConstReverseIterator&	operator-= (int a)								{ m_ptr += a; return *this; }
+			ConstReverseIterator&	operator-- ()									{ ++m_ptr; return *this; }
+			ConstReverseIterator	operator-- (int)								{ ConstReverseIterator tmp = *this; ++(*this); return tmp; }
 
 			bool	operator== (const ConstReverseIterator &other)			{ return this->m_ptr == other.m_ptr; }
 			bool	operator!= (const ConstReverseIterator &other)			{ return this->m_ptr != other.m_ptr; }
@@ -320,7 +322,7 @@ namespace ft
 	vector<T>::vector(vector::size_type n, const value_type &val) : m_size(n), m_capacity(n)
 	{
 		m_array = new value_type [n];
-		for (size_type i = 0; i < n; ++i)
+		for (long i = 0; i < n; ++i)
 			m_array[i] = val;
 	}
 
@@ -344,13 +346,15 @@ namespace ft
 	{
 		m_array = new value_type [x.m_capacity];
 
-		for (size_type i = 0; i < x.m_size; ++i)
+		for (long i = 0; i < x.m_size; ++i)
 			m_array[i] = x[i];
 	}
 
 	template<typename T>
 	vector<T>::~vector()
 	{
+		while (m_size != 0)
+			pop_back();
 		delete [] m_array;
 	}
 
@@ -407,25 +411,24 @@ namespace ft
 				if (n > 9)
 					m_capacity = n;
 				value_type *newArr = new value_type [m_capacity];
-				for (size_type i = 0; i < m_size; ++i)
+				for (long i = 0; i < m_size; ++i)
 					newArr[i] = m_array[i];
-				for (size_type i = m_size; i < n; ++i)
+				for (long i = m_size; i < n; ++i)
 					newArr[i] = val;
 				delete [] m_array;
 				m_array = newArr;
 			}
 			else
 			{
-				for (size_type i = m_size; i < n; ++i)
+				for (long i = m_size; i < n; ++i)
 					m_array[i] = val;
 			}
 			m_size = n;
 		}
 		else if (n < m_size)
 		{
-			for (size_type i = m_size - 1; i >= n; --i)
-				m_array[i].~T();
-			m_size = n;
+			while (m_size > n)
+				pop_back();
 		}
 	}
 
@@ -509,7 +512,7 @@ namespace ft
 		{
 			m_capacity = getNearestPowerOfTwo(m_size + 1);
 			value_type *newArr = new value_type [m_capacity];
-			for (size_type i = 0; i < m_size; ++i)
+			for (long i = 0; i < m_size; ++i)
 				newArr[i] = m_array[i];
 			delete [] m_array;
 			m_array = newArr;
@@ -553,7 +556,7 @@ namespace ft
 			m_capacity = n;
 			m_array = new value_type [m_capacity];
 		}
-		for (size_type i = 0; i < n; ++i)
+		for (long i = 0; i < n; ++i)
 			m_array[i] = val;
 		m_size = n;
 	}
@@ -561,7 +564,6 @@ namespace ft
 	template<typename T>
 	void vector<T>::pop_back()
 	{
-		m_array[m_size - 1].~T();
 		--m_size;
 	}
 
@@ -578,11 +580,13 @@ namespace ft
 	template<typename T>
 	void vector<T>::reserve(vector::size_type n)
 	{
+		if (n > max_size())
+			throw std::runtime_error("allocator<T>::allocate(size_t n) 'n' exceeds maximum supported size");
 		if (n > m_capacity)
 		{
 			m_capacity = n;
 			value_type *newArr = new value_type [m_capacity];
-			for (size_type i = 0; i < m_size; ++i)
+			for (long i = 0; i < m_size; ++i)
 				newArr[i] = m_array[i];
 			delete [] m_array;
 			m_array = newArr;
@@ -669,14 +673,16 @@ namespace ft
 		{
 			m_capacity = getNearestPowerOfTwo(m_size + 1);
 			value_type *newArr = new value_type [m_capacity];
-			size_type i = m_size;
+			long i = m_size;
 			for (; i > (position - begin()); --i)
 				newArr[i] = m_array[i - 1];
 			newArr[i] = val;
+			long newElementIndex = i;
 			for (--i; i >= 0; --i)
 				newArr[i] = m_array[i];
 			delete [] m_array;
 			m_array = newArr;
+			position = begin() + newElementIndex + 1;
 		}
 		else
 		{
@@ -686,7 +692,7 @@ namespace ft
 			*position = val;
 		}
 		++m_size;
-		return position;
+		return position - 1;
 	}
 
 	template<typename T>
@@ -696,10 +702,10 @@ namespace ft
 		{
 			m_capacity = getNearestPowerOfTwo(m_size + n + 1);
 			value_type *newArr = new value_type [m_capacity];
-			size_type i = m_size + n - 1;
+			long i = m_size + n - 1;
 			for (; i >= (position - begin() + n); --i)
 				newArr[i] = m_array[i - n];
-			for (size_type j = 0; j < n; ++j)
+			for (long j = 0; j < n; ++j)
 			{
 				newArr[i] = val;
 				--i;
@@ -714,7 +720,7 @@ namespace ft
 			iterator it = end() + n - 1;
 			for (; it >= position + n; --it)
 				*it = *(it - n);
-			for (size_type i = 0; i < n; ++i)
+			for (long i = 0; i < n; ++i)
 			{
 				*position = val;
 				++position;
@@ -732,7 +738,7 @@ namespace ft
 			return;
 		size_type n = last - first;
 		value_type tmpArr[n];
-		for (size_type i = 0; i < n; ++i)
+		for (long i = 0; i < n; ++i)
 		{
 			tmpArr[i] = *first;
 			++first;
@@ -741,10 +747,10 @@ namespace ft
 		{
 			m_capacity = getNearestPowerOfTwo(m_size + n + 1);
 			value_type *newArr = new value_type [m_capacity];
-			size_type i = m_size + n - 1;
+			long i = m_size + n - 1;
 			for (; i >= (position - begin() + n); --i)
 				newArr[i] = m_array[i - n];
-			for (int j = static_cast<int>(n) - 1; j >= 0; --j)
+			for (long j = static_cast<long>(n) - 1; j >= 0; --j)
 			{
 				newArr[i] = tmpArr[j];
 				--i;
@@ -759,7 +765,7 @@ namespace ft
 			iterator it = end() + n - 1;
 			for (; it >= position + n; --it)
 				*it = *(it - n);
-			for (size_type i = 0; i < n; ++i)
+			for (long i = 0; i < n; ++i)
 			{
 				*position = tmpArr[i];
 				++position;
@@ -772,8 +778,7 @@ namespace ft
 	typename vector<T>::iterator vector<T>::erase(vector::iterator position)
 	{
 		vector::iterator tmpPosition = position;
-		(*position).~T();
-		for (; position < end() - 1; ++position)
+		for (; position < end(); ++position)
 			*position = *(position + 1);
 		--m_size;
 		return tmpPosition;
@@ -785,13 +790,12 @@ namespace ft
 		if (last < first)
 			return first;
 		vector::iterator tmpPosition = first;
-		for (size_type i = 0; i < (last - first); ++i)
-			(*(first + i)).~T();
-		int i = 0;
-		for (; first < end(); ++first)
+		for (int i = 0; first < end(); ++first, ++i)
 		{
-			*first = *(last + i);
-			++i;
+			if (last + i >= end())
+				*first = T();
+			else
+				*first = *(last + i);
 		}
 		m_size -= last - tmpPosition;
 		return tmpPosition;
