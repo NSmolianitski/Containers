@@ -1463,55 +1463,6 @@ void listTest()
 		std::cout << "\nList one after merge:\n";
 		printList(ft_list);
 //--------------------------------------------------------------------------------------//
-		std::cout << RED "\n* MERGE WITH CUSTOM COMPARISON *" CLR << "\n";
-		list.clear();
-		list2.clear();
-		ft_list.clear();
-		ft_list2.clear();
-
-
-		std::cout << GREEN "Standard:" CLR << "\n";
-		std::cout << "List one:\n";
-		list.push_back(12);
-		list.push_back(1);
-		list.push_back(2);
-		list.push_back(3);
-		list.push_back(5);
-		list.push_back(8);
-		printList(list);
-
-		std::cout << "\nList two:\n";
-		list2.push_back(4);
-		list2.push_back(8);
-		list2.push_back(10);
-		printList(list2);
-
-		list.merge(list2, is_second_lower);
-		std::cout << "\nList one after merge:\n";
-		printList(list);
-
-
-
-		std::cout << YELLOW "\nCustom:" CLR << "\n";
-		std::cout << "List one:\n";
-		ft_list.push_back(12);
-		ft_list.push_back(1);
-		ft_list.push_back(2);
-		ft_list.push_back(3);
-		ft_list.push_back(5);
-		ft_list.push_back(8);
-		printList(ft_list);
-
-		std::cout << "\nList two:\n";
-		ft_list2.push_back(4);
-		ft_list2.push_back(8);
-		ft_list2.push_back(10);
-		printList(ft_list2);
-
-		ft_list.merge(ft_list2, is_second_lower);
-		std::cout << "\nList one after merge:\n";
-		printList(ft_list);
-//--------------------------------------------------------------------------------------//
 		std::cout << RED "\n* REVERSE *" CLR << "\n";
 		list.clear();
 		list2.clear();
@@ -2051,18 +2002,142 @@ void queueTest()
 }
 void mapTest()
 {
-	std::cout << BLUE "**********************\\\\\\\\MAP////**********************" CLR << "\n";
+	std::cout << BLUE "\n**********************\\\\\\\\MAP////**********************" CLR << "\n";
 	{
-		std::cout << RED "* SIZE, MAX SIZE *" CLR << "\n";
+		std::cout << RED "* SIZE, MAX SIZE, CLEAR, INSERT *" CLR << "\n";
 
 		std::cout << GREEN "Standard:" CLR << "\n";
 		std::map<int, int> map;
+		map.insert(std::pair<int, int>(10, 20));
+
+		std::map<int, int>::iterator it = map.begin();
+		map.insert(it, std::pair<int, int>(8, 20));
+		map.insert(std::pair<int, int>(50, 20));
+
+		std::cout << "Size: " << map.size() << std::endl;
+		map.clear();
+		std::cout << "Size: " << map.size() << std::endl;
 		std::cout << "Max size: " << map.max_size() << std::endl;
+
+
+
 
 		std::cout << YELLOW "\nCustom:" CLR << "\n";
 		ft::map<int, int> ft_map;
-		std::cout << "Max size: " << ft_map.max_size() << std::endl;
+		ft_map.insert(ft::pair<int, int>(10, 20));
 
+		ft::map<int, int>::iterator ft_it = ft_map.begin();
+		ft_map.insert(ft_it, ft::pair<int, int>(8, 20));
+		ft_map.insert(ft::pair<int, int>(50, 20));
+
+		std::cout << "Size: " << ft_map.size() << std::endl;
+		ft_map.clear();
+		std::cout << "Size: " << ft_map.size() << std::endl;
+		std::cout << "Max size: " << ft_map.max_size() << std::endl;
+	}
+//--------------------------------------------------------------------------------------//
+	{
+		std::cout << RED "* EMPTY, [], ERASE, SWAP *" CLR << "\n";
+
+		std::cout << GREEN "Standard:" CLR << "\n";
+		std::map<int, int> map;
+		map.insert(std::pair<int, int>(10, 20));
+		map.insert(std::pair<int, int>(20, 20));
+		map.insert(std::pair<int, int>(30, 20));
+		map.insert(std::pair<int, int>(40, 20));
+		map.insert(std::pair<int, int>(50, 20));
+		std::cout << "Size: " << map.size() << std::endl;
+
+		map[50] = 100;
+		std::cout << map[50] << std::endl;
+
+		map.erase(50);
+
+		for (std::map<int, int>::iterator it = map.begin(); it != map.end(); ++it)
+			std::cout << "[" << it->first << "] " << it->second << std::endl;
+		std::cout << "Size: " << map.size() << std::endl;
+
+		std::map<int, int> map2;
+		map2.insert(std::pair<int, int>(1, 50));
+		map2.insert(std::pair<int, int>(2, 50));
+
+		map.swap(map2);
+		std::cout << "\nSize: " << map.size() << std::endl;
+		std::cout << "Size: " << map2.size() << std::endl;
+
+		map = map2;
+		std::cout << "Size: " << map.size() << std::endl;
+		std::cout << "Size: " << map2.size() << std::endl;
+
+
+
+
+		std::cout << YELLOW "\nCustom:" CLR << "\n";
+		ft::map<int, int> ft_map;
+		ft_map.insert(ft::pair<int, int>(10, 20));
+		ft_map.insert(ft::pair<int, int>(20, 20));
+		ft_map.insert(ft::pair<int, int>(30, 20));
+		ft_map.insert(ft::pair<int, int>(40, 20));
+		ft_map.insert(ft::pair<int, int>(50, 20));
+		std::cout << "Size: " << ft_map.size() << std::endl;
+
+		ft_map[50] = 100;
+		std::cout << ft_map[50] << std::endl;
+
+		ft_map.erase(50);
+
+		for (ft::map<int, int>::iterator ft_it = ft_map.begin(); ft_it != ft_map.end(); ++ft_it)
+			std::cout << "[" << ft_it->first << "] " << ft_it->second << std::endl;
+		std::cout << "Size: " << ft_map.size() << std::endl;
+
+		ft::map<int, int> ft_map2;
+		ft_map2.insert(ft::pair<int, int>(1, 50));
+		ft_map2.insert(ft::pair<int, int>(2, 50));
+
+		ft_map.swap(ft_map2);
+		std::cout << "\nSize: " << ft_map.size() << std::endl;
+		std::cout << "Size: " << ft_map2.size() << std::endl;
+
+		ft_map = ft_map2;
+		std::cout << "Size: " << ft_map.size() << std::endl;
+		std::cout << "Size: " << ft_map2.size() << std::endl;
+	}
+	//--------------------------------------------------------------------------------------//
+	{
+		std::cout << RED "* FIND, COUNT, BOUND, RANGE *" CLR << "\n";
+
+		std::cout << GREEN "Standard:" CLR << "\n";
+		std::map<int, int> map;
+		map.insert(std::pair<int, int>(10, 20));
+		map.insert(std::pair<int, int>(20, 20));
+		map.insert(std::pair<int, int>(30, 20));
+		map.insert(std::pair<int, int>(40, 20));
+		map.insert(std::pair<int, int>(50, 20));
+		std::cout << "Size: " << map.size() << std::endl;
+
+		std::cout << map.find(20)->first << std::endl;
+		std::cout << map.count(20) << std::endl;
+		std::cout << map.lower_bound(34)->first << std::endl;
+		std::cout << map.upper_bound(20)->first << std::endl;
+		std::cout << map.equal_range(48).first->first << std::endl;
+
+
+
+
+		std::cout << YELLOW "\nCustom:" CLR << "\n";
+		ft::map<int, int> ft_map;
+		ft_map.insert(ft::pair<int, int>(10, 20));
+		ft_map.insert(ft::pair<int, int>(20, 20));
+		ft_map.insert(ft::pair<int, int>(30, 20));
+		ft_map.insert(ft::pair<int, int>(40, 20));
+		ft_map.insert(ft::pair<int, int>(50, 20));
+		std::cout << "Size: " << ft_map.size() << std::endl;
+
+		std::cout << ft_map.find(20)->first << std::endl;
+		std::cout << ft_map.count(20) << std::endl;
+		std::cout << ft_map.lower_bound(34)->first << std::endl;
+		std::cout << ft_map.upper_bound(20)->first << std::endl;
+		std::cout << ft_map.equal_range(48).first->first << std::endl;
 	}
 }
 

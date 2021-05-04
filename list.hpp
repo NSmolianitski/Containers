@@ -875,7 +875,6 @@ namespace ft
 	template<typename T>
 	void list<T>::merge(list &x)
 	{
-		iterator it = begin();
 		for (iterator itX = x.begin(); itX != x.end(); ++itX)
 			push_back(*itX);
 		sort();
@@ -886,7 +885,6 @@ namespace ft
 	template<class Compare>
 	void list<T>::merge(list &x, Compare comp)
 	{
-		iterator it = begin();
 		for (iterator itX = x.begin(); itX != x.end(); ++itX)
 			push_back(*itX);
 		sort(comp);
