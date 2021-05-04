@@ -2282,173 +2282,375 @@ void	print(map<Key, T>& lst)
 		cout << it->first << " => " << it->second << '\n';
 }
 
-int main ()
+template <class T>
+void	print(list<T>& lst)
 {
-	cout << _WHITE << "# test_map" << _END << std::endl;
-	cout << _YELLOW <<  "/* ********************************************************************** */" << std::endl;
-	cout << "/*                          "<< _WHITE << "BASIC TESTS" << _YELLOW << "                                   */" << std::endl;
-	cout << "/* ********************************************************************** */" << _END << std::endl;
-	cout << std::endl;
-
-
-	map<string, int> mymap;
-	print(mymap);
-
-
-	cout << "mymap<" << _PURPLE << "string" << _END << ", " << _PURPLE << "int" << _END <<"> mymap;" << std::endl;
-
-	cout << std::endl;
-	cout << "mymap.max_size(): " << (mymap.max_size() > 10000) << std::endl;
-	print(mymap);
-	cout << std::endl;
-
-
-	print(mymap);
-	mymap.insert(pair<string, int>("ft", 42));
-
-	print(mymap);
-	mymap.insert(pair<string, int>("one", 1));
-
-
-	cout << _WHITE << "# testing upper/lower_bound" << _END << std::endl;
-	map<string, int>::iterator mit;
-	map<string, int>::iterator it;
-	print(mymap);
-	it = mymap.lower_bound("aaa");
-	print(mymap);
-	cout << std::setw(40) << "mymap.lower_bound(\"aaa\"): " << it->first << ":" << it->second << std::endl;
-	cout << std::endl;
-	print(mymap);
-	it = mymap.lower_bound("one");
-	print(mymap);
-	cout << std::setw(40) << "mymap.lower_bound(\"one\"): " << it->first << ":" << it->second << std::endl;
-	cout << std::endl;
-	print(mymap);
-	it = mymap.lower_bound("oae");
-	print(mymap);
-	cout << std::setw(40) << "mymap.lower_bound(\"oae\"): " << it->first << ":" << it->second << std::endl;
-	cout << std::endl;
-	print(mymap);
-	it = mymap.lower_bound("ft");
-	print(mymap);
-	cout << std::setw(40) << "mymap.lower_bound(\"ft\"): " << it->first << ":" << it->second << std::endl;
-	cout << std::endl;
-	print(mymap);
-	it = mymap.lower_bound("zzz");
-	print(mymap);
-
-	if (it == mymap.end())
-		cout << std::setw(40) << "mymap.lower_bound(\"zzz\"): mymap.end()" << std::endl;
-	cout << std::endl;
-	print(mymap);
-	it = mymap.upper_bound("aaa");
-
-	print(mymap);
-	cout << std::setw(40) << "mymap.upper_bound(\"aaa\"): " << it->first << ":" << it->second << std::endl;;
-	cout << std::endl;
-	print(mymap);
-	it = mymap.upper_bound("oae");
-	print(mymap);
-	cout << std::setw(40) << "mymap.upper_bound(\"oae\"): " << it->first << ":" << it->second << std::endl;;
-	cout << std::endl;
-	print(mymap);
-	it = mymap.upper_bound("one");
-
-	if (it == mymap.end())
-		cout << std::setw(40) << "mymap.upper_bound(\"one\"): mymap.end()" << std::endl;
-	print(mymap);
-	cout << std::endl;
-	it = mymap.upper_bound("ft");
-	print(mymap);
-	cout << std::setw(40) << "mymap.upper_bound(\"ft\"): " << it->first << ":" << it->second << std::endl;;
-	cout << std::endl;
-	print(mymap);
-	it = mymap.upper_bound("zzz");
-
-	if (it == mymap.end())
-		cout << std::setw(40) << "mymap.upper_bound(\"zzz\"): mymap.end()" << std::endl;
-	print(mymap);
-	cout << std::endl;
-
-	print(mymap);
-	mymap.erase("undefined");
-	print(mymap);
-	mymap.erase("ft");
-	print(mymap);
-	cout << _WHITE << "# double clear" << _END << std::endl;
-	mymap.clear();
-	print(mymap);
-	mymap.clear();
-	print(mymap);
-	mymap["lol"];
-	print(mymap);
-	mymap.insert(pair<string, int>("xD", 123));
-	print(mymap);
-	mymap.insert(mymap.end(), pair<string, int>("uch", 442));
-	print(mymap);
-	mymap.insert(mymap.begin(), pair<string, int>("uch", 22));
-	print(mymap);
-	mymap.insert(mymap.end(), pair<string, int>("uch", 23));
-	print(mymap);
-	mymap.insert(pair<string, int>("uch", 23));
-	print(mymap);
-	mymap["lol"] = 8;
-
-
-	print(mymap);
-	map<string, int> map2;
-
-	print(mymap);
-	print(map2);
-	cout << "mymap<" << _PURPLE << "string" << _END << ", " << _PURPLE << "int" << _END <<"> mymap2;" << std::endl;
-	print(mymap);
-	cout << "empty line\n";
-	print(map2);
-	cout << "empty line2\n";
-
-	swap(mymap, map2);
-	cout << "empty line3\n";
-	print(mymap);
-	cout << "empty line4\n";
-	print(map2);
-	cout << "empty line5\n";
-
-	mymap = map2;
-	print(mymap);
-	print(map2);
-
-	cout << std::setw(40) << "ZZZZmap == map2: " << (mymap == map2) << std::endl;
-	print(mymap);
-	print(map2);
-	cout << std::endl;
-
-	mymap.clear();
-	print(mymap);
-	print(map2);
-
-	mymap["satan"] = 666;
-	print(mymap);
-	print(map2);
-	cout << std::setw(40) << "mymap == map2: " << (mymap == map2) << std::endl;
-	print(mymap);
-	print(map2);
-	cout << std::endl;
-	cout << std::setw(40) << "mymap <= map2: " << (mymap <= map2) << std::endl;
-	print(mymap);
-	print(map2);
-	cout << std::endl;
-	cout << std::setw(40) << "mymap >= map2: " << (mymap >= map2) << std::endl;
-	print(mymap);
-	print(map2);
-	cout << std::endl;
-	cout << std::setw(40) << "mymap > map2: " << (mymap > map2) << std::endl;
-	print(mymap);
-	print(map2);
-	cout << std::endl;
-	cout << std::setw(40) << "mymap < map2: " << (mymap > map2) << std::endl;
-	print(mymap);
-	print(map2);
-	cout << std::endl;
-
-	return 0;
+	for (typename list<T>::iterator it = lst.begin(); it != lst.end(); ++it)
+		cout << *it << ' ';
+	cout << '\n';
 }
+
+template <class T>
+void	print(list<list<T> >& lst)
+{
+	for (typename list<list<T> >::iterator it = lst.begin(); it != lst.end(); it++)
+	{
+		for (typename list<T>::iterator it2 = it->begin(); it2 != it->end(); it2++)
+			cout << *it2 << ' ';
+		cout << '\n';
+	}
+}
+
+// comparison, not case sensitive.
+bool compare_nocase (const string& first, const string& second)
+{
+	unsigned int i=0;
+	while ( (i<first.length()) && (i<second.length()) )
+	{
+		if (tolower(first[i])<tolower(second[i])) return true;
+		else if (tolower(first[i])>tolower(second[i])) return false;
+		++i;
+	}
+	return ( first.length() < second.length() );
+}
+
+// compare only integral part:
+bool mycomparison (double first, double second)
+{ return ( int(first)<int(second) ); }
+
+// a predicate implemented as a function:
+//bool single_digit (const int& value) { return (value < 10); }
+bool too_high (const int& value) { return (value > 2147483647); }
+bool first_b (const string& value) { return (value[0] == 'b'); }
+
+// a predicate implemented as a class:
+struct is_odd {
+	bool operator() (const int& value) { return (value % 2) == 1; }
+};
+
+#include <cmath>
+
+// a binary predicate implemented as a function:
+bool same_integral_part (double first, double second)
+{ return ( int(first)==int(second) ); }
+
+// a binary predicate implemented as a class:
+struct is_near {
+	bool operator() (double first, double second)
+	{ return (std::fabs(first-second)<5.0); }
+};
+
+static void			assignment_test()
+{
+	list<int>			l;
+	list<int>			l2((size_t)10, 42);
+	list<int>			cpy = l;
+	print(cpy);
+	print(l2);
+	cpy = l2;
+	print(cpy);
+	cout << std::endl;
+}
+
+static void			begin_rbegin_test()
+{
+	list<int>		l;
+	l.push_back(5);
+	while (l.back())
+	{
+		l.push_back(l.back() - 1);
+	}
+	print(l);
+	cout << "Create list<int>::iterator it = begin() and compare with real" << std::endl;
+	list<int>::iterator		it = l.begin();
+	cout << *it << '\n';
+	list<int>::reverse_iterator		rit = l.rbegin();
+	cout << *rit << '\n';
+}
+
+static void			end_rend_test()
+{
+	list<int>		l;
+	l.push_back(5);
+	while (l.back())
+		l.push_back(l.back() - 1);
+	print(l);
+	cout << "Create list<int>::iterator it = end() and compare with real" << std::endl;
+	list<int>::iterator		it = l.end();
+	cout << *(--it) << '\n';
+
+	list<int>::reverse_iterator		rit = l.rend();
+	cout << *(--rit) << '\n';
+
+}
+
+static void			empty_size_test()
+{
+	list<int>			l;
+	cout << "testing empty and size on empty list" << std::endl;
+	cout << l.size() << '\n';
+	cout << l.empty() << '\n';
+	cout << "testing empty and size on a 15 element list" << std::endl;
+	l.assign((size_t)15, 42);
+	cout << l.size() << '\n';
+	cout << l.empty() << '\n';
+}
+
+static void			assign_test()
+{
+	list<std::string>			l;
+	l.assign((size_t)10, "salut");
+	print(l);
+	list<std::string>			l2;
+	l2.assign(++l.begin(), --l.end());
+	print(l2);
+	cout << std::endl;
+}
+
+static void			push_pop_front_test()
+{
+	list<int>				l;
+	cout << "Creating list by pushing front 10 and then pushing front() - 1 until front() == 0" << std::endl;
+	l.push_front(10);
+	while (l.front())
+		l.push_front(l.front() - 1);
+	print(l);
+	cout << "Poping front 5 times for each list" << std::endl;
+	for (int i = 0; i < 5; ++i)
+	{
+		l.pop_front();
+	}
+	print(l);
+	cout << std::endl;
+}
+
+static void			push_pop_back_test()
+{
+	list<int>				l;
+	cout << "Creating list by pushing back 10 and then pushing back() - 1 until back() == 0" << std::endl;
+	l.push_back(10);
+	while (l.back())
+		l.push_back(l.back() - 1);
+	print(l);
+	cout << "Poping back 5 times for each list" << std::endl;
+	for (int i = 0; i < 5; ++i)
+	{
+		l.pop_back();
+	}
+	print(l);
+	cout << std::endl;
+}
+
+void boom1()
+{
+	list<int>		l;
+	l.insert(l.begin(), 2, 42);
+
+	l.push_back(10);
+	while (l.back())
+		l.push_back(l.back() - 1);
+	list<int>::iterator		it = l.begin();
+	for (int i = 0; i < 5; ++i)
+		++it;
+	l.insert(it, 42);
+	print(l);
+	l.insert(it, (size_t)5, 21);
+	print(l);
+	cout << std::endl;
+	print(l);
+}
+
+static void			insert_test()
+{
+	boom1();
+}
+
+static void			erase_test()
+{
+	list<int>			l;
+	l.push_back(10);
+	while (l.back())
+		l.push_back(l.back() - 1);
+	list<int>::iterator			it = l.begin();
+	for (int i = 0; i < 4; ++i)
+	{
+		++it;
+	}
+	l.erase(it);
+	print(l);
+	l.erase(l.begin(), l.end());
+	print(l);
+}
+
+static void			swap_test()
+{
+	list<int>			l;
+	list<int>			l2;
+	l.push_back(10);
+	while (l.back())
+	{
+		l.push_back(l.back() - 1);
+	}
+	l2.push_front(4);
+	while (l2.front())
+	{
+		l2.push_front(l2.front() - 1);
+	}
+	l.swap(l2);
+	print(l);
+	swap(l2, l);
+	print(l2);
+	cout << std::endl;
+}
+
+static void			resize_test()
+{
+	list<int>		l;
+	l.push_back(10);
+	while (l.back())
+	{
+		l.push_back(l.back() - 1);
+	}
+	l.resize(15);
+	print(l);
+	l.resize(5);
+	print(l);
+	l.resize(10, 42);
+	print(l);
+	cout << std::endl;
+}
+
+static void			clear_test()
+{
+	list<int>		l;
+	l.push_back(10);
+	while (l.back())
+	{
+		l.push_back(l.back() - 1);
+	}
+	l.clear();
+	print(l);
+	l.clear();
+	print(l);
+	cout << std::endl;
+}
+
+static void			splice_test()
+{
+	list<int>		l;
+	list<int>		l2;
+	l.push_back(10);
+	l2.push_back(30);
+	while (l.back())
+	{
+		l.push_back(l.back() - 1);
+	}
+	while (l2.front())
+	{
+		l2.push_front(l2.front() - 3);
+	}
+	list<int>::iterator			it = l.begin();
+	for (int i = 0; i < 3; ++i)
+	{
+		++it;
+	}
+	list<int>		l3(l);
+	l.splice(it, l2);
+	print(l);
+	list<int>::iterator			it2 = l3.begin();
+	for (int i = 0; i < 3; ++i)
+	{
+		++it2;
+	}
+	l.splice(it, l3, it2);
+	print(l);
+	l.splice(l.begin(), l3, l3.begin(), l3.end());
+	print(l);
+	cout << std::endl;
+}
+
+static void			remove_test()
+{
+	list<int>		l;
+	l.push_back(10);
+	while (l.back())
+	{
+		l.push_back(l.back() - 1);
+		l.insert(--l.end(), 42);
+	}
+	l.remove(42);
+	print(l);
+	cout << std::endl;
+}
+
+static bool 		comp(int a)
+{
+	return (a - 2 > 5);
+}
+
+static void			remove_if_test()
+{
+	list<int>		l;
+	l.push_back(10);
+	l.push_back(9);
+	l.push_back(6);
+	l.push_back(4);
+	l.push_back(12);
+	l.push_back(1);
+	l.remove_if(comp);
+	print(l);
+	cout << std::endl;
+}
+
+static bool			comp2(int a, int b)
+{
+	return a < b;
+}
+
+static void			unique_sort_merge_reverse_test()
+{
+	list<int>		l;
+	list<int>		l2;
+	for (int i = 0; i < 2; ++i)
+	{
+		l.push_back(2147483647);
+		l2.push_back(-2147483648);
+	}
+	l.sort();
+	print(l);
+	l2.sort(comp2);
+	print(l2);
+	l.merge(l2);
+	print(l);
+	l.unique();
+	print(l);
+	l.reverse();
+	print(l);
+	cout << std::endl;
+}
+
+int main()
+{
+	assignment_test();
+	begin_rbegin_test();
+	end_rend_test();
+	empty_size_test();
+	assign_test();
+	push_pop_front_test();
+	push_pop_back_test();
+	insert_test();
+	erase_test();
+	swap_test();
+	resize_test();
+	clear_test();
+	splice_test();
+	remove_test();
+	return 0;
+	remove_if_test();
+	unique_sort_merge_reverse_test();
+}
+//int main()
+//{
+//	std::cout << ("Three" < "one");
+//	return 0;
+//}

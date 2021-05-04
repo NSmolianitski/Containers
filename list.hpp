@@ -2,6 +2,7 @@
 #define FT_CONTAINERS_LIST_HPP
 
 #include "vector.hpp"
+#include "utils.hpp"
 
 #include <sstream>
 #include <iostream>
@@ -43,11 +44,14 @@ namespace ft
 		Node	*m_head;
 		Node	*m_tail;
 		Node	m_end;
+		Node	m_rend;
 
 		size_t	m_size;
 
 		class Iterator;
+		class ConstIterator;
 		class ReverseIterator;
+		class ConstReverseIterator;
 
 	public:
 
@@ -56,9 +60,12 @@ namespace ft
 		typedef T&						reference;
 		typedef const T&				const_reference;
 		typedef	Iterator				iterator;
-		typedef	const Iterator			const_iterator;
+		typedef	ConstIterator			const_iterator;
 		typedef	ReverseIterator			reverse_iterator;
-		typedef	const ReverseIterator	const_reverse_iterator;
+		typedef	ConstReverseIterator	const_reverse_iterator;
+		typedef	T*						pointer;
+		typedef	const T*				const_pointer;
+		typedef	std::ptrdiff_t			difference_type;
 
 		//Constructors and destructor
 		template<class InputIterator>
@@ -137,33 +144,57 @@ namespace ft
 			void	sort		(Compare comp);
 
 	private:
+		void swapNodes	(iterator& leftIt, iterator& rightIt);
+		void fixEndRend	();
 
 		class Iterator
 		{
 		public:
 			typedef	std::bidirectional_iterator_tag	iterator_category;
-			typedef	std::ptrdiff_t					difference_type;
-			typedef	T								value_type;
-			typedef	T*								pointer;
-			typedef	T&								reference;
 
 			Iterator() {}
-			explicit Iterator(Node *ptr) : m_ptr(ptr) {}
-			explicit Iterator(const Node *ptr) : m_ptr(const_cast<Node *> (ptr)) {}
+			Iterator(Node *ptr) : m_ptr(ptr) {}
+			Iterator(const Iterator& it) : m_ptr(it.m_ptr) {}
 
 			reference		operator*  () const 				{ return m_ptr->m_value; }
 			pointer			operator-> () const 				{ return &m_ptr->m_value; }
 
 			Iterator&		operator++ ()						{ m_ptr = m_ptr->m_next; return *this; }
-			Iterator		operator++ (int)					{ Iterator tmp = *this; tmp.m_ptr = tmp.m_ptr->m_next; return tmp; }
+			Iterator		operator++ (int)					{ Iterator tmp = *this; m_ptr = m_ptr->m_next; return tmp; }
 
 			Iterator&		operator-- ()						{ m_ptr = m_ptr->m_prev; return *this; }
-			Iterator		operator-- (int)					{ Iterator tmp = *this; tmp.m_ptr = tmp.m_ptr->m_prev; return tmp; }
+			Iterator		operator-- (int)					{ Iterator tmp = *this; m_ptr = m_ptr->m_prev; return tmp; }
 
 			bool			operator== (const Iterator &other)	{ return this->m_ptr == other.m_ptr; }
 			bool			operator!= (const Iterator &other)	{ return this->m_ptr != other.m_ptr; }
 
-			Node			*getNode   () 						{ return m_ptr; }
+			Node			*getNode   () const					{ return m_ptr; }
+
+		private:
+			Node	*m_ptr;
+		};
+		class ConstIterator
+		{
+		public:
+			typedef	std::bidirectional_iterator_tag	iterator_category;
+
+			ConstIterator() {}
+			ConstIterator(Node *ptr) : m_ptr(ptr) {}
+			ConstIterator(const Iterator& it) : m_ptr(it.getNode()) {}
+
+			const_reference			operator*  () const	{ return m_ptr->m_value; }
+			const_pointer			operator-> () const	{ return &m_ptr->m_value; }
+
+			ConstIterator&	operator++ ()		{ m_ptr = m_ptr->m_next; return *this; }
+			ConstIterator	operator++ (int)	{ ConstIterator tmp = *this; m_ptr = m_ptr->m_next; return tmp; }
+
+			ConstIterator&	operator-- ()		{ m_ptr = m_ptr->m_prev; return *this; }
+			ConstIterator	operator-- (int)	{ ConstIterator tmp = *this; m_ptr = m_ptr->m_prev; return tmp; }
+
+			bool	operator== (const ConstIterator &other)	{ return this->m_ptr == other.m_ptr; }
+			bool	operator!= (const ConstIterator &other)	{ return this->m_ptr != other.m_ptr; }
+
+			Node *getNode() const { return m_ptr; }
 
 		private:
 			Node	*m_ptr;
@@ -173,149 +204,100 @@ namespace ft
 		{
 		public:
 			typedef	std::bidirectional_iterator_tag	iterator_category;
-			typedef	std::ptrdiff_t					difference_type;
-			typedef	T								value_type;
-			typedef	T*								pointer;
-			typedef	T&								reference;
 
 			ReverseIterator() {}
-			explicit ReverseIterator(Node *ptr) : m_ptr(ptr) {}
-			explicit ReverseIterator(const Node *ptr) : m_ptr(const_cast<Node *> (ptr)) {}
+			ReverseIterator(Node *ptr) : m_ptr(ptr) {}
+			ReverseIterator(const ReverseIterator& it) : m_ptr(it.m_ptr) {}
+			ReverseIterator(const Iterator& it) : m_ptr(it.getNode()) {}
 
-			reference				operator*  () const 						{ return m_ptr->m_value; }
-			pointer					operator-> () const 						{ return m_ptr->m_value; }
+			reference			operator*  () const 						{ return m_ptr->m_value; }
+			pointer				operator-> () const 						{ return m_ptr->m_value; }
 
-			ReverseIterator&		operator++ ()								{ m_ptr = m_ptr->m_prev; return *this; }
-			ReverseIterator			operator++ (int)							{ ReverseIterator tmp = *this; tmp.m_ptr = tmp.m_ptr->m_prev; return tmp; }
+			ReverseIterator&	operator++ ()								{ m_ptr = m_ptr->m_prev; return *this; }
+			ReverseIterator		operator++ (int)							{ ReverseIterator tmp = *this; tmp.m_ptr = tmp.m_ptr->m_prev; return tmp; }
 
-			ReverseIterator&		operator-- ()								{ m_ptr = m_ptr->m_next; return *this; }
-			ReverseIterator			operator-- (int)							{ ReverseIterator tmp = *this; tmp.m_ptr = tmp.m_ptr->m_next; return tmp; }
+			ReverseIterator&	operator-- ()								{ m_ptr = m_ptr->m_next; return *this; }
+			ReverseIterator		operator-- (int)							{ ReverseIterator tmp = *this; tmp.m_ptr = tmp.m_ptr->m_next; return tmp; }
 
-			bool					operator== (const ReverseIterator &other)	{ return this->m_ptr == other.m_ptr; }
-			bool					operator!= (const ReverseIterator &other)	{ return this->m_ptr != other.m_ptr; }
+			bool				operator== (const ReverseIterator &other)	{ return this->m_ptr == other.m_ptr; }
+			bool				operator!= (const ReverseIterator &other)	{ return this->m_ptr != other.m_ptr; }
+
+			Node	*getNode   () const	{ return m_ptr; }
 
 		private:
 			Node	*m_ptr;
 		};
-
-		friend bool operator==(const list<T> &lhs, const list<T> &rhs)
+		class ConstReverseIterator
 		{
-			if (lhs.size() != rhs.size())
+		public:
+			typedef	std::bidirectional_iterator_tag	iterator_category;
+
+			ConstReverseIterator() {}
+			ConstReverseIterator(Node *ptr) : m_ptr(ptr) {}
+			ConstReverseIterator(const ReverseIterator& it) : m_ptr(it.getNode()) {}
+			ConstReverseIterator(const Iterator& it) : m_ptr(it.getNode()) {}
+
+			const_reference			operator*  () const { return m_ptr->m_value; }
+			const_pointer			operator-> () const { return m_ptr->m_value; }
+
+			ConstReverseIterator&	operator++ ()		{ m_ptr = m_ptr->m_prev; return *this; }
+			ConstReverseIterator	operator++ (int)	{ ConstReverseIterator tmp = *this; tmp.m_ptr = tmp.m_ptr->m_prev; return tmp; }
+
+			ConstReverseIterator&	operator-- ()		{ m_ptr = m_ptr->m_next; return *this; }
+			ConstReverseIterator	operator-- (int)	{ ConstReverseIterator tmp = *this; tmp.m_ptr = tmp.m_ptr->m_next; return tmp; }
+
+			bool	operator== (const ConstReverseIterator &other)	{ return this->m_ptr == other.m_ptr; }
+			bool	operator!= (const ConstReverseIterator &other)	{ return this->m_ptr != other.m_ptr; }
+
+			Node *getNode() const { return m_ptr; }
+			
+		private:
+			Node	*m_ptr;
+		};
+
+		friend bool operator== (const list<T>& lhs, const list<T>& rhs)
+		{
+			if (lhs.m_size != rhs.m_size)
 				return false;
-
-			typename ft::list<T>::iterator lhsIt = lhs.begin();
-			typename ft::list<T>::iterator rhsIt = rhs.begin();
-			typename ft::list<T>::iterator lhsItEnd = const_cast< list<T> & >(lhs).end();
-			typename ft::list<T>::iterator rhsItEnd = const_cast< list<T> & >(rhs).end();
-
-			for (; lhsIt != lhsItEnd && rhsIt != rhsItEnd; ++lhsIt, ++rhsIt)
+			const_iterator itR = rhs.begin();
+			for (const_iterator itL = lhs.begin(); itL != lhs.end(); ++itL, ++itR)
 			{
-				if (*lhsIt != *rhsIt)
+				if (*itL != *itR)
 					return false;
 			}
 			return true;
 		}
-
-		friend bool operator!=(const list<T> &lhs, const list<T> &rhs)
+		friend bool operator!= (const list<T>& lhs, const list<T>& rhs)
 		{
 			if (lhs.size() != rhs.size())
 				return true;
-
-			typename ft::list<T>::iterator lhsIt = lhs.begin();
-			typename ft::list<T>::iterator rhsIt = rhs.begin();
-			typename ft::list<T>::iterator lhsItEnd = const_cast< list<T> & >(lhs).end();
-			typename ft::list<T>::iterator rhsItEnd = const_cast< list<T> & >(rhs).end();
-
-			for (; lhsIt != lhsItEnd && rhsIt != rhsItEnd; ++lhsIt, ++rhsIt)
+			const_iterator itR = rhs.begin();
+			for (const_iterator itL = lhs.begin(); itL != lhs.end(); ++itL, ++itR)
 			{
-				if (*lhsIt != *rhsIt)
+				if (*itL != *itR)
 					return true;
 			}
 			return false;
 		}
-
-		friend bool operator<(const list<T> &lhs, const list<T> &rhs)
+		friend bool operator<  (const list<T>& lhs, const list<T>& rhs)
 		{
-			typename ft::list<T>::iterator lhsIt = lhs.begin();
-			typename ft::list<T>::iterator rhsIt = rhs.begin();
-			typename ft::list<T>::iterator lhsItEnd = const_cast< list<T> & >(lhs).end();
-			typename ft::list<T>::iterator rhsItEnd = const_cast< list<T> & >(rhs).end();
-
-			for (; lhsIt != lhsItEnd && rhsIt != rhsItEnd; ++lhsIt, ++rhsIt)
-			{
-				if (*lhsIt < *rhsIt)
-					return true;
-				else if (*lhsIt > *rhsIt)
-					return false;
-			}
-			if (lhs.size() < rhs.size())
-				return true;
-			return false;
+			return lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
 		}
-
-		friend bool operator<=(const list<T> &lhs, const list<T> &rhs)
-		{
-			typename ft::list<T>::iterator lhsIt = lhs.begin();
-			typename ft::list<T>::iterator rhsIt = rhs.begin();
-			typename ft::list<T>::iterator lhsItEnd = const_cast< list<T> & >(lhs).end();
-			typename ft::list<T>::iterator rhsItEnd = const_cast< list<T> & >(rhs).end();
-
-			for (; lhsIt != lhsItEnd && rhsIt != rhsItEnd; ++lhsIt, ++rhsIt)
-			{
-				if (*lhsIt < *rhsIt)
-					return true;
-				else if (*lhsIt > *rhsIt)
-					return false;
-			}
-			if (lhs.size() <= rhs.size())
-				return true;
-			return false;
-		}
-
-		friend bool operator>(const list<T> &lhs, const list<T> &rhs)
-		{
-			typename ft::list<T>::iterator lhsIt = lhs.begin();
-			typename ft::list<T>::iterator rhsIt = rhs.begin();
-			typename ft::list<T>::iterator lhsItEnd = const_cast< list<T> & >(lhs).end();
-			typename ft::list<T>::iterator rhsItEnd = const_cast< list<T> & >(rhs).end();
-
-			for (; lhsIt != lhsItEnd && rhsIt != rhsItEnd; ++lhsIt, ++rhsIt)
-			{
-				if (*lhsIt > *rhsIt)
-					return true;
-				else if (*lhsIt < *rhsIt)
-					return false;
-			}
-			if (lhs.size() > rhs.size())
-				return true;
-			return false;
-		}
-
-		friend bool operator>=(const list<T> &lhs, const list<T> &rhs)
-		{
-			typename ft::list<T>::iterator lhsIt = lhs.begin();
-			typename ft::list<T>::iterator rhsIt = rhs.begin();
-			typename ft::list<T>::iterator lhsItEnd = const_cast< list<T> & >(lhs).end();
-			typename ft::list<T>::iterator rhsItEnd = const_cast< list<T> & >(rhs).end();
-
-			for (; lhsIt != lhsItEnd && rhsIt != rhsItEnd; ++lhsIt, ++rhsIt)
-			{
-				if (*lhsIt > *rhsIt)
-					return true;
-				else if (*lhsIt < *rhsIt)
-					return false;
-			}
-			if (lhs.size() >= rhs.size())
-				return true;
-			return false;
-		}
+		friend bool operator<= (const list<T>& lhs, const list<T>& rhs)	{ return !(rhs < lhs); }
+		friend bool operator>  (const list<T>& lhs, const list<T>& rhs)	{ return rhs < lhs; }
+		friend bool operator>= (const list<T>& lhs, const list<T>& rhs)	{ return !(lhs < rhs); }
 
 	};
 
 	//Constructors and destructor
 	template<typename T>
 	list<T>::list()
-		: m_head(&m_end), m_tail(&m_end), m_size(0) { m_tail->m_next = &m_end; }
+		: m_head(&m_end), m_tail(&m_end), m_size(0)
+	{
+		m_tail->m_next = &m_end;
+		m_end.m_prev = m_tail;
+		m_rend.m_next = m_head;
+	}
 
 	template<typename T>
 	list<T>::list(size_type n, const value_type &val) : m_size(n)
@@ -332,6 +314,8 @@ namespace ft
 		m_tail = ptr;
 		m_tail->m_next = &m_end;
 		m_end.m_prev = m_tail;
+		m_head->m_prev = &m_rend;
+		m_rend.m_next = m_head;
 	}
 
 	template<typename T>
@@ -353,37 +337,24 @@ namespace ft
 		m_tail = ptr;
 		m_tail->m_next = &m_end;
 		m_end.m_prev = m_tail;
+		m_head->m_prev = &m_rend;
+		m_rend.m_next = m_head;
 	}
 
 	template<typename T>
 	list<T>::list(const list &x)
+			: m_head(&m_end), m_tail(&m_end), m_size(0)
 	{
-		if (!x.m_head)
-			return;
-		m_head = new Node(*x.begin());
-		Node *ptr = m_head;
-		m_size = x.m_size;
-
-		iterator it = x.begin();
-		++it;
-		for (; it != x.end(); ++it)
-		{
-			ptr->m_next = new Node(*it);
-			ptr->m_next->m_prev = ptr;
-			ptr = ptr->m_next;
-		}
-
-		ptr->m_next = 0;
-		m_tail = ptr;
 		m_tail->m_next = &m_end;
 		m_end.m_prev = m_tail;
+		m_rend.m_next = m_head;
+		*this = x;
 	}
 
 	template<typename T>
 	list<T>::~list()
 	{
-		for (; m_size > 0;)
-			pop_back();
+		clear();
 	}
 
 	template<typename T>
@@ -392,27 +363,27 @@ namespace ft
 		if (this != &x)
 		{
 			if (m_size > 0)
+				clear();
+			if (x.m_size > 0)
 			{
-				m_head = m_head->m_next;
-				for (; m_head; m_head = m_head->m_next)
-					delete m_head->m_prev;
-				delete m_tail;
+				m_head = new Node(*x.begin());
+				m_size = x.m_size;
+				Node* ptr = m_head;
+				const_iterator it = x.begin();
+				++it;
+				for (; it != x.end(); ++it)
+				{
+					ptr->m_next = new Node(*it);
+					ptr->m_next->m_prev = ptr;
+					ptr = ptr->m_next;
+				}
+				ptr->m_next = 0;
+				m_tail = ptr;
+				m_tail->m_next = &m_end;
+				m_end.m_prev = m_tail;
+				m_head->m_prev = &m_rend;
+				m_rend.m_next = m_head;
 			}
-			m_head = new Node(*x.begin());
-			m_size = x.m_size;
-			Node *ptr = m_head;
-			iterator it = x.begin();
-			++it;
-			for (; it != x.end(); ++it)
-			{
-				ptr->m_next = new Node(*it);
-				ptr->m_next->m_prev = ptr;
-				ptr = ptr->m_next;
-			}
-			ptr->m_next = 0;
-			m_tail = ptr;
-			m_tail->m_next = &m_end;
-			m_end.m_prev = m_tail;
 		}
 		return *this;
 	}
@@ -421,49 +392,49 @@ namespace ft
 	template<typename T>
 	typename list<T>::iterator list<T>::begin()
 	{
-		return Iterator(m_head);
+		return iterator(m_head);
 	}
 
 	template<typename T>
 	typename list<T>::const_iterator list<T>::begin() const
 	{
-		return Iterator(m_head);
+		return const_iterator(m_head);
 	}
 
 	template<typename T>
 	typename list<T>::iterator list<T>::end()
 	{
-		return Iterator(&m_end);
+		return iterator(&m_end);
 	}
 
 	template<typename T>
 	typename list<T>::const_iterator list<T>::end() const
 	{
-		return Iterator(&m_end);
+		return const_iterator(const_cast<Node *>(&m_end));
 	}
 
 	template<typename T>
 	typename list<T>::reverse_iterator list<T>::rbegin()
 	{
-		return ReverseIterator(m_tail);
+		return reverse_iterator(m_tail);
 	}
 
 	template<typename T>
 	typename list<T>::const_reverse_iterator list<T>::rbegin() const
 	{
-		return ReverseIterator(m_tail);
+		return const_reverse_iterator(m_tail);
 	}
 
 	template<typename T>
 	typename list<T>::reverse_iterator list<T>::rend()
 	{
-		return ReverseIterator(m_head->m_prev);
+		return reverse_iterator(&m_rend);
 	}
 
 	template<typename T>
 	typename list<T>::const_reverse_iterator list<T>::rend() const
 	{
-		return ReverseIterator(m_head->m_prev);
+		return const_reverse_iterator(&m_rend);
 	}
 
 	//Capacity
@@ -536,6 +507,8 @@ namespace ft
 		m_tail = ptr;
 		m_tail->m_next = &m_end;
 		m_end.m_prev = m_tail;
+		m_head->m_prev = &m_rend;
+		m_rend.m_next = m_head;
 		++m_size;
 	}
 
@@ -543,12 +516,7 @@ namespace ft
 	void list<T>::assign(list::size_type n, const value_type &val)
 	{
 		if (m_size > 0)
-		{
-			Node *ptr = m_head->m_next;
-			for (; ptr; ptr = ptr->m_next)
-				delete ptr->m_prev;
-			delete m_tail;
-		}
+			clear();
 
 		m_head = new Node(val);
 		Node *ptr = m_head;
@@ -566,7 +534,8 @@ namespace ft
 		m_tail = ptr;
 		m_tail->m_next = &m_end;
 		m_end.m_prev = m_tail;
-		++m_size;
+		m_head->m_prev = &m_rend;
+		m_rend.m_next = m_head;
 	}
 
 	template<typename T>
@@ -578,6 +547,10 @@ namespace ft
 		m_head->m_prev = ptr;
 		m_head = ptr;
 		++m_size;
+		if (m_tail == &m_end)
+			m_tail = m_head;
+		m_head->m_prev = &m_rend;
+		m_rend.m_next = m_head;
 	}
 
 	template<typename T>
@@ -586,6 +559,17 @@ namespace ft
 		m_head = m_head->m_next;
 		delete m_head->m_prev;
 		--m_size;
+		m_head->m_prev = &m_rend;
+		m_rend.m_next = m_head;
+	}
+
+	template<typename T>
+	void list<T>::fixEndRend()
+	{
+		m_tail->m_next = &m_end;
+		m_end.m_prev = m_tail;
+		m_head->m_prev = &m_rend;
+		m_rend.m_next = m_head;
 	}
 
 	template<typename T>
@@ -595,17 +579,14 @@ namespace ft
 		{
 			m_head = new Node(val);
 			m_tail = m_head;
-			m_tail->m_next = &m_end;
-			m_end.m_prev = m_tail;
-			++m_size;
-			return;
 		}
-		m_tail->m_next = new Node(val);
-
-		m_tail->m_next->m_prev = m_tail;
-		m_tail = m_tail->m_next;
-		m_tail->m_next = &m_end;
-		m_end.m_prev = m_tail;
+		else
+		{
+			m_tail->m_next = new Node(val);
+			m_tail->m_next->m_prev = m_tail;
+			m_tail = m_tail->m_next;
+		}
+		fixEndRend();
 		++m_size;
 	}
 
@@ -617,8 +598,10 @@ namespace ft
 			delete m_tail;
 			m_head = &m_end;
 			m_tail = m_head;
-			m_tail->m_next = &m_end;
-			m_end.m_prev = m_tail;
+			m_tail->m_next = m_head;
+			m_end.m_prev = m_head;
+			m_head->m_prev = &m_rend;
+			m_rend.m_next = m_head;
 			--m_size;
 			return;
 		}
@@ -676,55 +659,41 @@ namespace ft
 			head->m_prev = oldPrev;
 			old->m_prev = ptr;
 		}
+		m_head->m_prev = &m_rend;
+		m_rend.m_next = m_head;
 		m_size += newSize;
 	}
 
 	template<typename T>
 	typename list<T>::iterator list<T>::insert(list::iterator position, const value_type &val)
 	{
-		Node *ptr = new Node(val);
-		Node *old = position.getNode();
+		Node* newNode = new Node(val);
+		Node* beforePos = position.getNode()->m_prev;
+
+		beforePos->m_next = newNode;
+		newNode->m_prev = beforePos;
+
+		position.getNode()->m_prev = newNode;
+		newNode->m_next = position.getNode();
+
+		iterator newElement(newNode);
+
+		if (m_head == position.getNode())
+			m_head = newNode;
 
 		if (m_size == 0)
-			push_back(val);
-		else
-		{
-			ptr->m_prev = old->m_prev;
-			ptr->m_next = old;
-			if (old != m_head)
-				old->m_prev->m_next = ptr;
-			else
-				m_head = ptr;
-			old->m_prev = ptr;
-		}
+			m_tail = newNode;
+
+		fixEndRend();
 		++m_size;
-		iterator it(ptr);
-		return it;
+		return newElement;
 	}
 
 	template<typename T>
 	void list<T>::insert(list::iterator position, list::size_type n, const value_type &val)
 	{
-		Node *old = position.getNode();
-
-		if (m_size == 0)
-			for (size_type i = 0; i < n; ++i)
-				push_back(val);
-		else if (old == m_head)
-			for (size_type i = 0; i < n; ++i)
-				push_front(val);
-		else
-		{
-			for (size_type i = 0; i < n; ++i)
-			{
-				Node *ptr = new Node(val);
-				ptr->m_prev = old->m_prev;
-				ptr->m_next = old;
-				old->m_prev->m_next = ptr;
-				old->m_prev = ptr;
-			}
-		}
-		m_size += n;
+		for (size_type i = 0; i < n; ++i)
+			position = insert(position, val);
 	}
 
 	template<typename T>
@@ -735,19 +704,19 @@ namespace ft
 		Node *next = ptr->m_next;
 
 		if (ptr == m_head)
+		{
 			m_head = next;
+			prev = m_head;
+		}
 		else
 			prev->m_next = next;
 
 		if (ptr == m_tail)
-		{
 			m_tail = prev;
-			m_tail->m_next = &m_end;
-			m_end.m_prev = m_tail;
-		}
 		else
 			next->m_prev = prev;
 
+		fixEndRend();
 		delete ptr;
 		--m_size;
 		return Iterator(next);
@@ -756,39 +725,42 @@ namespace ft
 	template<typename T>
 	typename list<T>::iterator list<T>::erase(list::iterator first, list::iterator last)
 	{
-		Node *prev = first.getNode()->m_prev;
-		Node *next = last.getNode();
-
-		prev->m_next = next;
-		next->m_prev = prev;
+		iterator it;
 
 		for (; first != last; ++first)
-		{
-			delete first.getNode();
-			--m_size;
-		}
+			it = erase(first);
 
-		return Iterator(next);
+		return it;
 	}
 
 	template<typename T>
 	void list<T>::swap(list &x)
 	{
-		Node	*tmpHead = x.m_head;
-		Node	*tmpTail = x.m_tail;
-		size_t	tmpSize = x.m_size;
+		Node	*tmpHead	= x.m_head;
+		Node	*tmpTail	= x.m_tail;
+		size_t	tmpSize		= x.m_size;
 
 		x.m_head = m_head;
+		if (m_head == &m_end)
+			x.m_head = &x.m_end;
 		x.m_tail = m_tail;
+		if (m_tail == &m_end)
+			x.m_tail = &x.m_end;
 		x.m_size = m_size;
 		x.m_tail->m_next = &x.m_end;
 		x.m_end.m_prev = x.m_tail;
 
 		m_head = tmpHead;
+		if (tmpHead == &x.m_end)
+			m_head = &m_end;
 		m_tail = tmpTail;
+		if (tmpTail == &x.m_end)
+			m_tail = &m_end;
 		m_size = tmpSize;
 		m_tail->m_next = &m_end;
 		m_end.m_prev = m_tail;
+		m_head->m_prev = &m_rend;
+		m_rend.m_next = m_head;
 	}
 
 	template<typename T>
@@ -805,7 +777,7 @@ namespace ft
 	template<typename T>
 	void list<T>::clear()
 	{
-		for (; m_size > 0;)
+		while (m_size > 0)
 			pop_back();
 	}
 
@@ -833,10 +805,16 @@ namespace ft
 	template<typename T>
 	void list<T>::remove(const value_type &val)
 	{
-		for (iterator it = begin(); it != end(); ++it)
+		iterator it = begin();
+		while (it != end())
 		{
 			if (*it == val)
+			{
 				erase(it);
+				it = begin();
+				continue;
+			}
+			++it;
 		}
 	}
 
@@ -844,28 +822,34 @@ namespace ft
 	template<class Predicate>
 	void list<T>::remove_if(Predicate pred)
 	{
-		for (iterator it = begin(); it != end(); ++it)
+		iterator it = begin();
+		while (it != end())
 		{
 			if (pred(*it))
 			{
 				erase(it);
-				--it;
+				it = begin();
+				continue;
 			}
+			++it;
 		}
 	}
 
 	template<typename T>
 	void list<T>::unique()
 	{
-		for (iterator it = begin(); it != end().operator--(); ++it)
+		iterator it = begin();
+		while (it != end())
 		{
 			iterator tmpIt = it;
 			++tmpIt;
-			if (*tmpIt == *it)
+			if (tmpIt != end() && *tmpIt == *it)
 			{
 				erase(it);
-				--it;
+				it = begin();
+				continue;
 			}
+			++it;
 		}
 	}
 
@@ -873,15 +857,18 @@ namespace ft
 	template<class BinaryPredicate>
 	void list<T>::unique(BinaryPredicate binary_pred)
 	{
-		for (iterator it = begin(); it != end().operator--(); ++it)
+		iterator it = begin();
+		while (it != end())
 		{
 			iterator tmpIt = it;
 			++tmpIt;
-			if (binary_pred(*it, *tmpIt))
+			if (tmpIt != end() && binary_pred(*it, *tmpIt))
 			{
 				erase(tmpIt);
-				--it;
+				it = begin();
+				continue;
 			}
+			++it;
 		}
 	}
 
@@ -890,16 +877,8 @@ namespace ft
 	{
 		iterator it = begin();
 		for (iterator itX = x.begin(); itX != x.end(); ++itX)
-		{
-			for (; it != end(); ++it)
-			{
-				if (*it > *itX)
-				{
-					insert(it, *itX);
-					break;
-				}
-			}
-		}
+			push_back(*itX);
+		sort();
 		x.clear();
 	}
 
@@ -909,64 +888,81 @@ namespace ft
 	{
 		iterator it = begin();
 		for (iterator itX = x.begin(); itX != x.end(); ++itX)
-		{
-			for (; it != end(); ++it)
-			{
-				if (comp(*itX, *it))
-				{
-					insert(it, *itX);
-					break;
-				}
-			}
-		}
+			push_back(*itX);
+		sort(comp);
 		x.clear();
 	}
 
 	template<typename T>
 	void list<T>::reverse()
 	{
-		Node *ptr = m_head->m_prev;
-		m_tail = m_head;
-		m_end.m_prev = m_tail;
-		for (size_type i = 0; i < m_size; ++i)
+		if (m_size == 0)
+			return;
+
+		iterator itBegin	= begin();
+		iterator itEnd		= end();
+		--itEnd;
+
+		iterator tmpBegin;
+		iterator tmpEnd;
+
+		while (itBegin != itEnd)
 		{
-			m_head->m_prev = m_head->m_next;
-			m_head->m_next = ptr;
-			if (m_head->m_prev != &m_end)
-				m_head = m_head->m_prev;
-			ptr = m_head->m_prev;
+			tmpBegin = itBegin;
+			tmpEnd	 = itEnd;
+			++itBegin, --itEnd;
+			swapNodes(tmpBegin, tmpEnd);
+			if (tmpEnd.getNode()->m_next == tmpBegin.getNode())
+				break;
 		}
-		m_tail->m_next = &m_end;
-		m_head->m_prev = nullptr;
+	}
+
+	template<typename T>
+	void list<T>::swapNodes(list::iterator& leftIt, list::iterator& rightIt)
+	{
+		Node *left = leftIt.getNode();
+		Node *right = rightIt.getNode();
+
+		Node* leftNext = left->m_next;
+		Node* leftPrev = left->m_prev;
+
+		left->m_next = right->m_next;
+		left->m_next->m_prev = left;
+		right->m_next = leftNext;
+		leftNext->m_prev = right;
+
+		left->m_prev = right->m_prev;
+		left->m_prev->m_next = left;
+		right->m_prev = leftPrev;
+		leftPrev->m_next = right;
+
+		if (m_head == left)
+		{
+			m_head = right;
+			m_rend.m_next = right;
+		}
+		if (m_tail == right)
+		{
+			m_tail = left;
+			m_end.m_prev = left;
+		}
 	}
 
 	template<typename T>
 	void list<T>::sort()
 	{
-		for (iterator it = begin(); it != end().operator--(); ++it)
+		iterator it = begin();
+		while (it != end())
 		{
 			iterator tmpIt = it;
 			++tmpIt;
-			if (*it > *tmpIt)
+			if (tmpIt != end() && *tmpIt < *it)
 			{
-				Node *left = it.getNode();
-				Node *right = tmpIt.getNode();
-
-				left->m_next = right->m_next;
-				right->m_next->m_prev = left;
-				right->m_next = left;
-
-				right->m_prev = left->m_prev;
-				if (left != m_head)
-					left->m_prev->m_next = right;
-				left->m_prev = right;
-
-				if (left == m_head)
-					m_head = right;
-				if (right == m_tail)
-					m_tail = left;
+				swapNodes(it, tmpIt);
 				it = begin();
+				continue;
 			}
+			++it;
 		}
 	}
 
@@ -974,30 +970,18 @@ namespace ft
 	template<class Compare>
 	void list<T>::sort(Compare comp)
 	{
-		for (iterator it = begin(); it != end().operator--(); ++it)
+		iterator it = begin();
+		while (it != end())
 		{
 			iterator tmpIt = it;
 			++tmpIt;
-			if (comp(*tmpIt, *it))
+			if (tmpIt != end() && comp(*tmpIt, *it))
 			{
-				Node *left = it.getNode();
-				Node *right = tmpIt.getNode();
-
-				left->m_next = right->m_next;
-				right->m_next->m_prev = left;
-				right->m_next = left;
-
-				right->m_prev = left->m_prev;
-				if (left != m_head)
-					left->m_prev->m_next = right;
-				left->m_prev = right;
-
-				if (left == m_head)
-					m_head = right;
-				if (right == m_tail)
-					m_tail = left;
+				swapNodes(it, tmpIt);
 				it = begin();
+				continue;
 			}
+			++it;
 		}
 	}
 }
