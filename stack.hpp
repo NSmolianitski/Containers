@@ -42,7 +42,10 @@ namespace ft
 	//!STACK CLASS END!
 
 	template<class T, class Container>
-	stack<T, Container>::stack(const container_type &ctnr) : m_container(ctnr) {}
+	stack<T, Container>::stack(const container_type &ctnr)
+	{
+		m_container = ctnr;
+	}
 
 	template<class T, class Container>
 	bool stack<T, Container>::empty() const

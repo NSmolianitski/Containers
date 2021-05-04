@@ -316,7 +316,7 @@ namespace ft
 
 	/// CONSTRUCTORS			************************************************************
 	template<typename T>
-	vector<T>::vector() : m_array(nullptr), m_size(0), m_capacity(0) {}
+	vector<T>::vector() : m_array(nullptr), m_size(0), m_capacity(0)	{}
 
 	template<typename T>
 	vector<T>::vector(vector::size_type n, const value_type &val) : m_size(n), m_capacity(n)
@@ -342,19 +342,15 @@ namespace ft
 	}
 
 	template<typename T>
-	vector<T>::vector(const vector &x) : m_size(x.m_size), m_capacity(x.m_capacity)
+	vector<T>::vector(const vector &x)
 	{
-		m_array = new value_type [x.m_capacity];
-
-		for (long i = 0; i < x.m_size; ++i)
-			m_array[i] = x[i];
+		*this = x;
 	}
 
 	template<typename T>
 	vector<T>::~vector()
 	{
-		while (m_size != 0)
-			pop_back();
+		clear();
 		delete [] m_array;
 	}
 
@@ -364,7 +360,9 @@ namespace ft
 	{
 		if (this != &x)
 		{
-			delete [] m_array;
+			clear();
+			if (x.m_size == 0)
+				return *this;
 			m_array = new value_type [x.m_size];
 			m_size = x.m_size;
 			m_capacity = x.m_capacity;
@@ -645,8 +643,6 @@ namespace ft
 	template<typename T>
 	void vector<T>::clear()
 	{
-		for (int i = 0; i < m_size; ++i)
-			m_array[i].~T();
 		m_size = 0;
 	}
 
