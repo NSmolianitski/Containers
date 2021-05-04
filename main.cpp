@@ -2053,75 +2053,16 @@ void mapTest()
 {
 	std::cout << BLUE "**********************\\\\\\\\MAP////**********************" CLR << "\n";
 	{
-		std::cout << RED "*  *" CLR << "\n";
+		std::cout << RED "* SIZE, MAX SIZE *" CLR << "\n";
 
 		std::cout << GREEN "Standard:" CLR << "\n";
 		std::map<int, int> map;
 		std::cout << "Max size: " << map.max_size() << std::endl;
 
-//		map.insert(std::pair<int, int>(10, 20));
-//		map.insert(std::pair<int, int>(20, 20));
-//		map.insert(std::pair<int, int>(4, 20));
-//		map.insert(std::pair<int, int>(50, 20));
-//		map.insert(std::pair<int, int>(1, 20));
-		map.insert(std::pair<int, int>(1, 20));
-		map.insert(std::pair<int, int>(3, 20));
-		map.insert(std::pair<int, int>(5, 20));
-		map.insert(std::pair<int, int>(7, 20));
-		map.insert(std::pair<int, int>(9, 20));
-		map.insert(std::pair<int, int>(12, 20));
-		map.insert(std::pair<int, int>(18, 20));
-		map.insert(std::pair<int, int>(-10, 20));
-		map.insert(std::pair<int, int>(-20, 20));
-
-		std::map<int, int>::iterator it = map.begin();
-		std::cout << "Begin iterator key: " << it->first << std::endl;
-		std::cout << (*(it++)).first << std::endl;
-		std::cout << "++Iterator key: " << (*it).first << std::endl;
-
-
-
 		std::cout << YELLOW "\nCustom:" CLR << "\n";
 		ft::map<int, int> ft_map;
 		std::cout << "Max size: " << ft_map.max_size() << std::endl;
 
-		ft_map.insert(ft::pair<int, int>(1, 20));
-		ft_map.insert(ft::pair<int, int>(3, 20));
-		ft_map.insert(ft::pair<int, int>(5, 20));
-		ft_map.insert(ft::pair<int, int>(7, 20));
-		ft_map.insert(ft::pair<int, int>(9, 20));
-		ft_map.insert(ft::pair<int, int>(12, 20));
-		ft_map.insert(ft::pair<int, int>(18, 20));
-		ft_map.insert(ft::pair<int, int>(-10, 20));
-		ft_map.insert(ft::pair<int, int>(-20, 20));
-
-		ft::map<int, int> map2;
-		map2.insert(ft::pair<int, int>(140, 2));
-		map2.insert(ft::pair<int, int>(1, 2));
-
-		std::map<int, int>::iterator it4 = map.begin();
-		ft::map<int, int>::const_iterator it12(ft_map.begin());
-		ft::map<int, int>::iterator it152(ft_map.begin());
-		++it152;
-
-		if (it12 == it12)
-			std::cout << "True" << std::endl;
-		else
-			std::cout << "False" << std::endl;
-		it4->second = 12;
-		++it12;
-//		it12->second = 10;
-		++it152;
-		it152->second = 10;
-//--------------------------------------------------------------------------------------//
-		std::cout << "\n\n\n\n";
-
-		std::cout << ft_map.upper_bound(3)->first << std::endl;
-		std::cout << ft_map.equal_range(3).first->first << std::endl;
-
-		std::cout << map.upper_bound(3)->first << std::endl;
-		std::cout << map.equal_range(3).first->first << std::endl;
-//		getchar();
 	}
 }
 
