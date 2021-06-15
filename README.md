@@ -1,6 +1,6 @@
 # Containers
 "Containers" is a School 21 project that aims to reimplement and learn more about original C++ STL containers.
-All containers below contain all C++98 methods (except the allocator)
+All containers below contain all C++98 methods (except the allocator).
 
 ### List of implemented containers
 - vector
