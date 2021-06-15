@@ -5,9 +5,9 @@ All containers below contain all C++98 methods (except the allocator).
 ### List of implemented containers
 - vector
 - list
-- map
-- queue
-- stack
+- map (implemented with a red-black tree)
+- queue (uses a list as a default container)
+- stack (uses a vector as a default container)
 
 ### Comments
 The queue and stack contain the deque in STL by default, but I decided to use a list in queue and a vector in stack (cause I had no task to reimplement deque).
@@ -20,6 +20,7 @@ This project also contains main file with some tests for these containers. This 
 - the principle and functionality of STL containers
 - some things about templates and metaprogramming
 - a lot of new about Iterators and about C++ in general (since it was my first big project in this language)
+- some concepts about binary trees and, in particular, red-black tree
 
 ## Attention ❗
 This project is not perfect. I assume most of the bugs can be found in iterators.
