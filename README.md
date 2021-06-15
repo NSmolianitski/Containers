@@ -11,6 +11,7 @@ All containers below contain all C++98 methods (except the allocator)
 
 ### Comments
 The queue and stack contain the deque in STL by default, but I decided to use a list in queue and a vector in stack (cause I had no task to reimplement deque).
+
 The allocator and it's functions are omitted for the same reason.
 
 ## Attention ❗
